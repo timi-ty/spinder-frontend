@@ -19,7 +19,8 @@ export class SpinderErrorResponse implements SpinderResponse<Error> {
 }
 
 export interface FinalizeLoginData {
-  customToken: string;
+  firebaseCustomToken: string;
+  spotifyAccessToken: string;
 }
 
 export class FinalizeLoginResponse

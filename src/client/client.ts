@@ -16,8 +16,13 @@ export async function finalizeLogin(): Promise<boolean> {
     });
     loginResponse = await response.json();
 
-    if (loginResponse?.status === STATUS_OK && loginResponse.data.customToken) {
-      return firebaseSignInWithCustomToken(loginResponse.data.customToken);
+    if (
+      loginResponse?.status === STATUS_OK &&
+      loginResponse.data.firebaseCustomToken
+    ) {
+      return firebaseSignInWithCustomToken(
+        loginResponse.data.firebaseCustomToken
+      );
     }
 
     return false;
