@@ -1,10 +1,15 @@
 import { firebaseSignInWithCustomToken } from "./client.firebase";
-import { FinalizeLoginResponse, STATUS_OK } from "./client.model";
+import {
+  FinalizeLoginResponse,
+  STATUS_OK,
+  SpotifyUserProfileData,
+  SpotifyUserProfileResponse,
+} from "./client.model";
 
 const backendUrl = "http://localhost:3000/api";
 
+/**********LOGIN START**********/
 export const loginWithSpotifyUrl = backendUrl + "/login";
-
 const finalizeLoginUrl = backendUrl + "/login/finalize";
 
 export async function finalizeLogin(): Promise<boolean> {
@@ -30,3 +35,27 @@ export async function finalizeLogin(): Promise<boolean> {
     throw new Error(`Failed to finalize login - ${error}`);
   }
 }
+/**********LOGIN END**********/
+
+/**********USER START**********/
+const getSpotifyProfileDataUrl = backendUrl + "/user/spotify";
+
+export async function getSpotifyProfile(): Promise<SpotifyUserProfileData | null> {
+  var profileResponse: SpotifyUserProfileResponse | null;
+  try {
+    const response = await fetch(getSpotifyProfileDataUrl, {
+      method: "GET",
+      credentials: "include",
+    });
+    profileResponse = await response.json();
+
+    if (profileResponse?.status === STATUS_OK) {
+      return profileResponse.data;
+    }
+
+    return null;
+  } catch (error: any) {
+    throw new Error(`Failed to get Spotify profile - ${error}`);
+  }
+}
+/**********USER END**********/

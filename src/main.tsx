@@ -2,21 +2,17 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./home/Home";
-import Root from "./root/Root";
 import Discover from "./discover/Discover";
 
+//TODO: Create error page to handle error boundary.
 const browserRouter = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    element: <Discover />, //Discover is the root page of the frontend.
   },
   {
     path: "/home",
-    element: <Home />,
-  },
-  {
-    path: "/discover",
-    element: <Discover />,
+    element: <Home />, //Renders only if the user is not logged in or if the user goes to the home URL directly.
   },
 ]);
 
