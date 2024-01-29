@@ -22,9 +22,7 @@ const app = initializeApp(firebaseConfig);
 //const analytics = getAnalytics(app);
 const auth = getAuth(app);
 
-export async function firebaseSignInWithCustomToken(
-  token: string
-): Promise<boolean> {
+async function firebaseSignInWithCustomToken(token: string): Promise<boolean> {
   try {
     const userCredential = await signInWithCustomToken(auth, token);
     const user = userCredential.user;
@@ -36,3 +34,5 @@ export async function firebaseSignInWithCustomToken(
     throw new Error(`Failed firebase sign in with custom token - ${error}`);
   }
 }
+
+export { firebaseSignInWithCustomToken };

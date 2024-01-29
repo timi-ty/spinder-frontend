@@ -5,32 +5,32 @@ import {
   emptySpotifyProfileData,
 } from "../client/client.model";
 
-export enum LOGIN_STATE {
+enum LOGIN_STATE {
   PENDING,
   LOGGED_IN,
   LOGGED_OUT,
 }
 
-export function useLoginState() {
+function useLoginState() {
   const [logInState, setLoginState] = useState(LOGIN_STATE.PENDING);
   useEffect(() => {
     finalizeLogin()
       .then((loggedIn: Boolean) => {
-        console.log(`Using Login State: IsLoggedIn - ${logInState}.`);
         setLoginState(
           loggedIn ? LOGIN_STATE.LOGGED_IN : LOGIN_STATE.LOGGED_OUT
         );
+        console.log(`Using Login State: IsLoggedIn - ${loggedIn}.`);
       })
       .catch((error) => {
-        console.log(`Using Login State: Logged out. Error: ${error}`);
         setLoginState(LOGIN_STATE.LOGGED_OUT);
+        console.log(`Using Login State: Logged out. Error: ${error}`);
       });
   }, []);
 
   return logInState;
 }
 
-export function useSpotifyProfileData() {
+function useSpotifyProfileData() {
   const [spotifyProfileData, setSpotifyProfileData] = useState(
     emptySpotifyProfileData
   );
@@ -53,3 +53,5 @@ export function useSpotifyProfileData() {
 
   return spotifyProfileData;
 }
+
+export { LOGIN_STATE, useLoginState, useSpotifyProfileData };

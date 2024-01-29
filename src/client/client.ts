@@ -9,10 +9,10 @@ import {
 const backendUrl = "http://localhost:3000/api";
 
 /**********LOGIN START**********/
-export const loginWithSpotifyUrl = backendUrl + "/login";
+const loginWithSpotifyUrl = backendUrl + "/login";
 const finalizeLoginUrl = backendUrl + "/login/finalize";
 
-export async function finalizeLogin(): Promise<boolean> {
+async function finalizeLogin(): Promise<boolean> {
   var loginResponse: FinalizeLoginResponse | null;
   try {
     const response = await fetch(finalizeLoginUrl, {
@@ -40,7 +40,7 @@ export async function finalizeLogin(): Promise<boolean> {
 /**********USER START**********/
 const getSpotifyProfileDataUrl = backendUrl + "/user/spotify";
 
-export async function getSpotifyProfile(): Promise<SpotifyUserProfileData | null> {
+async function getSpotifyProfile(): Promise<SpotifyUserProfileData | null> {
   var profileResponse: SpotifyUserProfileResponse | null;
   try {
     const response = await fetch(getSpotifyProfileDataUrl, {
@@ -59,3 +59,5 @@ export async function getSpotifyProfile(): Promise<SpotifyUserProfileData | null
   }
 }
 /**********USER END**********/
+
+export { loginWithSpotifyUrl, finalizeLogin, getSpotifyProfile };

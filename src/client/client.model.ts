@@ -1,13 +1,13 @@
 /**********BASE START**********/
-export const STATUS_OK = "ok";
-export const STATUS_ERROR = "error";
+const STATUS_OK = "ok";
+const STATUS_ERROR = "error";
 
-export interface SpinderResponse<T> {
+interface SpinderResponse<T> {
   status: string;
   data: T;
 }
 
-export class SpinderErrorResponse implements SpinderResponse<Error> {
+class SpinderErrorResponse implements SpinderResponse<Error> {
   status: string;
   code: string;
   data: Error;
@@ -21,14 +21,12 @@ export class SpinderErrorResponse implements SpinderResponse<Error> {
 /**********BASE END**********/
 
 /**********LOGIN START**********/
-export interface FinalizeLoginData {
+interface FinalizeLoginData {
   firebaseCustomToken: string;
   spotifyAccessToken: string;
 }
 
-export class FinalizeLoginResponse
-  implements SpinderResponse<FinalizeLoginData>
-{
+class FinalizeLoginResponse implements SpinderResponse<FinalizeLoginData> {
   status: string;
   data: FinalizeLoginData;
 
@@ -74,7 +72,7 @@ interface Image {
   width: number;
 }
 
-export interface SpotifyUserProfileData {
+interface SpotifyUserProfileData {
   country: string;
   display_name: string;
   email: string;
@@ -89,7 +87,7 @@ export interface SpotifyUserProfileData {
   uri: string;
 }
 
-export const emptySpotifyProfileData: SpotifyUserProfileData = {
+const emptySpotifyProfileData: SpotifyUserProfileData = {
   country: "",
   display_name: "",
   email: "",
@@ -104,7 +102,7 @@ export const emptySpotifyProfileData: SpotifyUserProfileData = {
   uri: "",
 };
 
-export class SpotifyUserProfileResponse
+class SpotifyUserProfileResponse
   implements SpinderResponse<SpotifyUserProfileData>
 {
   status: string;
@@ -116,3 +114,14 @@ export class SpotifyUserProfileResponse
   }
 }
 /**********USER END**********/
+
+/**********USER END**********/
+export {
+  STATUS_OK,
+  STATUS_ERROR,
+  SpinderErrorResponse,
+  FinalizeLoginResponse,
+  type SpotifyUserProfileData,
+  emptySpotifyProfileData,
+  SpotifyUserProfileResponse,
+};
