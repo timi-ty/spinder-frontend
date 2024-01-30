@@ -29,8 +29,9 @@ function useLoginState() {
         console.log(`Using Login State: IsLoggedIn - ${loggedIn}.`);
       })
       .catch((error) => {
+        console.error(error);
         setLoginState(LOGIN_STATE.LOGGED_OUT);
-        console.log(`Using Login State: Logged out. Error: ${error}`);
+        console.error("Using Login State: Logged out. Error.");
       });
   }, []);
 
@@ -43,18 +44,15 @@ function useSpotifyProfileData() {
   );
   useEffect(() => {
     getSpotifyProfile()
-      .then((spotifyProfileData: SpotifyUserProfileData | null) => {
-        if (spotifyProfileData) {
-          console.log(
-            `Using Spotify Profile: Name - ${spotifyProfileData?.display_name}, Email - ${spotifyProfileData?.email}.`
-          );
-          setSpotifyProfileData(spotifyProfileData);
-        } else {
-          throw new Error(`Using Spotify Profile. Error: Null profile data.`);
-        }
+      .then((spotifyProfileData: SpotifyUserProfileData) => {
+        console.log(
+          `Using Spotify Profile: Name - ${spotifyProfileData.display_name}, Email - ${spotifyProfileData.email}.`
+        );
+        setSpotifyProfileData(spotifyProfileData);
       })
       .catch((error) => {
-        throw new Error(`Using Spotify Profile. Error: ${error}`);
+        console.error(error);
+        throw new Error("Using Spotify Profile. Error.");
       });
   }, []);
 
@@ -65,16 +63,13 @@ function useFirebaseIdToken() {
   const [idToken, setIdToken] = useState("");
   useEffect(() => {
     getFirebaseIdToken()
-      .then((idToken: string | null) => {
-        if (idToken) {
-          console.log(`Using firebase id token - ${idToken}.`);
-          setIdToken(idToken);
-        } else {
-          throw new Error(`Using firebase id token. Error: Null token.`);
-        }
+      .then((idToken: string) => {
+        console.log(`Using firebase id token - ${idToken}.`);
+        setIdToken(idToken);
       })
       .catch((error) => {
-        throw new Error(`Using firebase id token. Error: ${error}`);
+        console.error(error);
+        throw new Error("Using firebase id token. Error.");
       });
   }, []);
 
@@ -88,22 +83,17 @@ function useDiscoverSourceTypes() {
   const idToken = useFirebaseIdToken();
   useEffect(() => {
     getDiscoverSourceTypes(idToken)
-      .then((discoverSourceTypes: DiscoverSourceTypesData | null) => {
-        if (discoverSourceTypes) {
-          console.log(
-            `Using discover source types - ${JSON.stringify(
-              discoverSourceTypes
-            )}.`
-          );
-          setDiscoverSourceTypes(discoverSourceTypes);
-        } else {
-          throw new Error(
-            `Using discover source types. Error: Null source types.`
-          );
-        }
+      .then((discoverSourceTypes: DiscoverSourceTypesData) => {
+        console.log(
+          `Using discover source types - ${JSON.stringify(
+            discoverSourceTypes
+          )}.`
+        );
+        setDiscoverSourceTypes(discoverSourceTypes);
       })
       .catch((error) => {
-        throw new Error(`Using discover source types. Error: ${error}`);
+        console.error(error);
+        throw new Error("Using discover source types. Error.");
       });
   }, [idToken]);
 

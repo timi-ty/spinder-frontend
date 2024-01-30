@@ -1,22 +1,16 @@
 /**********BASE START**********/
-const STATUS_OK = "ok";
-const STATUS_ERROR = "error";
+class SpinderError {
+  status: number;
+  message: string;
 
-interface SpinderResponse<T> {
-  status: string;
-  data: T;
+  constructor(status: number, message: string) {
+    this.status = status;
+    this.message = message;
+  }
 }
 
-class SpinderErrorResponse implements SpinderResponse<Error> {
-  status: string;
-  code: string;
-  data: Error;
-
-  constructor(code: string, data: string) {
-    this.status = STATUS_ERROR;
-    this.code = code;
-    this.data = new Error(data);
-  }
+interface SpinderErrorResponse {
+  error: SpinderError;
 }
 /**********BASE END**********/
 
@@ -24,16 +18,6 @@ class SpinderErrorResponse implements SpinderResponse<Error> {
 interface FinalizeLoginData {
   firebaseCustomToken: string;
   spotifyAccessToken: string;
-}
-
-class FinalizeLoginResponse implements SpinderResponse<FinalizeLoginData> {
-  status: string;
-  data: FinalizeLoginData;
-
-  constructor(status: string, data: FinalizeLoginData) {
-    this.status = status;
-    this.data = data;
-  }
 }
 /**********LOGIN END**********/
 
@@ -101,18 +85,6 @@ const emptySpotifyProfileData: SpotifyUserProfileData = {
   type: "",
   uri: "",
 };
-
-class SpotifyUserProfileResponse
-  implements SpinderResponse<SpotifyUserProfileData>
-{
-  status: string;
-  data: SpotifyUserProfileData;
-
-  constructor(status: string, data: SpotifyUserProfileData) {
-    this.status = status;
-    this.data = data;
-  }
-}
 /**********USER END**********/
 
 /**********DISCOVER START**********/
@@ -125,29 +97,14 @@ const emptyDiscoverSourceTypes: DiscoverSourceTypesData = {
   selectedSourceType: 0,
   sourceTypes: [],
 };
-
-class DiscoverSourceTypesResponse
-  implements SpinderResponse<DiscoverSourceTypesData>
-{
-  status: string;
-  data: DiscoverSourceTypesData;
-
-  constructor(status: string, data: DiscoverSourceTypesData) {
-    this.status = status;
-    this.data = data;
-  }
-}
 /**********DISCOVER END**********/
 
 export {
-  STATUS_OK,
-  STATUS_ERROR,
-  SpinderErrorResponse,
-  FinalizeLoginResponse,
+  SpinderError,
+  type SpinderErrorResponse,
+  type FinalizeLoginData,
   type SpotifyUserProfileData,
   emptySpotifyProfileData,
-  SpotifyUserProfileResponse,
   type DiscoverSourceTypesData,
   emptyDiscoverSourceTypes,
-  DiscoverSourceTypesResponse,
 };

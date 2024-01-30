@@ -30,18 +30,26 @@ async function firebaseSignInWithCustomToken(token: string): Promise<boolean> {
       `Firebase authenticated user with ID: ${user.uid}, Name: ${user.displayName}`
     );
     return true;
-  } catch (error: any) {
-    throw new Error(`Failed firebase sign in with custom token - ${error}`);
+  } catch (error) {
+    console.error(error);
+    throw new Error(
+      `Failed firebase sign in with custom token. Token: ${token}`
+    );
   }
 }
 
-async function getFirebaseIdToken(): Promise<string | null> {
+async function getFirebaseIdToken(): Promise<string> {
   try {
-    console.log(`Firebase trying to get id token...`);
-    const idToken = await auth.currentUser?.getIdToken(true);
-    return idToken || null;
-  } catch (error: any) {
-    throw new Error(`Failed to get firebase id token - ${error}`);
+    console.log("Firebase trying to get id token...");
+    const idToken = (await auth.currentUser?.getIdToken(true)) || null;
+    if (idToken) {
+      return idToken;
+    } else {
+      throw new Error("Failed to get firebase id token.");
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to get firebase id token.");
   }
 }
 
