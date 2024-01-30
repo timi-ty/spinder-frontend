@@ -35,4 +35,14 @@ async function firebaseSignInWithCustomToken(token: string): Promise<boolean> {
   }
 }
 
-export { firebaseSignInWithCustomToken };
+async function getFirebaseIdToken(): Promise<string | null> {
+  try {
+    console.log(`Firebase trying to get id token...`);
+    const idToken = await auth.currentUser?.getIdToken(true);
+    return idToken || null;
+  } catch (error: any) {
+    throw new Error(`Failed to get firebase id token - ${error}`);
+  }
+}
+
+export { firebaseSignInWithCustomToken, getFirebaseIdToken };

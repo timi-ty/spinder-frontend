@@ -1,9 +1,16 @@
 import { useState, useEffect } from "react";
-import { finalizeLogin, getSpotifyProfile } from "../client/client";
 import {
+  finalizeLogin,
+  getDiscoverSourceTypes,
+  getSpotifyProfile,
+} from "../client/client";
+import {
+  DiscoverSourceTypesData,
   SpotifyUserProfileData,
+  emptyDiscoverSourceTypes,
   emptySpotifyProfileData,
 } from "../client/client.model";
+import { getFirebaseIdToken } from "../client/client.firebase";
 
 enum LOGIN_STATE {
   PENDING,
@@ -54,4 +61,59 @@ function useSpotifyProfileData() {
   return spotifyProfileData;
 }
 
-export { LOGIN_STATE, useLoginState, useSpotifyProfileData };
+function useFirebaseIdToken() {
+  const [idToken, setIdToken] = useState("");
+  useEffect(() => {
+    getFirebaseIdToken()
+      .then((idToken: string | null) => {
+        if (idToken) {
+          console.log(`Using firebase id token - ${idToken}.`);
+          setIdToken(idToken);
+        } else {
+          throw new Error(`Using firebase id token. Error: Null token.`);
+        }
+      })
+      .catch((error) => {
+        throw new Error(`Using firebase id token. Error: ${error}`);
+      });
+  }, []);
+
+  return idToken;
+}
+
+function useDiscoverSourceTypes() {
+  const [discoverSourceTypes, setDiscoverSourceTypes] = useState(
+    emptyDiscoverSourceTypes
+  );
+  const idToken = useFirebaseIdToken();
+  useEffect(() => {
+    getDiscoverSourceTypes(idToken)
+      .then((discoverSourceTypes: DiscoverSourceTypesData | null) => {
+        if (discoverSourceTypes) {
+          console.log(
+            `Using discover source types - ${JSON.stringify(
+              discoverSourceTypes
+            )}.`
+          );
+          setDiscoverSourceTypes(discoverSourceTypes);
+        } else {
+          throw new Error(
+            `Using discover source types. Error: Null source types.`
+          );
+        }
+      })
+      .catch((error) => {
+        throw new Error(`Using discover source types. Error: ${error}`);
+      });
+  }, [idToken]);
+
+  return discoverSourceTypes;
+}
+
+export {
+  LOGIN_STATE,
+  useLoginState,
+  useSpotifyProfileData,
+  useFirebaseIdToken,
+  useDiscoverSourceTypes,
+};

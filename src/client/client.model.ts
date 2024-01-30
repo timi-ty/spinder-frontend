@@ -115,7 +115,30 @@ class SpotifyUserProfileResponse
 }
 /**********USER END**********/
 
-/**********USER END**********/
+/**********DISCOVER START**********/
+interface DiscoverSourceTypesData {
+  selectedSourceType: number;
+  sourceTypes: string[];
+}
+
+const emptyDiscoverSourceTypes: DiscoverSourceTypesData = {
+  selectedSourceType: 0,
+  sourceTypes: [],
+};
+
+class DiscoverSourceTypesResponse
+  implements SpinderResponse<DiscoverSourceTypesData>
+{
+  status: string;
+  data: DiscoverSourceTypesData;
+
+  constructor(status: string, data: DiscoverSourceTypesData) {
+    this.status = status;
+    this.data = data;
+  }
+}
+/**********DISCOVER END**********/
+
 export {
   STATUS_OK,
   STATUS_ERROR,
@@ -124,4 +147,7 @@ export {
   type SpotifyUserProfileData,
   emptySpotifyProfileData,
   SpotifyUserProfileResponse,
+  type DiscoverSourceTypesData,
+  emptyDiscoverSourceTypes,
+  DiscoverSourceTypesResponse,
 };
