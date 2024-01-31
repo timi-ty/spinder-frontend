@@ -97,6 +97,26 @@ const emptyDiscoverSourceTypes: DiscoverSourceTypesData = {
   selectedSourceType: 0,
   sourceTypes: [],
 };
+
+interface DiscoverDestinationPlaylist {
+  name: string; // Playlist name.
+  image: string; // Playlist image.
+  id: string; //playlist id.
+}
+
+interface DiscoverDestinationData {
+  selectedDestinationId: string;
+  offset: number; // The index at which the server terminated it's search for valid discover destinations (i.e. user owned spotify playlists) in the total user playlists.
+  total: number; // The total number of user playlists. The server searches these playlists for discover destinations (i.e. user owned playlists).
+  discoverDestinationPlaylists: DiscoverDestinationPlaylist[];
+}
+
+const emptyDiscoverDestinations: DiscoverDestinationData = {
+  selectedDestinationId: "",
+  offset: 0,
+  total: 0,
+  discoverDestinationPlaylists: [],
+};
 /**********DISCOVER END**********/
 
 export {
@@ -107,4 +127,6 @@ export {
   emptySpotifyProfileData,
   type DiscoverSourceTypesData,
   emptyDiscoverSourceTypes,
+  type DiscoverDestinationData,
+  emptyDiscoverDestinations,
 };

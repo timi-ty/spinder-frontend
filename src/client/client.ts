@@ -1,5 +1,6 @@
 import { firebaseSignInWithCustomToken } from "./client.firebase";
 import {
+  DiscoverDestinationData,
   DiscoverSourceTypesData,
   FinalizeLoginData,
   SpinderErrorResponse,
@@ -57,6 +58,7 @@ async function getSpotifyProfile(): Promise<SpotifyUserProfileData> {
 
 /**********DISCOVER START**********/
 const getDiscoverSourceTypesUrl = backendUrl + "/discover/source-types";
+const getDiscoverDestinationsUrl = backendUrl + "/discover/destinations";
 
 async function getDiscoverSourceTypes(
   idToken: string
@@ -82,6 +84,32 @@ async function getDiscoverSourceTypes(
     throw new Error("Failed to get Discover source types.");
   }
 }
+
+async function getDiscoverDestinations(
+  idToken: string,
+  offset: number
+): Promise<DiscoverDestinationData> {
+  try {
+    const response = await fetch(
+      `${getDiscoverDestinationsUrl}?offset=${offset}`,
+      fetchConfig(idToken)
+    );
+
+    if (response.ok) {
+      const discoverDestinationData: DiscoverDestinationData =
+        await response.json();
+      return discoverDestinationData;
+    } else {
+      const errorResponse: SpinderErrorResponse = await response.json();
+      throw new Error(
+        `Status: ${errorResponse.error.status}, Message: ${errorResponse.error.message}`
+      );
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to get Discover destinations.");
+  }
+}
 /**********DISCOVER END**********/
 
 function fetchConfig(idToken: string = ""): RequestInit {
@@ -100,4 +128,5 @@ export {
   finalizeLogin,
   getSpotifyProfile,
   getDiscoverSourceTypes,
+  getDiscoverDestinations,
 };

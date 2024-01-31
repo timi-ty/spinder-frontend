@@ -1,8 +1,13 @@
-import { useDiscoverSourceTypes, useSpotifyProfileData } from "../hooks/hooks";
+import {
+  useDiscoverDestiantions,
+  useDiscoverSourceTypes,
+  useSpotifyProfileData,
+} from "../hooks/hooks";
 
 function DiscoverContent() {
   const spotifyProfileData = useSpotifyProfileData();
   const discoverSourceTypes = useDiscoverSourceTypes();
+  const discoverDestinations = useDiscoverDestiantions();
   return (
     <>
       <h1>Discover</h1>
@@ -14,6 +19,19 @@ function DiscoverContent() {
             index == discoverSourceTypes.selectedSourceType ? "(SELCETED)" : ""
           }`}</li>
         ))}
+      </ul>
+      <div />
+      <ul>
+        {discoverDestinations.discoverDestinationPlaylists.map(
+          (destinationPlaylist) => (
+            <li>{`${destinationPlaylist.name} ${
+              destinationPlaylist.id ==
+              discoverDestinations.selectedDestinationId
+                ? "(SELCETED)"
+                : ""
+            }`}</li>
+          )
+        )}
       </ul>
     </>
   );

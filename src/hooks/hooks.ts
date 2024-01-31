@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import {
   finalizeLogin,
+  getDiscoverDestinations,
   getDiscoverSourceTypes,
   getSpotifyProfile,
 } from "../client/client";
 import {
+  DiscoverDestinationData,
   DiscoverSourceTypesData,
   SpotifyUserProfileData,
+  emptyDiscoverDestinations,
   emptyDiscoverSourceTypes,
   emptySpotifyProfileData,
 } from "../client/client.model";
@@ -64,12 +67,12 @@ function useFirebaseIdToken() {
   useEffect(() => {
     getFirebaseIdToken()
       .then((idToken: string) => {
-        console.log(`Using firebase id token - ${idToken}.`);
+        console.log(`Using Firebase id token - ${idToken}.`);
         setIdToken(idToken);
       })
       .catch((error) => {
         console.error(error);
-        throw new Error("Using firebase id token. Error.");
+        throw new Error("Using Firebase id token. Error.");
       });
   }, []);
 
@@ -85,7 +88,7 @@ function useDiscoverSourceTypes() {
     getDiscoverSourceTypes(idToken)
       .then((discoverSourceTypes: DiscoverSourceTypesData) => {
         console.log(
-          `Using discover source types - ${JSON.stringify(
+          `Using Discover source types - ${JSON.stringify(
             discoverSourceTypes
           )}.`
         );
@@ -93,11 +96,35 @@ function useDiscoverSourceTypes() {
       })
       .catch((error) => {
         console.error(error);
-        throw new Error("Using discover source types. Error.");
+        throw new Error("Using Discover source types. Error.");
       });
   }, [idToken]);
 
   return discoverSourceTypes;
+}
+
+function useDiscoverDestiantions() {
+  const [discoverDestinations, setDiscoverDestinations] = useState(
+    emptyDiscoverDestinations
+  );
+  const idToken = useFirebaseIdToken();
+  useEffect(() => {
+    getDiscoverDestinations(idToken, 0)
+      .then((discoverDestinations: DiscoverDestinationData) => {
+        console.log(
+          `Using Discover destinations - ${JSON.stringify(
+            discoverDestinations
+          )}.`
+        );
+        setDiscoverDestinations(discoverDestinations);
+      })
+      .catch((error) => {
+        console.error(error);
+        throw new Error("Using Discover destinations. Error.");
+      });
+  }, [idToken]);
+
+  return discoverDestinations;
 }
 
 export {
@@ -106,4 +133,5 @@ export {
   useSpotifyProfileData,
   useFirebaseIdToken,
   useDiscoverSourceTypes,
+  useDiscoverDestiantions,
 };
