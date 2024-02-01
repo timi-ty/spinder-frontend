@@ -88,13 +88,20 @@ const emptySpotifyProfileData: SpotifyUserProfileData = {
 /**********USER END**********/
 
 /**********DISCOVER START**********/
+type DiscoverSourceType =
+  | "Anything Me"
+  | "Following"
+  | "Playlist"
+  | "Artiste"
+  | "Keyword";
+
 interface DiscoverSourceTypesData {
-  selectedSourceType: number;
-  sourceTypes: string[];
+  selectedSourceType: DiscoverSourceType;
+  sourceTypes: DiscoverSourceType[];
 }
 
 const emptyDiscoverSourceTypes: DiscoverSourceTypesData = {
-  selectedSourceType: 0,
+  selectedSourceType: "Anything Me",
   sourceTypes: [],
 };
 

@@ -14,9 +14,11 @@ function DiscoverContent() {
       <div>{spotifyProfileData.display_name}</div>
       <div>{spotifyProfileData.email}</div>
       <ul>
-        {discoverSourceTypes.sourceTypes.map((sourceType, index) => (
+        {discoverSourceTypes.sourceTypes.map((sourceType) => (
           <li>{`${sourceType} ${
-            index == discoverSourceTypes.selectedSourceType ? "(SELCETED)" : ""
+            sourceType == discoverSourceTypes.selectedSourceType
+              ? "(SELCETED)"
+              : ""
           }`}</li>
         ))}
       </ul>
