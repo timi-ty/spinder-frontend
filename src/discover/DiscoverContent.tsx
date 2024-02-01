@@ -2,7 +2,7 @@ import {
   useDiscoverDestiantions,
   useDiscoverSourceTypes,
   useSpotifyProfileData,
-} from "../hooks/hooks";
+} from "../utils/hooks";
 
 function DiscoverContent() {
   const spotifyProfileData = useSpotifyProfileData();

@@ -22,14 +22,14 @@ const app = initializeApp(firebaseConfig);
 //const analytics = getAnalytics(app);
 const auth = getAuth(app);
 
-async function firebaseSignInWithCustomToken(token: string): Promise<boolean> {
+async function firebaseSignInWithCustomToken(token: string): Promise<void> {
   try {
     const userCredential = await signInWithCustomToken(auth, token);
     const user = userCredential.user;
     console.log(
       `Firebase authenticated user with ID: ${user.uid}, Name: ${user.displayName}`
     );
-    return true;
+    return;
   } catch (error) {
     console.error(error);
     throw new Error(

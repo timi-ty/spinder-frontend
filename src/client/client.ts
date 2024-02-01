@@ -13,7 +13,7 @@ const backendUrl = "http://localhost:3000/api";
 const loginWithSpotifyUrl = backendUrl + "/login";
 const finalizeLoginUrl = backendUrl + "/login/finalize";
 
-async function finalizeLogin(): Promise<boolean> {
+async function finalizeLogin(): Promise<void> {
   try {
     const response = await fetch(finalizeLoginUrl, fetchConfig());
 

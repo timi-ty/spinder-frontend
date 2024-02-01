@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   finalizeLogin,
   getDiscoverDestinations,
@@ -14,31 +14,36 @@ import {
   emptySpotifyProfileData,
 } from "../client/client.model";
 import { getFirebaseIdToken } from "../client/client.firebase";
+import { AuthContext } from "./context";
 
-enum LOGIN_STATE {
-  PENDING,
-  LOGGED_IN,
-  LOGGED_OUT,
+interface AuthenticationState {
+  state: "Pending" | "LoggedIn" | "LoggedOut";
+  token: string;
 }
 
-function useLoginState() {
-  const [logInState, setLoginState] = useState(LOGIN_STATE.PENDING);
+function useAuthenticationState(defaultState: AuthenticationState) {
+  const [authState, setAuthState] = useState(defaultState);
   useEffect(() => {
     finalizeLogin()
-      .then((loggedIn: Boolean) => {
-        setLoginState(
-          loggedIn ? LOGIN_STATE.LOGGED_IN : LOGIN_STATE.LOGGED_OUT
-        );
-        console.log(`Using Login State: IsLoggedIn - ${loggedIn}.`);
+      .then(async () => {
+        try {
+          const idToken = await getFirebaseIdToken();
+          setAuthState({ state: "LoggedIn", token: idToken });
+          console.log(`Using authentication token: ${idToken}`);
+        } catch (error) {
+          console.error(error);
+          setAuthState({ state: "LoggedOut", token: "" });
+          console.error("Failed to use Authentication: Logged out.");
+        }
       })
       .catch((error) => {
         console.error(error);
-        setLoginState(LOGIN_STATE.LOGGED_OUT);
-        console.error("Using Login State: Logged out. Error.");
+        setAuthState({ state: "LoggedOut", token: "" });
+        console.error("Failed to use Authentication: Logged out.");
       });
   }, []);
 
-  return logInState;
+  return authState;
 }
 
 function useSpotifyProfileData() {
@@ -55,35 +60,18 @@ function useSpotifyProfileData() {
       })
       .catch((error) => {
         console.error(error);
-        throw new Error("Using Spotify Profile. Error.");
+        throw new Error("Failed to use Spotify Profile. Error.");
       });
   }, []);
 
   return spotifyProfileData;
 }
 
-function useFirebaseIdToken() {
-  const [idToken, setIdToken] = useState("");
-  useEffect(() => {
-    getFirebaseIdToken()
-      .then((idToken: string) => {
-        console.log(`Using Firebase id token - ${idToken}.`);
-        setIdToken(idToken);
-      })
-      .catch((error) => {
-        console.error(error);
-        throw new Error("Using Firebase id token. Error.");
-      });
-  }, []);
-
-  return idToken;
-}
-
 function useDiscoverSourceTypes() {
+  const idToken = useContext(AuthContext);
   const [discoverSourceTypes, setDiscoverSourceTypes] = useState(
     emptyDiscoverSourceTypes
   );
-  const idToken = useFirebaseIdToken();
   useEffect(() => {
     getDiscoverSourceTypes(idToken)
       .then((discoverSourceTypes: DiscoverSourceTypesData) => {
@@ -96,7 +84,7 @@ function useDiscoverSourceTypes() {
       })
       .catch((error) => {
         console.error(error);
-        throw new Error("Using Discover source types. Error.");
+        throw new Error("Failed to use Discover source types. Error.");
       });
   }, [idToken]);
 
@@ -104,10 +92,10 @@ function useDiscoverSourceTypes() {
 }
 
 function useDiscoverDestiantions() {
+  const idToken = useContext(AuthContext);
   const [discoverDestinations, setDiscoverDestinations] = useState(
     emptyDiscoverDestinations
   );
-  const idToken = useFirebaseIdToken();
   useEffect(() => {
     getDiscoverDestinations(idToken, 0)
       .then((discoverDestinations: DiscoverDestinationData) => {
@@ -120,7 +108,7 @@ function useDiscoverDestiantions() {
       })
       .catch((error) => {
         console.error(error);
-        throw new Error("Using Discover destinations. Error.");
+        throw new Error("Failed to use Discover destinations. Error.");
       });
   }, [idToken]);
 
@@ -128,10 +116,9 @@ function useDiscoverDestiantions() {
 }
 
 export {
-  LOGIN_STATE,
-  useLoginState,
+  type AuthenticationState,
+  useAuthenticationState,
   useSpotifyProfileData,
-  useFirebaseIdToken,
   useDiscoverSourceTypes,
   useDiscoverDestiantions,
 };
