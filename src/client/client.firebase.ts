@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithCustomToken } from "firebase/auth";
+import { Auth, getAuth, signInWithCustomToken } from "firebase/auth";
 import {
+  Database,
   getDatabase,
   onDisconnect,
   onValue,
@@ -8,6 +9,15 @@ import {
   serverTimestamp,
   set,
 } from "firebase/database";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  Firestore,
+  getFirestore,
+  onSnapshot,
+  QuerySnapshot,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA8Txu3DhuE6KwWtA84NKiCE-25DErLLU0",
@@ -21,12 +31,18 @@ const firebaseConfig = {
   measurementId: "G-L6DBBBXD6Y",
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const database = getDatabase(app);
+var auth: Auth;
+var database: Database;
+var firestore: Firestore;
 
-async function firebaseSignInWithCustomToken(token: string): Promise<void> {
+function startFirebaseClient() {
+  const app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  database = getDatabase(app);
+  firestore = getFirestore(app);
+}
+
+async function firebaseSignInWithCustomToken(token: string): Promise<string> {
   try {
     const userCredential = await signInWithCustomToken(auth, token);
     const user = userCredential.user;
@@ -34,7 +50,7 @@ async function firebaseSignInWithCustomToken(token: string): Promise<void> {
       `Firebase authenticated user with ID: ${user.uid}, Name: ${user.displayName}`
     );
     attachPresenceService();
-    return;
+    return user.uid;
   } catch (error) {
     console.error(error);
     throw new Error(
@@ -58,6 +74,11 @@ async function getFirebaseIdToken(): Promise<string> {
   }
 }
 
+interface PresenceStatus {
+  state: "offline" | "online";
+  lastChanged: object;
+}
+
 function attachPresenceService() {
   if (!auth.currentUser) {
     throw new Error(
@@ -68,13 +89,13 @@ function attachPresenceService() {
   var uid = auth.currentUser.uid;
   var userStatusDatabaseRef = ref(database, "/status/" + uid);
 
-  var isOfflineForDatabase = {
+  var isOfflineForDatabase: PresenceStatus = {
     state: "offline",
-    last_changed: serverTimestamp(),
+    lastChanged: serverTimestamp(),
   };
-  var isOnlineForDatabase = {
+  var isOnlineForDatabase: PresenceStatus = {
     state: "online",
-    last_changed: serverTimestamp(),
+    lastChanged: serverTimestamp(),
   };
 
   const isConnectedRef = ref(database, ".info/connected");
@@ -90,4 +111,34 @@ function attachPresenceService() {
   });
 }
 
-export { firebaseSignInWithCustomToken, getFirebaseIdToken };
+function listenToFirestoreCollection(
+  collectionPath: string,
+  onChange: (snapshot: QuerySnapshot) => void
+): () => void {
+  const col = collection(firestore, collectionPath);
+
+  const unsubscribe = onSnapshot(
+    col,
+    (querySnapshot) => {
+      console.log(`Received query snapshot of size ${querySnapshot.size}`);
+      onChange(querySnapshot);
+    },
+    (error) => {
+      console.error(error);
+    }
+  );
+  return unsubscribe;
+}
+
+function deleteFireStoreDoc(docPath: string) {
+  const document = doc(firestore, docPath);
+  deleteDoc(document);
+}
+
+export {
+  startFirebaseClient,
+  firebaseSignInWithCustomToken,
+  getFirebaseIdToken,
+  listenToFirestoreCollection,
+  deleteFireStoreDoc,
+};

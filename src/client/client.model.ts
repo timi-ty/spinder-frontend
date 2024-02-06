@@ -126,6 +126,18 @@ const emptyDiscoverDestinations: DiscoverDestinationData = {
 };
 /**********DISCOVER END**********/
 
+/**********DECK START**********/
+interface DeckItem {
+  trackId: string;
+  image: string;
+  previewUrl: string;
+  trackName: string;
+  trackUrl: string;
+  artistName: string;
+  artistUrl: string;
+}
+/**********DECK END**********/
+
 export {
   SpinderError,
   type SpinderErrorResponse,
@@ -136,4 +148,5 @@ export {
   emptyDiscoverSourceTypes,
   type DiscoverDestinationData,
   emptyDiscoverDestinations,
+  type DeckItem,
 };

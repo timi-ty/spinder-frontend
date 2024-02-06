@@ -4,7 +4,7 @@ import {
   getDiscoverDestinations,
   getDiscoverSourceTypes,
   getSpotifyProfile,
-} from "../client/client";
+} from "../client/client.api";
 import {
   DiscoverDestinationData,
   DiscoverSourceTypesData,
@@ -15,30 +15,29 @@ import {
 } from "../client/client.model";
 import { getFirebaseIdToken } from "../client/client.firebase";
 import { AuthContext } from "./context";
-
-interface AuthenticationState {
-  state: "Pending" | "LoggedIn" | "LoggedOut";
-  token: string;
-}
+import { AuthenticationState } from "./models";
+import { startDeckClient, stopDeckClient } from "../client/client.deck";
 
 function useAuthenticationState(defaultState: AuthenticationState) {
   const [authState, setAuthState] = useState(defaultState);
   useEffect(() => {
     finalizeLogin()
-      .then(async () => {
+      .then(async (userId) => {
         try {
           const idToken = await getFirebaseIdToken();
-          setAuthState({ state: "LoggedIn", token: idToken });
-          console.log(`Using authentication token: ${idToken}`);
+          setAuthState({ state: "LoggedIn", token: idToken, userId: userId });
+          console.log(
+            `Using authentication token: ${idToken} for user: ${userId}`
+          );
         } catch (error) {
           console.error(error);
-          setAuthState({ state: "LoggedOut", token: "" });
+          setAuthState({ state: "LoggedOut", token: "", userId: "" });
           console.error("Failed to use Authentication: Logged out.");
         }
       })
       .catch((error) => {
         console.error(error);
-        setAuthState({ state: "LoggedOut", token: "" });
+        setAuthState({ state: "LoggedOut", token: "", userId: "" });
         console.error("Failed to use Authentication: Logged out.");
       });
   }, []);
@@ -68,12 +67,12 @@ function useSpotifyProfileData() {
 }
 
 function useDiscoverSourceTypes() {
-  const idToken = useContext(AuthContext);
+  const authState = useContext(AuthContext);
   const [discoverSourceTypes, setDiscoverSourceTypes] = useState(
     emptyDiscoverSourceTypes
   );
   useEffect(() => {
-    getDiscoverSourceTypes(idToken)
+    getDiscoverSourceTypes(authState.token)
       .then((discoverSourceTypes: DiscoverSourceTypesData) => {
         console.log(
           `Using Discover source types - ${JSON.stringify(
@@ -86,18 +85,18 @@ function useDiscoverSourceTypes() {
         console.error(error);
         throw new Error("Failed to use Discover source types. Error.");
       });
-  }, [idToken]);
+  }, [authState]);
 
   return discoverSourceTypes;
 }
 
-function useDiscoverDestiantions() {
-  const idToken = useContext(AuthContext);
+function useDiscoverDestinations() {
+  const authState = useContext(AuthContext);
   const [discoverDestinations, setDiscoverDestinations] = useState(
     emptyDiscoverDestinations
   );
   useEffect(() => {
-    getDiscoverDestinations(idToken, 0)
+    getDiscoverDestinations(authState.token, 0)
       .then((discoverDestinations: DiscoverDestinationData) => {
         console.log(
           `Using Discover destinations - ${JSON.stringify(
@@ -110,15 +109,30 @@ function useDiscoverDestiantions() {
         console.error(error);
         throw new Error("Failed to use Discover destinations. Error.");
       });
-  }, [idToken]);
+  }, [authState]);
 
   return discoverDestinations;
 }
 
+function useReadyTracks(): boolean {
+  const authState = useContext(AuthContext);
+  const [isTracksReady, setIsTracksReady] = useState(false);
+  useEffect(() => {
+    startDeckClient(authState.userId, () => {
+      setIsTracksReady(true);
+    });
+    return () => {
+      stopDeckClient();
+    };
+  }, [authState]);
+
+  return isTracksReady;
+}
+
 export {
-  type AuthenticationState,
   useAuthenticationState,
   useSpotifyProfileData,
   useDiscoverSourceTypes,
-  useDiscoverDestiantions,
+  useDiscoverDestinations,
+  useReadyTracks,
 };

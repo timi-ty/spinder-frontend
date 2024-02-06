@@ -1,4 +1,4 @@
-import { loginWithSpotifyUrl } from "../client/client";
+import { loginWithSpotifyUrl } from "../client/client.api";
 
 function Home() {
   return (

@@ -1,13 +1,14 @@
 import {
-  useDiscoverDestiantions,
+  useDiscoverDestinations,
   useDiscoverSourceTypes,
   useSpotifyProfileData,
 } from "../utils/hooks";
+import DiscoverDeck from "./DiscoverDeck";
 
 function DiscoverContent() {
   const spotifyProfileData = useSpotifyProfileData();
   const discoverSourceTypes = useDiscoverSourceTypes();
-  const discoverDestinations = useDiscoverDestiantions();
+  const discoverDestinations = useDiscoverDestinations();
   return (
     <>
       <h1>Discover</h1>
@@ -15,7 +16,7 @@ function DiscoverContent() {
       <div>{spotifyProfileData.email}</div>
       <ul>
         {discoverSourceTypes.sourceTypes.map((sourceType) => (
-          <li>{`${sourceType} ${
+          <li key={sourceType}>{`${sourceType} ${
             sourceType == discoverSourceTypes.selectedSourceType
               ? "(SELCETED)"
               : ""
@@ -26,7 +27,7 @@ function DiscoverContent() {
       <ul>
         {discoverDestinations.discoverDestinationPlaylists.map(
           (destinationPlaylist) => (
-            <li>{`${destinationPlaylist.name} ${
+            <li key={destinationPlaylist.id}>{`${destinationPlaylist.name} ${
               destinationPlaylist.id ==
               discoverDestinations.selectedDestinationId
                 ? "(SELCETED)"
@@ -35,6 +36,7 @@ function DiscoverContent() {
           )
         )}
       </ul>
+      <DiscoverDeck />
     </>
   );
 }
