@@ -1,6 +1,7 @@
 import {
   deleteFireStoreDoc,
   listenToFirestoreCollection,
+  setFireStoreDoc,
 } from "./client.firebase";
 import { DeckItem } from "./client.model";
 
@@ -40,13 +41,20 @@ function stopDeckClient() {
 
 function nextTrack(
   currentTrack: DeckItem | null,
-  nextTrackIndex: number
+  nextTrackIndex: number,
+  saveTrack: boolean
 ): DeckItem | null {
   console.log(
     `Track deck has ${trackDeck.length} tracks. Getting the one at index ${nextTrackIndex}...`
   );
-  if (currentTrack)
+  if (currentTrack) {
     deleteFireStoreDoc(`users/${userId}/sourceDeck/${currentTrack.trackId}`);
+    if (saveTrack)
+      setFireStoreDoc(
+        `users/${userId}/yesDeck/${currentTrack.trackId}`,
+        currentTrack
+      );
+  }
   const trackIndex = nextTrackIndex % trackDeck.length;
   return trackDeck.length > 0 ? trackDeck[trackIndex] : null;
 }

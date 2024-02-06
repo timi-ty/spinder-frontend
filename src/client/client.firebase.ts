@@ -17,6 +17,7 @@ import {
   getFirestore,
   onSnapshot,
   QuerySnapshot,
+  setDoc,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -130,6 +131,11 @@ function listenToFirestoreCollection(
   return unsubscribe;
 }
 
+function setFireStoreDoc(docPath: string, data: any) {
+  const document = doc(firestore, docPath);
+  setDoc(document, data);
+}
+
 function deleteFireStoreDoc(docPath: string) {
   const document = doc(firestore, docPath);
   deleteDoc(document);
@@ -140,5 +146,6 @@ export {
   firebaseSignInWithCustomToken,
   getFirebaseIdToken,
   listenToFirestoreCollection,
+  setFireStoreDoc,
   deleteFireStoreDoc,
 };

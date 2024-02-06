@@ -8,14 +8,18 @@ interface Props {
 
 function DiscoverTrack({ initialTrackIndex, nextTrackOffset }: Props) {
   const firstTrack = useMemo(
-    () => nextTrack(null, initialTrackIndex),
+    () => nextTrack(null, initialTrackIndex, false),
     [initialTrackIndex]
   );
   const [activeTrackIndex, setActiveTrackIndex] = useState(initialTrackIndex);
   const [activeTrack, setActiveTrack] = useState(firstTrack);
 
-  function onClickNext() {
-    const newTrack = nextTrack(activeTrack, activeTrackIndex + nextTrackOffset);
+  function onClickNext(save: boolean) {
+    const newTrack = nextTrack(
+      activeTrack,
+      activeTrackIndex + nextTrackOffset,
+      save
+    );
     if (newTrack) {
       setActiveTrack(newTrack);
       setActiveTrackIndex((n) => (n += nextTrackOffset));
@@ -29,7 +33,8 @@ function DiscoverTrack({ initialTrackIndex, nextTrackOffset }: Props) {
       ) : (
         <>
           <audio controls src={activeTrack.previewUrl} />
-          <button onClick={onClickNext}>Next Track</button>
+          <button onClick={() => onClickNext(false)}>Next Track</button>
+          <button onClick={() => onClickNext(true)}>Save Track</button>
         </>
       )}
     </>
