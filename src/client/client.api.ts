@@ -1,8 +1,12 @@
-import { firebaseSignInWithCustomToken } from "./client.firebase";
+import {
+  firebaseSignInWithCustomToken,
+  getFirebaseIdToken,
+} from "./client.firebase";
 import {
   DiscoverDestinationData,
   DiscoverSourceTypesData,
   FinalizeLoginData,
+  RenewedAuth,
   SpinderErrorResponse,
   SpotifyUserProfileData,
 } from "./client.model";
@@ -33,6 +37,32 @@ async function finalizeLogin(): Promise<string> {
 }
 /**********LOGIN END**********/
 
+/**********AUTH START**********/
+const renewAuthenticationUrl = backendUrl + "/auth/renew";
+
+async function renewAuthentication(): Promise<RenewedAuth> {
+  try {
+    const response = await fetch(
+      renewAuthenticationUrl,
+      fetchConfig(await getBearerToken())
+    );
+
+    if (response.ok) {
+      const renewedAuth: RenewedAuth = await response.json();
+      return renewedAuth;
+    } else {
+      const errorResponse: SpinderErrorResponse = await response.json();
+      throw new Error(
+        `Status: ${errorResponse.error.status}, Message: ${errorResponse.error.message}`
+      );
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to renew authentication.");
+  }
+}
+/**********AUTH END**********/
+
 /**********USER START**********/
 const getSpotifyProfileDataUrl = backendUrl + "/user/spotify";
 
@@ -60,13 +90,11 @@ async function getSpotifyProfile(): Promise<SpotifyUserProfileData> {
 const getDiscoverSourceTypesUrl = backendUrl + "/discover/source-types";
 const getDiscoverDestinationsUrl = backendUrl + "/discover/destinations";
 
-async function getDiscoverSourceTypes(
-  idToken: string
-): Promise<DiscoverSourceTypesData> {
+async function getDiscoverSourceTypes(): Promise<DiscoverSourceTypesData> {
   try {
     const response = await fetch(
       getDiscoverSourceTypesUrl,
-      fetchConfig(idToken)
+      fetchConfig(await getBearerToken())
     );
 
     if (response.ok) {
@@ -86,13 +114,12 @@ async function getDiscoverSourceTypes(
 }
 
 async function getDiscoverDestinations(
-  idToken: string,
   offset: number
 ): Promise<DiscoverDestinationData> {
   try {
     const response = await fetch(
       `${getDiscoverDestinationsUrl}?offset=${offset}`,
-      fetchConfig(idToken)
+      fetchConfig(await getBearerToken())
     );
 
     if (response.ok) {
@@ -112,20 +139,25 @@ async function getDiscoverDestinations(
 }
 /**********DISCOVER END**********/
 
-function fetchConfig(idToken: string = ""): RequestInit {
+function fetchConfig(bearerToken: string = ""): RequestInit {
   return {
     method: "GET",
     credentials: "include",
     headers: [
       ["X-Requested-With", "XMLHttpRequest"],
-      ["Authorization", `Bearer ${idToken}`],
+      ["Authorization", `Bearer ${bearerToken}`],
     ],
   };
+}
+
+async function getBearerToken(): Promise<string> {
+  return await getFirebaseIdToken();
 }
 
 export {
   loginWithSpotifyUrl,
   finalizeLogin,
+  renewAuthentication,
   getSpotifyProfile,
   getDiscoverSourceTypes,
   getDiscoverDestinations,

@@ -67,7 +67,7 @@ async function getFirebaseIdToken(): Promise<string> {
 
   try {
     console.log("Firebase trying to get id token...");
-    const idToken = await auth.currentUser.getIdToken(true);
+    const idToken = await auth.currentUser.getIdToken();
     return idToken;
   } catch (error) {
     console.error(error);

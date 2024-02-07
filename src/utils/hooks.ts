@@ -13,33 +13,35 @@ import {
   emptyDiscoverSourceTypes,
   emptySpotifyProfileData,
 } from "../client/client.model";
-import { getFirebaseIdToken } from "../client/client.firebase";
 import { AuthContext } from "./context";
 import { AuthenticationState } from "./models";
 import { startDeckClient, stopDeckClient } from "../client/client.deck";
+import {
+  startRenewingAuthentication,
+  stopRenewingAuthentication,
+} from "../client/client";
 
 function useAuthenticationState(defaultState: AuthenticationState) {
   const [authState, setAuthState] = useState(defaultState);
   useEffect(() => {
     finalizeLogin()
-      .then(async (userId) => {
+      .then((userId) => {
         try {
-          const idToken = await getFirebaseIdToken();
-          setAuthState({ state: "LoggedIn", token: idToken, userId: userId });
-          console.log(
-            `Using authentication token: ${idToken} for user: ${userId}`
-          );
+          setAuthState({ state: "LoggedIn", userId: userId });
+          console.log(`Using Authentication for user: ${userId}`);
         } catch (error) {
           console.error(error);
-          setAuthState({ state: "LoggedOut", token: "", userId: "" });
+          setAuthState({ state: "LoggedOut", userId: "" });
           console.error("Failed to use Authentication: Logged out.");
         }
       })
       .catch((error) => {
         console.error(error);
-        setAuthState({ state: "LoggedOut", token: "", userId: "" });
+        setAuthState({ state: "LoggedOut", userId: "" });
         console.error("Failed to use Authentication: Logged out.");
       });
+    startRenewingAuthentication(55);
+    return () => stopRenewingAuthentication();
   }, []);
 
   return authState;
@@ -72,7 +74,7 @@ function useDiscoverSourceTypes() {
     emptyDiscoverSourceTypes
   );
   useEffect(() => {
-    getDiscoverSourceTypes(authState.token)
+    getDiscoverSourceTypes()
       .then((discoverSourceTypes: DiscoverSourceTypesData) => {
         console.log(
           `Using Discover source types - ${JSON.stringify(
@@ -96,7 +98,7 @@ function useDiscoverDestinations() {
     emptyDiscoverDestinations
   );
   useEffect(() => {
-    getDiscoverDestinations(authState.token, 0)
+    getDiscoverDestinations(0)
       .then((discoverDestinations: DiscoverDestinationData) => {
         console.log(
           `Using Discover destinations - ${JSON.stringify(

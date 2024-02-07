@@ -21,6 +21,16 @@ interface FinalizeLoginData {
 }
 /**********LOGIN END**********/
 
+/**********AUTH START**********/
+interface RenewedAuth {
+  userId: string;
+  spotifyAccessToken: string;
+  spotifyAccessTokenExpiresIn: number;
+  firebaseIdToken: string;
+  firebaseIdTokenExpiresIn: number;
+}
+/**********AUTH START**********/
+
 /**********USER START**********/
 interface ExplicitContent {
   filter_enabled: boolean;
@@ -132,9 +142,9 @@ interface DeckItem {
   image: string;
   previewUrl: string;
   trackName: string;
-  trackUrl: string;
+  trackUri: string;
   artistName: string;
-  artistUrl: string;
+  artistUri: string;
 }
 /**********DECK END**********/
 
@@ -142,6 +152,7 @@ export {
   SpinderError,
   type SpinderErrorResponse,
   type FinalizeLoginData,
+  type RenewedAuth,
   type SpotifyUserProfileData,
   emptySpotifyProfileData,
   type DiscoverSourceTypesData,
