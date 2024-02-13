@@ -3,8 +3,11 @@ import {
   useDiscoverSourceTypes,
   useSpotifyProfileData,
 } from "../utils/hooks";
+import DiscoverTop from "./DiscoverTop";
 import DiscoverDeck from "./DiscoverDeck";
+import DiscoverBottom from "./DiscoverBottom";
 import "./DiscoverContent.scss";
+import DiscoverSeeker from "./DiscoverSeeker";
 
 function DiscoverContent() {
   const spotifyProfileData = useSpotifyProfileData();
@@ -12,32 +15,18 @@ function DiscoverContent() {
   const discoverDestinations = useDiscoverDestinations();
   return (
     <div className="discover">
-      <h1>Discover</h1>
-      <div>{spotifyProfileData.display_name}</div>
-      <div>{spotifyProfileData.email}</div>
-      <ul>
-        {discoverSourceTypes.sourceTypes.map((sourceType) => (
-          <li key={sourceType}>{`${sourceType} ${
-            sourceType == discoverSourceTypes.selectedSourceType
-              ? "(SELCETED)"
-              : ""
-          }`}</li>
-        ))}
-      </ul>
-      <div />
-      <ul>
-        {discoverDestinations.discoverDestinationPlaylists.map(
-          (destinationPlaylist) => (
-            <li key={destinationPlaylist.id}>{`${destinationPlaylist.name} ${
-              destinationPlaylist.id ==
-              discoverDestinations.selectedDestinationId
-                ? "(SELCETED)"
-                : ""
-            }`}</li>
-          )
-        )}
-      </ul>
-      <DiscoverDeck />
+      <div className="top">
+        <DiscoverTop />
+      </div>
+      <div className="deck">
+        <DiscoverDeck />
+      </div>
+      <div className="bottom">
+        <DiscoverBottom />
+      </div>
+      <div className="seeker">
+        <DiscoverSeeker />
+      </div>
     </div>
   );
 }

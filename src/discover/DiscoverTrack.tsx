@@ -4,9 +4,14 @@ import { nextTrack } from "../client/client.deck";
 interface Props {
   initialTrackIndex: number;
   nextTrackOffset: number;
+  onNextTrack: () => void;
 }
 
-function DiscoverTrack({ initialTrackIndex, nextTrackOffset }: Props) {
+function DiscoverTrack({
+  initialTrackIndex,
+  nextTrackOffset,
+  onNextTrack,
+}: Props) {
   const firstTrack = useMemo(
     () => nextTrack(null, initialTrackIndex, false),
     [initialTrackIndex]
@@ -24,6 +29,7 @@ function DiscoverTrack({ initialTrackIndex, nextTrackOffset }: Props) {
       setActiveTrack(newTrack);
       setActiveTrackIndex((n) => (n += nextTrackOffset));
     }
+    onNextTrack();
   }
 
   return (
@@ -33,8 +39,12 @@ function DiscoverTrack({ initialTrackIndex, nextTrackOffset }: Props) {
       ) : (
         <>
           <audio controls src={activeTrack.previewUrl} />
-          <button onClick={() => onClickNext(false)}>Next Track</button>
-          <button onClick={() => onClickNext(true)}>Save Track</button>
+          <button
+            onClick={() => onClickNext(false)}
+          >{`${initialTrackIndex}. Next Track (${activeTrackIndex})`}</button>
+          <button
+            onClick={() => onClickNext(true)}
+          >{`${initialTrackIndex}. Save Track (${activeTrackIndex})`}</button>
         </>
       )}
     </>
