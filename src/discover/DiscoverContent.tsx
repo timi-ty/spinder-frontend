@@ -12,7 +12,7 @@ function DiscoverContent() {
   const discoverDestinations = useDiscoverDestinations();
   return (
     <div className="discover">
-      <h1 className="discover-header">Discover</h1>
+      <h1>Discover</h1>
       <div>{spotifyProfileData.display_name}</div>
       <div>{spotifyProfileData.email}</div>
       <ul>
