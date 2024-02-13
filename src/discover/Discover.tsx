@@ -1,18 +1,25 @@
-import { Navigate } from "react-router-dom";
-import DiscoverContent from "./DiscoverContent";
-import FullScreenLoader from "../loaders/FullScreenLoader";
-import { useAuthenticationState } from "../utils/hooks";
-import { AuthContext } from "../utils/context";
-import { defaultAuthState } from "../utils/models";
+import {
+  useDiscoverDestinations,
+  useDiscoverSourceTypes,
+  useSpotifyProfileData,
+} from "../utils/hooks";
+import DiscoverTop from "./DiscoverTop";
+import DiscoverDeck from "./DiscoverDeck";
+import DiscoverBottom from "./DiscoverBottom";
+import DiscoverSeeker from "./DiscoverSeeker";
+import "./Discover.scss";
 
 function Discover() {
-  const authState = useAuthenticationState(defaultAuthState);
+  const spotifyProfileData = useSpotifyProfileData();
+  const discoverSourceTypes = useDiscoverSourceTypes();
+  const discoverDestinations = useDiscoverDestinations();
   return (
-    <AuthContext.Provider value={authState}>
-      {authState.state === "Pending" && <FullScreenLoader />}
-      {authState.state === "LoggedIn" && <DiscoverContent />}
-      {authState.state === "LoggedOut" && <Navigate to="/home" />}
-    </AuthContext.Provider>
+    <div className="discover">
+      <DiscoverTop />
+      <DiscoverDeck />
+      <DiscoverBottom />
+      <DiscoverSeeker />
+    </div>
   );
 }
 

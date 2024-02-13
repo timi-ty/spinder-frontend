@@ -1,0 +1,11 @@
+@use "../base";
+
+.discover {
+  @extend %app-area;
+}
+
+.discover > div {
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+}

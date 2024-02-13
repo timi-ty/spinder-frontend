@@ -1,0 +1,31 @@
+.discover .deck .track-container .track {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+.discover .deck .track-container .track > .image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.discover .deck .track-container .track .actions {
+  position: absolute;
+  bottom: 0;
+  height: 30%;
+  width: 100%;
+}
+
+.discover .deck .track-container .track .actions .row {
+  position: relative;
+  height: 33.333%;
+  width: 100%;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.discover .deck .track-container .track .actions .row:nth-child(3) {
+  justify-content: space-between;
+}

@@ -2,14 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./home/Home";
-import Discover from "./discover/Discover";
+import Root from "./root/Root";
 import "./main.scss";
 
 //TODO: Create error page to handle error boundary.
 const browserRouter = createBrowserRouter([
   {
     path: "/",
-    element: <Discover />, //Discover is the root page of the frontend.
+    element: <Root />, //The single page Web App is rendered under the root page of the frontend.
   },
   {
     path: "/home",
