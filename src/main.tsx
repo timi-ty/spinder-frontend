@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./home/Home";
 import Discover from "./discover/Discover";
+import "./main.scss";
 
 //TODO: Create error page to handle error boundary.
 const browserRouter = createBrowserRouter([

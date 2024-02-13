@@ -1,0 +1,20 @@
+@use "./base";
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font: 100% base.$font-stack;
+  color: base.$primary-color;
+  background: base.$empty-area-bg-color;
+  width: 100%;
+}
+
+#root{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

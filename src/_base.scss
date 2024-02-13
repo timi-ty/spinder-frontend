@@ -1,0 +1,18 @@
+$font-stack: Helvetica, sans-serif;
+$primary-color: #333;
+$empty-area-bg-color: #333;
+$app-area-bg-color: #fcfcfc;
+
+%app-area{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    background: $app-area-bg-color;
+}
+
+@media screen and (min-width: 40rem){
+    %app-area{
+        width: 40rem;
+    }   
+}

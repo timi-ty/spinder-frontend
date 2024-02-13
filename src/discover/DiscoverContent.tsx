@@ -4,14 +4,15 @@ import {
   useSpotifyProfileData,
 } from "../utils/hooks";
 import DiscoverDeck from "./DiscoverDeck";
+import "./DiscoverContent.scss";
 
 function DiscoverContent() {
   const spotifyProfileData = useSpotifyProfileData();
   const discoverSourceTypes = useDiscoverSourceTypes();
   const discoverDestinations = useDiscoverDestinations();
   return (
-    <>
-      <h1>Discover</h1>
+    <div className="discover">
+      <h1 className="discover-header">Discover</h1>
       <div>{spotifyProfileData.display_name}</div>
       <div>{spotifyProfileData.email}</div>
       <ul>
@@ -37,7 +38,7 @@ function DiscoverContent() {
         )}
       </ul>
       <DiscoverDeck />
-    </>
+    </div>
   );
 }
 
