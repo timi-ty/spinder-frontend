@@ -3,7 +3,7 @@ $primary-color: #333;
 $empty-area-bg-color: #333;
 $app-area-bg-color: #fcfcfc;
 $min-aspect-ratio: 1.5; // = height : width (mobile first).
-$max-aspect-ratio: 2.3; // = height : width (mobile first).
+$max-aspect-ratio: 2.3; // = height : width (mobile first). Research shows that at the moment the largest mobile aspect ratio is 20:9 = 2.222.
 $max-width: 40rem;
 
 //Use the entire screen width by default (mobile first).
