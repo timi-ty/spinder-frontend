@@ -10,10 +10,26 @@
   object-fit: cover;
 }
 
+.discover .deck .track-container .track .play-pause {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.discover .deck .track-container .track .play-pause .button {
+  position: absolute;
+  top: calc(50% - 4rem);
+  left: calc(50% - 4rem);
+  height: 8rem;
+  width: 8rem;
+}
+
 .discover .deck .track-container .track .actions {
   position: absolute;
   bottom: 0;
-  height: 30%;
+  height: 40%;
   width: 100%;
 }
 

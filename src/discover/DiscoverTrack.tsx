@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { nextTrack } from "../client/client.deck";
 import {
   playNextAudioElement,
@@ -20,34 +20,55 @@ function DiscoverTrack({
   nextTrackOffset,
   onNextTrack,
 }: Props) {
-  const firstTrack = useMemo(
+  const getFirstTrack = useCallback(
     () => nextTrack(null, initialTrackIndex, false),
     [initialTrackIndex]
   );
+  const getAudioElement = useCallback(
+    () =>
+      document.getElementById(`audio${initialTrackIndex}`) as HTMLAudioElement,
+    [initialTrackIndex]
+  );
   const [activeTrackIndex, setActiveTrackIndex] = useState(initialTrackIndex);
-  const [activeTrack, setActiveTrack] = useState(firstTrack);
+  const [activeTrack, setActiveTrack] = useState(getFirstTrack);
+  const [audioElement, setAudioElement] = useState(getAudioElement); //The audio element is likely not available upon initialization of this state. Ensure to get it in useEffect.
+  const [isPaused, setIsPaused] = useState(true);
+  const onPause = useCallback(() => setIsPaused(true), []);
+  const onPlay = useCallback(() => setIsPaused(false), []);
 
   useEffect(() => {
-    const audioElement = document.getElementById(
-      `audio${initialTrackIndex}`
-    ) as HTMLAudioElement;
-    registerAudioElement(audioElement, initialTrackIndex);
-    return () => unregisterAudioElement(initialTrackIndex);
+    const audioDomElement = getAudioElement();
+    audioDomElement.addEventListener("pause", onPause);
+    audioDomElement.addEventListener("play", onPlay);
+    setAudioElement(audioDomElement);
+    registerAudioElement(audioDomElement, initialTrackIndex);
+    return () => {
+      unregisterAudioElement(initialTrackIndex);
+      audioDomElement.removeEventListener("pause", onPause);
+      audioDomElement.addEventListener("play", onPlay);
+    };
   }, [initialTrackIndex]);
 
-  function onClickNext(save: boolean) {
-    const newTrack = nextTrack(
-      activeTrack,
-      activeTrackIndex + nextTrackOffset,
-      save
-    );
-    if (newTrack) {
-      setActiveTrack(newTrack);
-      setActiveTrackIndex((n) => (n += nextTrackOffset));
-    }
-    onNextTrack();
-    playNextAudioElement(initialTrackIndex);
-  }
+  const onClickNext = useCallback(
+    (save: boolean) => {
+      const newTrack = nextTrack(
+        activeTrack,
+        activeTrackIndex + nextTrackOffset,
+        save
+      );
+      if (newTrack) {
+        setActiveTrack(newTrack);
+        setActiveTrackIndex((n) => (n += nextTrackOffset));
+      }
+      onNextTrack();
+      playNextAudioElement(initialTrackIndex);
+    },
+    [activeTrack, activeTrackIndex, nextTrackOffset, initialTrackIndex]
+  );
+
+  const onClickPlayPause = useCallback(() => {
+    audioElement.paused ? audioElement.play() : audioElement.pause();
+  }, [audioElement]);
 
   return (
     <div className="track" style={{ zIndex: isActiveTrack ? 1 : 0 }}>
@@ -60,6 +81,11 @@ function DiscoverTrack({
             src={activeTrack.previewUrl}
           />
           <img className="image" src={activeTrack.image} />
+          <div className="play-pause" onClick={onClickPlayPause}>
+            {isPaused && (
+              <img className="button" src="./src/assets/btn_play.png" />
+            )}
+          </div>
           <div className="actions">
             <div className="row">
               <img className="image" src={activeTrack.image} />
