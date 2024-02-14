@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { nextTrack } from "../client/client.deck";
 import {
+  onAudioElementTimeUpdate,
   playNextAudioElement,
   registerAudioElement,
   unregisterAudioElement,
@@ -35,17 +36,23 @@ function DiscoverTrack({
   const [isPaused, setIsPaused] = useState(true);
   const onPause = useCallback(() => setIsPaused(true), []);
   const onPlay = useCallback(() => setIsPaused(false), []);
+  const onTimeUpdate = useCallback(
+    (ev: Event) => onAudioElementTimeUpdate(ev.target as HTMLAudioElement),
+    []
+  );
 
   useEffect(() => {
     const audioDomElement = getAudioElement();
     audioDomElement.addEventListener("pause", onPause);
     audioDomElement.addEventListener("play", onPlay);
+    audioDomElement.addEventListener("timeupdate", onTimeUpdate);
     setAudioElement(audioDomElement);
     registerAudioElement(audioDomElement, initialTrackIndex);
     return () => {
       unregisterAudioElement(initialTrackIndex);
       audioDomElement.removeEventListener("pause", onPause);
-      audioDomElement.addEventListener("play", onPlay);
+      audioDomElement.removeEventListener("play", onPlay);
+      audioDomElement.removeEventListener("timeupdate", onTimeUpdate);
     };
   }, [initialTrackIndex]);
 
