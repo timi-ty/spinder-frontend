@@ -8,4 +8,6 @@ const defaultAuthState: AuthenticationState = {
   userId: "",
 };
 
-export { type AuthenticationState, defaultAuthState };
+type PickerState = "Picking" | "Picked" | "Loading";
+
+export { type AuthenticationState, defaultAuthState, type PickerState };

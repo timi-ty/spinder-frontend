@@ -7,6 +7,7 @@ import {
   DiscoverSourceTypesData,
   FinalizeLoginData,
   RenewedAuth,
+  SetDiscoverDestinationResponse,
   SpinderErrorResponse,
   SpotifyUserProfileData,
 } from "./client.model";
@@ -89,6 +90,7 @@ async function getSpotifyProfile(): Promise<SpotifyUserProfileData> {
 /**********DISCOVER START**********/
 const getDiscoverSourceTypesUrl = backendUrl + "/discover/source-types";
 const getDiscoverDestinationsUrl = backendUrl + "/discover/destinations";
+const setDiscoverDestinationUrl = backendUrl + "/discover/destination";
 
 async function getDiscoverSourceTypes(): Promise<DiscoverSourceTypesData> {
   try {
@@ -137,11 +139,39 @@ async function getDiscoverDestinations(
     throw new Error("Failed to get Discover destinations.");
   }
 }
+
+async function postDiscoverDestination(
+  destinationId: string
+): Promise<SetDiscoverDestinationResponse> {
+  try {
+    const response = await fetch(
+      `${setDiscoverDestinationUrl}?destinationId=${destinationId}`,
+      fetchConfig(await getBearerToken(), "POST")
+    );
+
+    if (response.ok) {
+      const responseData: SetDiscoverDestinationResponse =
+        await response.json();
+      return responseData;
+    } else {
+      const errorResponse: SpinderErrorResponse = await response.json();
+      throw new Error(
+        `Status: ${errorResponse.error.status}, Message: ${errorResponse.error.message}`
+      );
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to set Discover destination.");
+  }
+}
 /**********DISCOVER END**********/
 
-function fetchConfig(bearerToken: string = ""): RequestInit {
+function fetchConfig(
+  bearerToken: string = "",
+  method: "GET" | "POST" = "GET"
+): RequestInit {
   return {
-    method: "GET",
+    method: method,
     credentials: "include",
     headers: [
       ["X-Requested-With", "XMLHttpRequest"],
@@ -161,4 +191,5 @@ export {
   getSpotifyProfile,
   getDiscoverSourceTypes,
   getDiscoverDestinations,
+  postDiscoverDestination,
 };

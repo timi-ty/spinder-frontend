@@ -9,6 +9,7 @@ var userId: string;
 
 //Track deck must be treated as a data store that gets fed from outside but never changes wrt to user interaction.
 //This way, we don't break React's state management paradigm.
+//Track deck grows indefinitely until the deck client is restarted. We can choose to address this.
 var trackDeck: DeckItem[];
 var unsub: () => void;
 

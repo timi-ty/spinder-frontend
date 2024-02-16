@@ -1,0 +1,55 @@
+.discover .destination-picker {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  background: #f9f9f9;
+  z-index: 2;
+}
+
+.discover .destination-picker .top {
+  position: relative;
+  width: 100%;
+  height: 3rem;
+  display: flex;
+}
+
+.discover .destination-picker .search {
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  background: #cecece;
+  border: none;
+  border-radius: 50000rem;
+}
+
+.discover .destination-picker .option-grid {
+  margin-top: 1rem;
+  width: 100%;
+  height: calc(100% - 4rem);
+  gap: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: start;
+  overflow-y: auto;
+}
+
+.discover .destination-picker .option-item {
+  background-color: aqua;
+  height: 8rem;
+  width: 8rem;
+}
+
+.discover .destination-picker .selected {
+  background-color: lightcoral;
+}
+
+.discover .destination-picker .option-item .text {
+  width: 80%;
+  height: 30%;
+  text-align: center;
+  margin: auto;
+  translate: 0% calc(4rem - 50%);
+}

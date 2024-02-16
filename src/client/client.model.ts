@@ -134,6 +134,10 @@ const emptyDiscoverDestinations: DiscoverDestinationData = {
   total: 0,
   discoverDestinationPlaylists: [],
 };
+
+interface SetDiscoverDestinationResponse {
+  selectedDestinationId: string;
+}
 /**********DISCOVER END**********/
 
 /**********DECK START**********/
@@ -159,5 +163,6 @@ export {
   emptyDiscoverSourceTypes,
   type DiscoverDestinationData,
   emptyDiscoverDestinations,
+  type SetDiscoverDestinationResponse,
   type DeckItem,
 };

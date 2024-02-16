@@ -4,7 +4,7 @@ import DiscoverTrack from "./DiscoverTrack";
 import "./DiscoverDeck.scss";
 
 function DiscoverDeck() {
-  const isTracksReady = useReadyTracks();
+  const isTracksReady = useReadyTracks(); //Add a loader until tracks get ready.
   const [activeTrackComponent, setActiveTrackComponent] = useState(0);
 
   return (

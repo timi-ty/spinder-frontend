@@ -1,17 +1,18 @@
 @use "../base";
 
-.home{
-    @extend %app-area;
+.home {
+  @extend %app-area;
 }
 
 .home > div {
-    width: 100%;
-    padding: 1rem;
-    display: flex;
-    justify-content: center;
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
 }
 
 .home > div * {
-    width: fit-content;
-    padding: 1rem;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 1rem;
 }

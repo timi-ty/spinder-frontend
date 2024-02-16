@@ -92,13 +92,15 @@ function useDiscoverSourceTypes() {
   return discoverSourceTypes;
 }
 
-function useDiscoverDestinations() {
+function useDiscoverDestinations(
+  setSelectedDestination: React.Dispatch<React.SetStateAction<string>>
+) {
   const authState = useContext(AuthContext);
   const [discoverDestinations, setDiscoverDestinations] = useState(
     emptyDiscoverDestinations
   );
   useEffect(() => {
-    getDiscoverDestinations(0)
+    getDiscoverDestinations(0) //TODO: Correctly retrieve the paginated data.
       .then((discoverDestinations: DiscoverDestinationData) => {
         console.log(
           `Using Discover destinations - ${JSON.stringify(
@@ -106,6 +108,7 @@ function useDiscoverDestinations() {
           )}.`
         );
         setDiscoverDestinations(discoverDestinations);
+        setSelectedDestination(discoverDestinations.selectedDestinationId);
       })
       .catch((error) => {
         console.error(error);
