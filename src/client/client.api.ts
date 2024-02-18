@@ -3,11 +3,11 @@ import {
   getFirebaseIdToken,
 } from "./client.firebase";
 import {
+  DiscoverDestination,
   DiscoverDestinationData,
-  DiscoverSourceTypesData,
+  DiscoverSourceData,
   FinalizeLoginData,
   RenewedAuth,
-  SetDiscoverDestinationResponse,
   SpinderErrorResponse,
   SpotifyUserProfileData,
 } from "./client.model";
@@ -67,6 +67,7 @@ async function renewAuthentication(): Promise<RenewedAuth> {
 /**********USER START**********/
 const getSpotifyProfileDataUrl = backendUrl + "/user/spotify";
 
+/**This request is authenticated with cookies instead of an explicit authourization header.*/
 async function getSpotifyProfile(): Promise<SpotifyUserProfileData> {
   try {
     const response = await fetch(getSpotifyProfileDataUrl, fetchConfig());
@@ -88,21 +89,20 @@ async function getSpotifyProfile(): Promise<SpotifyUserProfileData> {
 /**********USER END**********/
 
 /**********DISCOVER START**********/
-const getDiscoverSourceTypesUrl = backendUrl + "/discover/source-types";
+const getDiscoverSourcesUrl = backendUrl + "/discover/sources";
 const getDiscoverDestinationsUrl = backendUrl + "/discover/destinations";
 const setDiscoverDestinationUrl = backendUrl + "/discover/destination";
 
-async function getDiscoverSourceTypes(): Promise<DiscoverSourceTypesData> {
+async function getDiscoverSources(): Promise<DiscoverSourceData> {
   try {
     const response = await fetch(
-      getDiscoverSourceTypesUrl,
+      getDiscoverSourcesUrl,
       fetchConfig(await getBearerToken())
     );
 
     if (response.ok) {
-      const discoverSourceTypesResponse: DiscoverSourceTypesData =
-        await response.json();
-      return discoverSourceTypesResponse;
+      const discoverSourceData: DiscoverSourceData = await response.json();
+      return discoverSourceData;
     } else {
       const errorResponse: SpinderErrorResponse = await response.json();
       throw new Error(
@@ -111,7 +111,7 @@ async function getDiscoverSourceTypes(): Promise<DiscoverSourceTypesData> {
     }
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to get Discover source types.");
+    throw new Error("Failed to get Discover sources.");
   }
 }
 
@@ -141,17 +141,16 @@ async function getDiscoverDestinations(
 }
 
 async function postDiscoverDestination(
-  destinationId: string
-): Promise<SetDiscoverDestinationResponse> {
+  destination: DiscoverDestination
+): Promise<DiscoverDestination> {
   try {
     const response = await fetch(
-      `${setDiscoverDestinationUrl}?destinationId=${destinationId}`,
+      `${setDiscoverDestinationUrl}?destination=${JSON.stringify(destination)}`,
       fetchConfig(await getBearerToken(), "POST")
     );
 
     if (response.ok) {
-      const responseData: SetDiscoverDestinationResponse =
-        await response.json();
+      const responseData: DiscoverDestination = await response.json();
       return responseData;
     } else {
       const errorResponse: SpinderErrorResponse = await response.json();
@@ -189,7 +188,7 @@ export {
   finalizeLogin,
   renewAuthentication,
   getSpotifyProfile,
-  getDiscoverSourceTypes,
+  getDiscoverSources as getDiscoverSourceTypes,
   getDiscoverDestinations,
   postDiscoverDestination,
 };

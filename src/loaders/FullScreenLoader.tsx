@@ -1,5 +1,7 @@
+import "./FullScreenLoader.scss";
+
 function FullScreenLoader() {
-  return <div className="loader">Loading...</div>;
+  return <div className="screen-loader">Loading...</div>;
 }
 
 export default FullScreenLoader;

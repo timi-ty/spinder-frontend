@@ -1,18 +1,12 @@
-import { Navigate } from "react-router-dom";
-import Discover from "../discover/Discover";
-import FullScreenLoader from "../loaders/FullScreenLoader";
-import { useAuthenticationState } from "../utils/hooks";
-import { AuthContext } from "../utils/context";
-import { defaultAuthState } from "../utils/models";
+import { Provider } from "react-redux";
+import { store } from "../state/store";
+import App from "./App";
 
 function Root() {
-  const authState = useAuthenticationState(defaultAuthState);
   return (
-    <AuthContext.Provider value={authState}>
-      {authState.state === "Pending" && <FullScreenLoader />}
-      {authState.state === "LoggedIn" && <Discover />}
-      {authState.state === "LoggedOut" && <Navigate to="/home" />}
-    </AuthContext.Provider>
+    <Provider store={store}>
+      <App />
+    </Provider>
   );
 }
 

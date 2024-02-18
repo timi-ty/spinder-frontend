@@ -1,27 +1,46 @@
 import { useCallback, useState } from "react";
-import { useDiscoverDestinations } from "../utils/hooks";
+import { useDiscoverDestinationResource } from "../utils/hooks";
 import "./DiscoverDestinationPicker.scss";
 import { postDiscoverDestination } from "../client/client.api";
-import FullScreenLoader from "../loaders/FullScreenLoader";
+import FullComponentLoader from "../loaders/FullComponentLoader";
+import { useDispatch, useSelector } from "react-redux";
+import { StoreState } from "../state/store";
+import {
+  DiscoverDestination,
+  DiscoverDestinationData,
+} from "../client/client.model";
+import { selectDiscoverDestination } from "../state/slice.discoverdestination";
 
 interface Props {
   onDestinationSelected: () => void;
 }
 
 function DiscoverDestinationPicker({ onDestinationSelected }: Props) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedDestination, setSelectedDestination] = useState("");
-  const discoverDestinations = useDiscoverDestinations(setSelectedDestination); //TODO: This is unnacceptable. Use a global state manager to avoid doing stuff like this.
+  const dispatch = useDispatch();
+  const resourceStatus = useDiscoverDestinationResource();
+  const discoverDestinationData = useSelector<
+    StoreState,
+    DiscoverDestinationData
+  >((state) => state.discoverDestinationState.data);
+  const [isLoading, setIsLoading] = useState(resourceStatus === "Loading"); //Also used as local loader for changing destination. May want to change this.
+
   const onDestinationClick = useCallback(
-    async (id: string, selected: boolean) => {
+    async (destination: DiscoverDestination, selected: boolean) => {
       if (!selected) {
         setIsLoading(true);
         try {
-          const response = await postDiscoverDestination(id);
-          setSelectedDestination(response.selectedDestinationId);
-          onDestinationSelected();
-          setIsLoading(false);
+          const response = await postDiscoverDestination(destination);
+          if (response.id === destination.id) {
+            dispatch(selectDiscoverDestination(destination));
+            onDestinationSelected();
+            setIsLoading(false);
+            return;
+          }
+          throw new Error(
+            `Discover destination set mismatch. Asked for ${destination.id} but got ${response.id}.`
+          );
         } catch (error) {
+          console.error(error);
           console.error("Failed to set discover desination.");
           setIsLoading(false);
         }
@@ -41,15 +60,18 @@ function DiscoverDestinationPicker({ onDestinationSelected }: Props) {
             <input className="search" type="search" />
           </div>
           <div className="option-grid">
-            {discoverDestinations.discoverDestinationPlaylists.map(
-              (playlist) => {
-                const selected = playlist.id === selectedDestination;
+            {discoverDestinationData.availableDestinations.map(
+              (destination) => {
+                const selected =
+                  destination.id ===
+                  discoverDestinationData.selectedDestination.id;
                 return (
                   <div
+                    key={destination.id}
                     className={`option-item ${selected ? "selected" : ""}`}
-                    onClick={() => onDestinationClick(playlist.id, selected)}
+                    onClick={() => onDestinationClick(destination, selected)}
                   >
-                    <div className="text">{playlist.name}</div>
+                    <div className="text">{destination.name}</div>
                   </div>
                 );
               }
@@ -57,7 +79,7 @@ function DiscoverDestinationPicker({ onDestinationSelected }: Props) {
           </div>
         </>
       )}
-      {isLoading && <FullScreenLoader />}
+      {isLoading && <FullComponentLoader />}
     </div>
   );
 }

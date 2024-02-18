@@ -1,143 +1,124 @@
-import { useState, useEffect, useContext } from "react";
-import {
-  finalizeLogin,
-  getDiscoverDestinations,
-  getDiscoverSourceTypes,
-  getSpotifyProfile,
-} from "../client/client.api";
-import {
-  DiscoverDestinationData,
-  DiscoverSourceTypesData,
-  SpotifyUserProfileData,
-  emptyDiscoverDestinations,
-  emptyDiscoverSourceTypes,
-  emptySpotifyProfileData,
-} from "../client/client.model";
-import { AuthContext } from "./context";
-import { AuthenticationState } from "./models";
+import { useState, useEffect } from "react";
 import { startDeckClient, stopDeckClient } from "../client/client.deck";
+import { useSelector } from "react-redux";
+import { AuthStatus } from "../state/slice.auth";
+import { ResourceStatus, StoreState } from "../state/store";
 import {
-  startRenewingAuthentication,
-  stopRenewingAuthentication,
-} from "../client/client";
+  loadAuth,
+  loadDiscoverDestination,
+  loadDiscoverSource,
+  loadUserProfile,
+} from "./loaders";
 
-function useAuthenticationState(defaultState: AuthenticationState) {
-  const [authState, setAuthState] = useState(defaultState);
+/* The global state of this app is managaed by redux. The custom hooks here interface with react-redux hooks.
+ * These hooks are built with a homogenous paradigm. They are primarily for loading app data/resources.
+ * These hooks will only try to load up a resource from it's source if the resource is not fresh or loading.
+ * Every resource has a status value which determines whether or not the resource will be reloaded when hooked up.
+ * This means that these hooks can be used anywhere in the app without reloading performance concerns.
+ * A resource is only loaded if it is not available or currently loading.
+ */
+
+function useAuthResource() {
+  const authStatus = useSelector<StoreState, AuthStatus>(
+    (state) => state.authState.status
+  );
   useEffect(() => {
-    finalizeLogin()
-      .then((userId) => {
-        try {
-          setAuthState({ state: "LoggedIn", userId: userId });
-          console.log(`Using Authentication for user: ${userId}`);
-        } catch (error) {
-          console.error(error);
-          setAuthState({ state: "LoggedOut", userId: "" });
-          console.error("Failed to use Authentication: Logged out.");
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        setAuthState({ state: "LoggedOut", userId: "" });
-        console.error("Failed to use Authentication: Logged out.");
-      });
-    startRenewingAuthentication(55);
-    return () => stopRenewingAuthentication();
+    if (authStatus !== "Empty") {
+      console.log(`Already using Auth Resource:: Status: ${authStatus}`);
+      return;
+    }
+    const unloader = loadAuth();
+    return unloader;
   }, []);
 
-  return authState;
+  return authStatus;
 }
 
-function useSpotifyProfileData() {
-  const [spotifyProfileData, setSpotifyProfileData] = useState(
-    emptySpotifyProfileData
+function useSpotifyProfileResource() {
+  const authStatus = useSelector<StoreState, AuthStatus>(
+    (state) => state.authState.status
+  );
+  const resourceStatus = useSelector<StoreState, ResourceStatus>(
+    (state) => state.userProfileState.status
   );
   useEffect(() => {
-    getSpotifyProfile()
-      .then((spotifyProfileData: SpotifyUserProfileData) => {
-        console.log(
-          `Using Spotify Profile: Name - ${spotifyProfileData.display_name}, Email - ${spotifyProfileData.email}.`
-        );
-        setSpotifyProfileData(spotifyProfileData);
-      })
-      .catch((error) => {
-        console.error(error);
-        throw new Error("Failed to use Spotify Profile. Error.");
-      });
-  }, []);
+    if (resourceStatus !== "Empty") {
+      console.log(
+        `Already using User Profile Resource:: Status: ${resourceStatus}`
+      );
+      return;
+    }
+    loadUserProfile();
+    return () => {
+      console.log("Unload User Profile");
+    };
+  }, [authStatus]);
 
-  return spotifyProfileData;
+  return resourceStatus;
 }
 
-function useDiscoverSourceTypes() {
-  const authState = useContext(AuthContext);
-  const [discoverSourceTypes, setDiscoverSourceTypes] = useState(
-    emptyDiscoverSourceTypes
+function useDiscoverSourceResource() {
+  const authStatus = useSelector<StoreState, AuthStatus>(
+    (state) => state.authState.status
+  );
+  const resourceStatus = useSelector<StoreState, ResourceStatus>(
+    (state) => state.discoverSourceState.status
   );
   useEffect(() => {
-    getDiscoverSourceTypes()
-      .then((discoverSourceTypes: DiscoverSourceTypesData) => {
-        console.log(
-          `Using Discover source types - ${JSON.stringify(
-            discoverSourceTypes
-          )}.`
-        );
-        setDiscoverSourceTypes(discoverSourceTypes);
-      })
-      .catch((error) => {
-        console.error(error);
-        throw new Error("Failed to use Discover source types. Error.");
-      });
-  }, [authState]);
+    if (resourceStatus !== "Empty") {
+      console.log(
+        `Aready using Discover Source Resource:: Status: ${resourceStatus}`
+      );
+      return;
+    }
+    loadDiscoverSource();
+  }, [authStatus]);
 
-  return discoverSourceTypes;
+  return resourceStatus;
 }
 
-function useDiscoverDestinations(
-  setSelectedDestination: React.Dispatch<React.SetStateAction<string>>
-) {
-  const authState = useContext(AuthContext);
-  const [discoverDestinations, setDiscoverDestinations] = useState(
-    emptyDiscoverDestinations
+function useDiscoverDestinationResource() {
+  const authStatus = useSelector<StoreState, AuthStatus>(
+    (state) => state.authState.status
+  );
+  const resourceStatus = useSelector<StoreState, ResourceStatus>(
+    (state) => state.discoverDestinationState.status
   );
   useEffect(() => {
-    getDiscoverDestinations(0) //TODO: Correctly retrieve the paginated data.
-      .then((discoverDestinations: DiscoverDestinationData) => {
-        console.log(
-          `Using Discover destinations - ${JSON.stringify(
-            discoverDestinations
-          )}.`
-        );
-        setDiscoverDestinations(discoverDestinations);
-        setSelectedDestination(discoverDestinations.selectedDestinationId);
-      })
-      .catch((error) => {
-        console.error(error);
-        throw new Error("Failed to use Discover destinations. Error.");
-      });
-  }, [authState]);
+    if (resourceStatus !== "Empty") {
+      console.log(
+        `Already using Discover Destination Resource:: Status: ${resourceStatus}`
+      );
+      return;
+    }
+    loadDiscoverDestination();
+  }, [authStatus]);
 
-  return discoverDestinations;
+  return resourceStatus;
 }
 
+//This hook is not managed by redux.
 function useReadyTracks(): boolean {
-  const authState = useContext(AuthContext);
+  const userId = useSelector<StoreState, string>(
+    (state) => state.authState.userId
+  );
   const [isTracksReady, setIsTracksReady] = useState(false);
   useEffect(() => {
-    startDeckClient(authState.userId, () => {
+    startDeckClient(userId, () => {
       setIsTracksReady(true);
     });
     return () => {
       stopDeckClient();
     };
-  }, [authState]);
+  }, [userId]);
 
   return isTracksReady;
 }
 
 export {
-  useAuthenticationState,
-  useSpotifyProfileData,
-  useDiscoverSourceTypes,
-  useDiscoverDestinations,
+  useAuthResource,
+  useSpotifyProfileResource,
+  useDiscoverSourceResource,
+  useDiscoverDestinationResource,
   useReadyTracks,
 };

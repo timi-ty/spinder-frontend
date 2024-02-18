@@ -1,7 +1,7 @@
 import {
-  useDiscoverDestinations,
-  useDiscoverSourceTypes,
-  useSpotifyProfileData,
+  useAuthResource,
+  useDiscoverSourceResource,
+  useSpotifyProfileResource,
 } from "../utils/hooks";
 import DiscoverTop from "./DiscoverTop";
 import DiscoverDeck from "./DiscoverDeck";
@@ -9,11 +9,11 @@ import DiscoverBottom from "./DiscoverBottom";
 import DiscoverSeeker from "./DiscoverSeeker";
 import DiscoverDestinationPicker from "./DiscoverDestinationPicker";
 import "./Discover.scss";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 function Discover() {
-  const spotifyProfileData = useSpotifyProfileData();
-  const discoverSourceTypes = useDiscoverSourceTypes();
+  const spotifyProfileData = useSpotifyProfileResource();
+  const discoverSourceTypes = useDiscoverSourceResource();
 
   const [isSelectingDestination, setIsSelectingDestination] = useState(false);
 

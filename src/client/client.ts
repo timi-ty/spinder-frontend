@@ -29,12 +29,16 @@ function startRenewingAuthentication(intervalInMinutes: number) {
 }
 
 function stopRenewingAuthentication() {
-  if (renewAuthHandle) {
-    clearInterval(renewAuthHandle);
-    console.log(
-      `Stopped renewing authentication every ${activeRenewInterval} minutes.`
+  if (!renewAuthHandle) {
+    console.warn(
+      "Tried to stop renewing authentication but it authentication renewal has not yet started."
     );
+    return;
   }
+  clearInterval(renewAuthHandle);
+  console.log(
+    `Stopped renewing authentication every ${activeRenewInterval} minutes.`
+  );
   renewAuthHandle = null;
 }
 

@@ -12,6 +12,8 @@ class SpinderError {
 interface SpinderErrorResponse {
   error: SpinderError;
 }
+
+export { SpinderError, type SpinderErrorResponse };
 /**********BASE END**********/
 
 /**********LOGIN START**********/
@@ -29,6 +31,8 @@ interface RenewedAuth {
   firebaseIdToken: string;
   firebaseIdTokenExpiresIn: number;
 }
+
+export { type FinalizeLoginData, type RenewedAuth };
 /**********AUTH START**********/
 
 /**********USER START**********/
@@ -95,49 +99,62 @@ const emptySpotifyProfileData: SpotifyUserProfileData = {
   type: "",
   uri: "",
 };
+
+export { type SpotifyUserProfileData, emptySpotifyProfileData };
 /**********USER END**********/
 
 /**********DISCOVER START**********/
-type DiscoverSourceType =
+type DiscoverSource =
   | "Anything Me"
   | "Following"
   | "Playlist"
   | "Artiste"
   | "Keyword";
 
-interface DiscoverSourceTypesData {
-  selectedSourceType: DiscoverSourceType;
-  sourceTypes: DiscoverSourceType[];
+interface DiscoverSourceData {
+  selectedSource: DiscoverSource;
+  availableSources: DiscoverSource[];
 }
 
-const emptyDiscoverSourceTypes: DiscoverSourceTypesData = {
-  selectedSourceType: "Anything Me",
-  sourceTypes: [],
+const emptyDiscoverSourceData: DiscoverSourceData = {
+  selectedSource: "Anything Me",
+  availableSources: [],
 };
 
-interface DiscoverDestinationPlaylist {
-  name: string; // Playlist name.
-  image: string; // Playlist image.
-  id: string; //playlist id.
+//For now, destination has to be a Spotify Playlist.
+interface DiscoverDestination {
+  name: string;
+  image: string;
+  id: string;
 }
+
+const emptyDiscoverDestination: DiscoverDestination = {
+  name: "",
+  image: "",
+  id: "",
+};
 
 interface DiscoverDestinationData {
-  selectedDestinationId: string;
+  selectedDestination: DiscoverDestination;
   offset: number; // The index at which the server terminated it's search for valid discover destinations (i.e. user owned spotify playlists) in the total user playlists.
   total: number; // The total number of user playlists. The server searches these playlists for discover destinations (i.e. user owned playlists).
-  discoverDestinationPlaylists: DiscoverDestinationPlaylist[];
+  availableDestinations: DiscoverDestination[];
 }
 
-const emptyDiscoverDestinations: DiscoverDestinationData = {
-  selectedDestinationId: "",
+const emptyDiscoverDestinationData: DiscoverDestinationData = {
+  selectedDestination: emptyDiscoverDestination,
   offset: 0,
   total: 0,
-  discoverDestinationPlaylists: [],
+  availableDestinations: [],
 };
 
-interface SetDiscoverDestinationResponse {
-  selectedDestinationId: string;
-}
+export {
+  type DiscoverSourceData,
+  emptyDiscoverSourceData,
+  type DiscoverDestination,
+  type DiscoverDestinationData,
+  emptyDiscoverDestinationData,
+};
 /**********DISCOVER END**********/
 
 /**********DECK START**********/
@@ -150,19 +167,6 @@ interface DeckItem {
   artistName: string;
   artistUri: string;
 }
-/**********DECK END**********/
 
-export {
-  SpinderError,
-  type SpinderErrorResponse,
-  type FinalizeLoginData,
-  type RenewedAuth,
-  type SpotifyUserProfileData,
-  emptySpotifyProfileData,
-  type DiscoverSourceTypesData,
-  emptyDiscoverSourceTypes,
-  type DiscoverDestinationData,
-  emptyDiscoverDestinations,
-  type SetDiscoverDestinationResponse,
-  type DeckItem,
-};
+export { type DeckItem };
+/**********DECK END**********/
