@@ -2,6 +2,7 @@ import { useState } from "react";
 import "../styles/TabListGroup.scss";
 
 interface TabListItem {
+  id: string;
   title: string;
   image: string;
   group: string;
@@ -31,6 +32,7 @@ function TabListGroup({ items, onClickItem }: Props) {
             <div
               className={`tab ${selected}`}
               onClick={() => setSelectedTab(index)}
+              key={tabItems[0].group}
             >
               {
                 tabItems[0]
@@ -41,12 +43,17 @@ function TabListGroup({ items, onClickItem }: Props) {
         })}
       </div>
       <div className="tab-list">
-        {tabGroups[selectedTab].map((item) => (
-          <div onClick={() => onClickItem(item)}>{item.title}</div>
-        ))}
+        {tabGroups.length > 0 &&
+          tabGroups[selectedTab].map((item) => (
+            <div onClick={() => onClickItem(item)} key={item.id}>
+              {item.title}
+            </div>
+          ))}
       </div>
     </div>
   );
 }
 
 export default TabListGroup;
+
+export { type TabListItem };

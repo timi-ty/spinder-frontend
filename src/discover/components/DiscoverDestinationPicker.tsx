@@ -11,9 +11,45 @@ import {
 import { selectDiscoverDestination } from "../../state/slice.discoverdestination";
 import "../styles/DiscoverDestinationPicker.scss";
 import ActionSearch from "../../generic/components/ActionSearch";
+import TabListGroup, {
+  TabListItem,
+} from "../../generic/components/TabListGroup";
 
 interface Props {
   onDestinationSelected: () => void;
+}
+
+function TabListItemToDiscoverDestination(
+  item: TabListItem
+): DiscoverDestination {
+  const discoverDestination: DiscoverDestination = {
+    id: item.id,
+    name: item.title,
+    image: item.image,
+  };
+  return discoverDestination;
+}
+
+function DiscoverDestinationToTabListItem(
+  item: DiscoverDestination
+): TabListItem {
+  const tabListItem: TabListItem = {
+    id: item.id,
+    title: item.name,
+    image: item.image,
+    group: "Playlists", //For now, all discover destinations are playlists.
+  };
+
+  return tabListItem;
+}
+
+function SearchFilterTabListItems(
+  items: TabListItem[],
+  searchText: string
+): TabListItem[] {
+  return items.filter((item) =>
+    item.title.toLowerCase().includes(searchText.toLowerCase())
+  );
 }
 
 function DiscoverDestinationPicker({ onDestinationSelected }: Props) {
@@ -27,6 +63,7 @@ function DiscoverDestinationPicker({ onDestinationSelected }: Props) {
     resourceStatus === "Loading" || resourceStatus === "Empty"
   ); //Also used as local loader for changing destination. May want to change this.
   const [isSearching, setIsSearching] = useState(false);
+  const [searchText, setSearchText] = useState("");
   useEffect(
     () =>
       setIsLoading(resourceStatus === "Loading" || resourceStatus === "Empty"),
@@ -34,7 +71,7 @@ function DiscoverDestinationPicker({ onDestinationSelected }: Props) {
   );
 
   const onDestinationClick = useCallback(
-    async (destination: DiscoverDestination, selected: boolean) => {
+    async (destination: DiscoverDestination, selected: boolean = false) => {
       if (!selected) {
         setIsLoading(true);
         try {
@@ -58,15 +95,24 @@ function DiscoverDestinationPicker({ onDestinationSelected }: Props) {
     []
   );
 
+  const tabListItems = discoverDestinationData.availableDestinations.map(
+    (destination) => DiscoverDestinationToTabListItem(destination)
+  );
+
   return (
     <div className="destination-picker">
       {!isLoading && (
         <>
-          <ActionSearch
-            actionImage={"/src/assets/ic_close.png"}
-            onAction={onDestinationSelected}
-            onSearch={(text) => setIsSearching(text.length > 0)}
-          />
+          <div className="top">
+            <ActionSearch
+              actionImage={"/src/assets/ic_close.png"}
+              onAction={onDestinationSelected}
+              onSearch={(text) => {
+                setIsSearching(text.length > 0);
+                setSearchText(text);
+              }}
+            />
+          </div>
           {!isSearching && (
             <div className="option-grid">
               {discoverDestinationData.availableDestinations.map(
@@ -86,6 +132,14 @@ function DiscoverDestinationPicker({ onDestinationSelected }: Props) {
                 }
               )}
             </div>
+          )}
+          {isSearching && (
+            <TabListGroup
+              items={SearchFilterTabListItems(tabListItems, searchText)}
+              onClickItem={(item) => {
+                onDestinationClick(TabListItemToDiscoverDestination(item));
+              }}
+            />
           )}
         </>
       )}
