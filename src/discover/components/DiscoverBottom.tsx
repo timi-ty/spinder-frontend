@@ -1,4 +1,4 @@
-import "./DiscoverBottom.scss";
+import "../styles/DiscoverBottom.scss";
 
 function DiscoverBottom() {
   return (

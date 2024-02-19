@@ -1,4 +1,4 @@
-import "./DiscoverTop.scss";
+import "../styles/DiscoverTop.scss";
 
 interface Props {
   onClickDestinationPicker: () => void;

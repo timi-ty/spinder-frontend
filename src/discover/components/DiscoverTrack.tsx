@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import { nextTrack } from "../client/client.deck";
+import { nextTrack } from "../../client/client.deck";
 import {
   onAudioElementTimeUpdate,
   playNextAudioElement,
   registerAudioElement,
   unregisterAudioElement,
-} from "../client/client.audio";
-import "./DiscoverTrack.scss";
+} from "../../client/client.audio";
+import "../styles/DiscoverTrack.scss";
 
 interface Props {
   isActiveTrack: boolean;

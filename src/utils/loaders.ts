@@ -33,7 +33,7 @@ import {
   loadUserProfileResource,
   injectUserProfileResource,
   errorUserProfileResource,
-} from "../state/slice.userProfile";
+} from "../state/slice.userprofile";
 import { dispatch } from "../state/store";
 
 /* Each loader can return an unloader.

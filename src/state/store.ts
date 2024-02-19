@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { AuthState, authStateReducer } from "./slice.auth";
-import { UserProfileState, userProfileStateReducer } from "./slice.userProfile";
+import { UserProfileState, userProfileStateReducer } from "./slice.userprofile";
 import {
   DiscoverSourceState,
   discoverSourceStateReducer,

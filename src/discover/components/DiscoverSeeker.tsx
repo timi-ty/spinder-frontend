@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import "./DiscoverSeeker.scss";
 import {
   addAudioElementTimeUpdateListener,
   removeAudioElementTimeUpdateListener,
-} from "../client/client.audio";
+} from "../../client/client.audio";
+import "../styles/DiscoverSeeker.scss";
 
 function DiscoverSeeker() {
   const [seekerProgress, setSeekerProgress] = useState(0);

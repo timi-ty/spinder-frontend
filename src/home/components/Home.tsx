@@ -1,5 +1,5 @@
-import { loginWithSpotifyUrl } from "../client/client.api";
-import "./Home.scss";
+import { loginWithSpotifyUrl } from "../../client/client.api";
+import "../styles/Home.scss";
 
 function Home() {
   return (

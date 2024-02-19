@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
-import Discover from "../discover/Discover";
-import FullScreenLoader from "../loaders/FullScreenLoader";
+import Discover from "../discover/components/Discover";
+import FullScreenLoader from "../loaders/components/FullScreenLoader";
 import { useAuthResource } from "../utils/hooks";
 
 function App() {

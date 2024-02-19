@@ -1,20 +1,12 @@
-import {
-  useAuthResource,
-  useDiscoverSourceResource,
-  useSpotifyProfileResource,
-} from "../utils/hooks";
+import { useState } from "react";
 import DiscoverTop from "./DiscoverTop";
 import DiscoverDeck from "./DiscoverDeck";
 import DiscoverBottom from "./DiscoverBottom";
 import DiscoverSeeker from "./DiscoverSeeker";
 import DiscoverDestinationPicker from "./DiscoverDestinationPicker";
-import "./Discover.scss";
-import { useState } from "react";
+import "../styles/Discover.scss";
 
 function Discover() {
-  const spotifyProfileData = useSpotifyProfileResource();
-  const discoverSourceTypes = useDiscoverSourceResource();
-
   const [isSelectingDestination, setIsSelectingDestination] = useState(false);
 
   return (

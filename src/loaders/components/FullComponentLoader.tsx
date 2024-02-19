@@ -1,4 +1,4 @@
-import "./FullComponentLoader.scss";
+import "../styles/FullComponentLoader.scss";
 
 function FullComponentLoader() {
   return <div className="component-loader">Loading...</div>;

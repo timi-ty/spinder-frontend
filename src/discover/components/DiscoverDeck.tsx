@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useReadyTracks } from "../utils/hooks";
+import { useReadyTracks } from "../../utils/hooks";
 import DiscoverTrack from "./DiscoverTrack";
-import "./DiscoverDeck.scss";
+import "../styles/DiscoverDeck.scss";
 
 function DiscoverDeck() {
   const isTracksReady = useReadyTracks(); //Add a loader until tracks get ready.
