@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { startDeckClient, stopDeckClient } from "../client/client.deck";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AuthStatus } from "../state/slice.auth";
 import { ResourceStatus, StoreState } from "../state/store";
 import {
@@ -9,6 +9,7 @@ import {
   loadDiscoverSource,
   loadUserProfile,
 } from "./loaders";
+import { setTracksReady } from "../state/slice.deck";
 
 /* The global state of this app is managaed by redux. The custom hooks here interface with react-redux hooks.
  * These hooks are built with a homogenous paradigm. They are primarily for loading app data/resources.
@@ -99,14 +100,23 @@ function useDiscoverDestinationResource() {
 
 //This hook is not managed by redux.
 function useReadyTracks(): boolean {
+  const dispatch = useDispatch();
   const userId = useSelector<StoreState, string>(
     (state) => state.authState.userId
   );
-  const [isTracksReady, setIsTracksReady] = useState(false);
+  const isTracksReady = useSelector<StoreState, boolean>(
+    (state) => state.deckState.isTracksReady
+  );
   useEffect(() => {
-    startDeckClient(userId, () => {
-      setIsTracksReady(true);
-    });
+    startDeckClient(
+      userId,
+      () => {
+        dispatch(setTracksReady(true));
+      },
+      () => {
+        dispatch(setTracksReady(false));
+      }
+    );
     return () => {
       stopDeckClient();
     };

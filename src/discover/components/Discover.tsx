@@ -5,14 +5,17 @@ import DiscoverBottom from "./DiscoverBottom";
 import DiscoverSeeker from "./DiscoverSeeker";
 import DiscoverDestinationPicker from "./DiscoverDestinationPicker";
 import "../styles/Discover.scss";
+import DiscoverSourcePicker from "./DiscoverSourcePicker";
 
 function Discover() {
   const [isSelectingDestination, setIsSelectingDestination] = useState(false);
+  const [isSelectingSource, setIsSelectingSource] = useState(false);
 
   return (
     <div className="discover">
       <DiscoverTop
         onClickDestinationPicker={() => setIsSelectingDestination(true)}
+        onClickSourcePicker={() => setIsSelectingSource(true)}
       />
       <DiscoverDeck />
       <DiscoverBottom />
@@ -20,6 +23,11 @@ function Discover() {
       {isSelectingDestination && (
         <DiscoverDestinationPicker
           onDestinationSelected={() => setIsSelectingDestination(false)}
+        />
+      )}
+      {isSelectingSource && (
+        <DiscoverSourcePicker
+          onSourceSelected={() => setIsSelectingSource(false)}
         />
       )}
     </div>

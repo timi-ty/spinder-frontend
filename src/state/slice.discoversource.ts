@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  DiscoverSource,
   DiscoverSourceData,
   emptyDiscoverSourceData,
 } from "../client/client.model";
@@ -17,6 +18,11 @@ const defaultDiscoverSourceState: DiscoverSourceState = {
 
 interface InjectAction {
   payload: DiscoverSourceData;
+  type: string;
+}
+
+interface SelectSourceAction {
+  payload: DiscoverSource;
   type: string;
 }
 
@@ -38,6 +44,9 @@ const discoverSourceSlice = createSlice({
       state.status = "Empty";
       state.data = emptyDiscoverSourceData;
     },
+    selectDiscoverSource: (state, action: SelectSourceAction) => {
+      state.data.selectedSource = action.payload;
+    },
   },
 });
 
@@ -46,6 +55,7 @@ export const {
   injectDiscoverSourceResource,
   errorDiscoverSourceResource,
   emptyDiscoverSourceResource,
+  selectDiscoverSource,
 } = discoverSourceSlice.actions;
 
 export { type DiscoverSourceState };

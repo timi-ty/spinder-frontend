@@ -5,6 +5,7 @@ import {
 import {
   DiscoverDestination,
   DiscoverDestinationData,
+  DiscoverSource,
   DiscoverSourceData,
   DiscoverSourceSearchResult,
   FinalizeLoginData,
@@ -92,6 +93,7 @@ async function getSpotifyProfile(): Promise<SpotifyUserProfileData> {
 /**********DISCOVER START**********/
 const getDiscoverSourcesUrl = backendUrl + "/discover/sources";
 const searchDiscoverSourcesUrl = backendUrl + "/discover/sources/search";
+const setDiscoverSourceUrl = backendUrl + "/discover/source";
 const getDiscoverDestinationsUrl = backendUrl + "/discover/destinations";
 const setDiscoverDestinationUrl = backendUrl + "/discover/destination";
 
@@ -139,6 +141,30 @@ async function searchDiscoverSources(
   } catch (error) {
     console.error(error);
     throw new Error("Failed to search Discover sources.");
+  }
+}
+
+async function postDiscoverSource(
+  source: DiscoverSource
+): Promise<DiscoverSource> {
+  try {
+    const response = await fetch(
+      `${setDiscoverSourceUrl}?source=${JSON.stringify(source)}`,
+      fetchConfig(await getBearerToken(), "POST")
+    );
+
+    if (response.ok) {
+      const responseData: DiscoverSource = await response.json();
+      return responseData;
+    } else {
+      const errorResponse: SpinderErrorResponse = await response.json();
+      throw new Error(
+        `Status: ${errorResponse.error.status}, Message: ${errorResponse.error.message}`
+      );
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to set Discover destination.");
   }
 }
 
@@ -217,6 +243,7 @@ export {
   getSpotifyProfile,
   getDiscoverSources,
   searchDiscoverSources,
+  postDiscoverSource,
   getDiscoverDestinations,
   postDiscoverDestination,
 };

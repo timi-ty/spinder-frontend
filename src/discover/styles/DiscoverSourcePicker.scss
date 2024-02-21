@@ -1,0 +1,21 @@
+.discover .source-picker {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  background: #f9f9f9;
+  z-index: 2;
+}
+
+.discover .source-picker .top {
+  position: relative;
+  width: 100%;
+  height: 3rem;
+}
+
+.discover .source-picker .bottom {
+  position: relative;
+  width: 100%;
+  margin-top: 1rem;
+  height: calc(100% - 4rem);
+}

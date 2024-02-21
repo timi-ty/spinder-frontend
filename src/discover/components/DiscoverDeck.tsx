@@ -26,6 +26,7 @@ function DiscoverDeck() {
             onNextTrack={() => setActiveTrackComponent((a) => (a + 1) % 2)}
           />
         )}
+        {/* An etra view goes here. It shows a loader or a button to reload based on an expectancy state. */}
       </div>
     </div>
   );

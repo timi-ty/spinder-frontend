@@ -9,6 +9,7 @@ import {
   DiscoverDestinationState,
   discoverDestinationStateReducer,
 } from "./slice.discoverdestination";
+import { DeckState, deckStateReducer } from "./slice.deck";
 
 type ResourceStatus =
   | "Empty"
@@ -23,6 +24,7 @@ interface StoreState {
   userProfileState: UserProfileState;
   discoverSourceState: DiscoverSourceState;
   discoverDestinationState: DiscoverDestinationState;
+  deckState: DeckState;
 }
 
 const store = configureStore({
@@ -31,6 +33,7 @@ const store = configureStore({
     userProfileState: userProfileStateReducer,
     discoverSourceState: discoverSourceStateReducer,
     discoverDestinationState: discoverDestinationStateReducer,
+    deckState: deckStateReducer,
   },
 });
 
