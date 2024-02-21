@@ -8,15 +8,20 @@ interface TabListItem {
   group: string;
 }
 
-interface Props {
-  items: TabListItem[];
-  onClickItem: (item: TabListItem) => void;
+interface Props<T> {
+  items: T[];
+  onClickItem: (item: T, isSelected: boolean) => void;
+  selectedItem: T;
 }
 
-function TabListGroup({ items, onClickItem }: Props) {
+function TabListGroup<T extends TabListItem>({
+  items,
+  onClickItem,
+  selectedItem,
+}: Props<T>) {
   const tabSet: Set<string> = new Set();
   items.forEach((item) => tabSet.add(item.group));
-  const tabGroups: TabListItem[][] = [];
+  const tabGroups: T[][] = [];
   tabSet.forEach((tab) => {
     const tabItems = items.filter((item) => item.group === tab);
     tabGroups.push(tabItems);
@@ -30,7 +35,7 @@ function TabListGroup({ items, onClickItem }: Props) {
           const selected = index === selectedTab ? "selected" : "";
           return (
             <div
-              className={`tab ${selected}`}
+              className={`tab-item ${selected}`}
               onClick={() => setSelectedTab(index)}
               key={tabItems[0].group}
             >
@@ -42,13 +47,21 @@ function TabListGroup({ items, onClickItem }: Props) {
           );
         })}
       </div>
-      <div className="tab-list">
+      <div className="list">
         {tabGroups.length > 0 &&
-          tabGroups[selectedTab].map((item) => (
-            <div onClick={() => onClickItem(item)} key={item.id}>
-              {item.title}
-            </div>
-          ))}
+          tabGroups[selectedTab].map((item) => {
+            const isSelected = item.id === selectedItem.id;
+            const selected = isSelected ? "selected" : "";
+            return (
+              <div
+                className={`list-item ${selected}`}
+                onClick={() => onClickItem(item, isSelected)}
+                key={item.id}
+              >
+                {item.title}
+              </div>
+            );
+          })}
       </div>
     </div>
   );

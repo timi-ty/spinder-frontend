@@ -10,7 +10,13 @@ import {
   discoverDestinationStateReducer,
 } from "./slice.discoverdestination";
 
-type ResourceStatus = "Empty" | "Loading" | "Loaded" | "Error";
+type ResourceStatus =
+  | "Empty"
+  | "Loading"
+  | "LoadingMore"
+  | "Loaded"
+  | "Error"
+  | "ErrorMore";
 
 interface StoreState {
   authState: AuthState;

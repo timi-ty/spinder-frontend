@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import {
   startRenewingAuthentication,
   stopRenewingAuthentication,
@@ -5,7 +6,7 @@ import {
 import {
   finalizeLogin,
   getDiscoverDestinations,
-  getDiscoverSourceTypes,
+  getDiscoverSources,
   getSpotifyProfile,
 } from "../client/client.api";
 import {
@@ -21,8 +22,11 @@ import {
 } from "../state/slice.auth";
 import {
   errorDiscoverDestinationResource,
+  errorMoreDiscoverDestinationResource,
   injectDiscoverDestinationResource,
+  injectMoreDiscoverDestinationResource,
   loadDiscoverDestinationResource,
+  loadMoreDiscoverDestinationResource,
 } from "../state/slice.discoverdestination";
 import {
   errorDiscoverSourceResource,
@@ -34,7 +38,7 @@ import {
   injectUserProfileResource,
   errorUserProfileResource,
 } from "../state/slice.userprofile";
-import { dispatch } from "../state/store";
+import { StoreState, dispatch } from "../state/store";
 
 /* Each loader can return an unloader.
  * An unloader is a function that disposes the loaded resources.
@@ -90,7 +94,7 @@ function loadUserProfile() {
 function loadDiscoverSource() {
   dispatch(loadDiscoverSourceResource());
 
-  getDiscoverSourceTypes()
+  getDiscoverSources()
     .then((discoverSourceData: DiscoverSourceData) => {
       console.log(
         `Using Discover Sources:: ${JSON.stringify(discoverSourceData)}.`
@@ -107,7 +111,8 @@ function loadDiscoverSource() {
 function loadDiscoverDestination() {
   dispatch(loadDiscoverDestinationResource());
 
-  getDiscoverDestinations(0) //TODO: Correctly retrieve the paginated data.
+  //Load the first page of the resource.
+  getDiscoverDestinations(0)
     .then((discoverDestinationData: DiscoverDestinationData) => {
       console.log(
         `Using Discover Destination:: ${JSON.stringify(
@@ -123,9 +128,35 @@ function loadDiscoverDestination() {
     });
 }
 
+function loadMoreDiscoverDestination() {
+  dispatch(loadMoreDiscoverDestinationResource());
+
+  //This is a stateful loader. Each time it loads, the resource state knows where the loading stopped.
+  const offset = useSelector<StoreState, number>(
+    (state) => state.discoverDestinationState.data.offset
+  );
+
+  //Load more pages of the resource.
+  getDiscoverDestinations(offset)
+    .then((discoverDestinationData: DiscoverDestinationData) => {
+      console.log(
+        `Using Discover Destination:: ${JSON.stringify(
+          discoverDestinationData
+        )}.`
+      );
+      dispatch(injectMoreDiscoverDestinationResource(discoverDestinationData));
+    })
+    .catch((error) => {
+      console.error(error);
+      dispatch(errorMoreDiscoverDestinationResource());
+      throw new Error("Failed to use Discover Destination:: Error.");
+    });
+}
+
 export {
   loadAuth,
   loadUserProfile,
   loadDiscoverSource,
   loadDiscoverDestination,
+  loadMoreDiscoverDestination,
 };

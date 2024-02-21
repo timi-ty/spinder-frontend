@@ -6,6 +6,7 @@ import {
   DiscoverDestination,
   DiscoverDestinationData,
   DiscoverSourceData,
+  DiscoverSourceSearchResult,
   FinalizeLoginData,
   RenewedAuth,
   SpinderErrorResponse,
@@ -90,6 +91,7 @@ async function getSpotifyProfile(): Promise<SpotifyUserProfileData> {
 
 /**********DISCOVER START**********/
 const getDiscoverSourcesUrl = backendUrl + "/discover/sources";
+const searchDiscoverSourcesUrl = backendUrl + "/discover/sources/search";
 const getDiscoverDestinationsUrl = backendUrl + "/discover/destinations";
 const setDiscoverDestinationUrl = backendUrl + "/discover/destination";
 
@@ -112,6 +114,31 @@ async function getDiscoverSources(): Promise<DiscoverSourceData> {
   } catch (error) {
     console.error(error);
     throw new Error("Failed to get Discover sources.");
+  }
+}
+
+async function searchDiscoverSources(
+  searchText: string
+): Promise<DiscoverSourceSearchResult> {
+  try {
+    const response = await fetch(
+      `${searchDiscoverSourcesUrl}?q=${searchText}`,
+      fetchConfig(await getBearerToken())
+    );
+
+    if (response.ok) {
+      const discoverSourceSearchResult: DiscoverSourceSearchResult =
+        await response.json();
+      return discoverSourceSearchResult;
+    } else {
+      const errorResponse: SpinderErrorResponse = await response.json();
+      throw new Error(
+        `Status: ${errorResponse.error.status}, Message: ${errorResponse.error.message}`
+      );
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to search Discover sources.");
   }
 }
 
@@ -188,7 +215,8 @@ export {
   finalizeLogin,
   renewAuthentication,
   getSpotifyProfile,
-  getDiscoverSources as getDiscoverSourceTypes,
+  getDiscoverSources,
+  searchDiscoverSources,
   getDiscoverDestinations,
   postDiscoverDestination,
 };

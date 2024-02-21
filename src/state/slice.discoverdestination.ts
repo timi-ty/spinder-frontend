@@ -33,12 +33,29 @@ const discoverDestinationSlice = createSlice({
     loadDiscoverDestinationResource: (state) => {
       state.status = "Loading";
     },
+    loadMoreDiscoverDestinationResource: (state) => {
+      state.status = "LoadingMore";
+    },
     injectDiscoverDestinationResource: (state, action: InjectAction) => {
       state.status = "Loaded";
       state.data = action.payload;
     },
+    injectMoreDiscoverDestinationResource: (state, action: InjectAction) => {
+      state.status = "Loaded";
+      //Lazy verfication that we are actually adding more data. This can be more sophisticated.
+      if (action.payload.offset > state.data.offset)
+        state.data.availableDestinations.push(
+          ...action.payload.availableDestinations
+        );
+      state.data.offset = action.payload.offset;
+      state.data.selectedDestination = action.payload.selectedDestination;
+      state.data.total = action.payload.total;
+    },
     errorDiscoverDestinationResource: (state) => {
       state.status = "Error";
+    },
+    errorMoreDiscoverDestinationResource: (state) => {
+      state.status = "ErrorMore";
     },
     emptyDiscoverDestinationResource: (state) => {
       state.status = "Empty";
@@ -52,8 +69,11 @@ const discoverDestinationSlice = createSlice({
 
 export const {
   loadDiscoverDestinationResource,
+  loadMoreDiscoverDestinationResource,
   injectDiscoverDestinationResource,
+  injectMoreDiscoverDestinationResource,
   errorDiscoverDestinationResource,
+  errorMoreDiscoverDestinationResource,
   emptyDiscoverDestinationResource,
   selectDiscoverDestination,
 } = discoverDestinationSlice.actions;

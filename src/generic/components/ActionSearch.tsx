@@ -1,6 +1,6 @@
 import { useCallback } from "react";
-import "../styles/ActionSeach.scss";
 import IconButton from "./IconButton";
+import "../styles/ActionSeach.scss";
 
 interface Props {
   actionImage: string;

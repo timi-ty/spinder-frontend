@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreState } from "../../state/store";
 import { useDiscoverDestinationResource } from "../../utils/hooks";
@@ -14,39 +14,37 @@ import ActionSearch from "../../generic/components/ActionSearch";
 import TabListGroup, {
   TabListItem,
 } from "../../generic/components/TabListGroup";
+import BalancedGrid, {
+  BalancedGridItem,
+} from "../../generic/components/BalancedGrid";
 
 interface Props {
   onDestinationSelected: () => void;
 }
 
-function TabListItemToDiscoverDestination(
-  item: TabListItem
-): DiscoverDestination {
-  const discoverDestination: DiscoverDestination = {
-    id: item.id,
-    name: item.title,
-    image: item.image,
-  };
-  return discoverDestination;
-}
+interface DiscoverDestinationItem
+  extends DiscoverDestination,
+    TabListItem,
+    BalancedGridItem {}
 
-function DiscoverDestinationToTabListItem(
+function DiscoverDestinationToItem(
   item: DiscoverDestination
-): TabListItem {
-  const tabListItem: TabListItem = {
+): DiscoverDestinationItem {
+  const destinationItem: DiscoverDestinationItem = {
     id: item.id,
+    name: item.name,
     title: item.name,
     image: item.image,
-    group: "Playlists", //For now, all discover destinations are playlists.
+    group: "Playlists",
   };
 
-  return tabListItem;
+  return destinationItem;
 }
 
-function SearchFilterTabListItems(
-  items: TabListItem[],
+function SearchFilterItems(
+  items: DiscoverDestinationItem[],
   searchText: string
-): TabListItem[] {
+): DiscoverDestinationItem[] {
   return items.filter((item) =>
     item.title.toLowerCase().includes(searchText.toLowerCase())
   );
@@ -59,6 +57,7 @@ function DiscoverDestinationPicker({ onDestinationSelected }: Props) {
     StoreState,
     DiscoverDestinationData
   >((state) => state.discoverDestinationState.data);
+
   const [isLoading, setIsLoading] = useState(
     resourceStatus === "Loading" || resourceStatus === "Empty"
   ); //Also used as local loader for changing destination. May want to change this.
@@ -71,8 +70,11 @@ function DiscoverDestinationPicker({ onDestinationSelected }: Props) {
   );
 
   const onDestinationClick = useCallback(
-    async (destination: DiscoverDestination, selected: boolean = false) => {
-      if (!selected) {
+    async (
+      destination: DiscoverDestinationItem,
+      isSelected: boolean = false
+    ) => {
+      if (!isSelected) {
         setIsLoading(true);
         try {
           const response = await postDiscoverDestination(destination);
@@ -95,8 +97,17 @@ function DiscoverDestinationPicker({ onDestinationSelected }: Props) {
     []
   );
 
-  const tabListItems = discoverDestinationData.availableDestinations.map(
-    (destination) => DiscoverDestinationToTabListItem(destination)
+  const destinationItems = useMemo(
+    () =>
+      discoverDestinationData.availableDestinations.map((destination) =>
+        DiscoverDestinationToItem(destination)
+      ),
+    [discoverDestinationData]
+  );
+  const selectedDestinationItem = useMemo(
+    () =>
+      DiscoverDestinationToItem(discoverDestinationData.selectedDestination),
+    [discoverDestinationData]
   );
 
   return (
@@ -113,34 +124,22 @@ function DiscoverDestinationPicker({ onDestinationSelected }: Props) {
               }}
             />
           </div>
-          {!isSearching && (
-            <div className="option-grid">
-              {discoverDestinationData.availableDestinations.map(
-                (destination) => {
-                  const selected =
-                    destination.id ===
-                    discoverDestinationData.selectedDestination.id;
-                  return (
-                    <div
-                      key={destination.id}
-                      className={`option-item ${selected ? "selected" : ""}`}
-                      onClick={() => onDestinationClick(destination, selected)}
-                    >
-                      <div className="text">{destination.name}</div>
-                    </div>
-                  );
-                }
-              )}
-            </div>
-          )}
-          {isSearching && (
-            <TabListGroup
-              items={SearchFilterTabListItems(tabListItems, searchText)}
-              onClickItem={(item) => {
-                onDestinationClick(TabListItemToDiscoverDestination(item));
-              }}
-            />
-          )}
+          <div className="bottom">
+            {!isSearching && (
+              <BalancedGrid
+                items={destinationItems}
+                onClickItem={onDestinationClick}
+                selectedItem={selectedDestinationItem}
+              />
+            )}
+            {isSearching && (
+              <TabListGroup
+                items={SearchFilterItems(destinationItems, searchText)}
+                onClickItem={onDestinationClick}
+                selectedItem={selectedDestinationItem}
+              />
+            )}
+          </div>
         </>
       )}
       {isLoading && <FullComponentLoader />}
