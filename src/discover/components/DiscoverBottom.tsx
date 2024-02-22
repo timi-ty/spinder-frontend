@@ -17,15 +17,19 @@ function DiscoverBottom() {
 
   return (
     <div className="bottom">
-      <div className="related-sources">
-        {relatedSources.map((source) => (
-          <div className="source" key={source.id}>{`#${source.name}`}</div>
-        ))}
+      <div className="left">
+        <div className="related-sources">
+          {relatedSources.map((source) => (
+            <div className="source" key={source.id}>{`#${source.name}`}</div>
+          ))}
+        </div>
       </div>
-      <div className="profile">
-        {profileResource === "Loaded" && (
-          <img className="image" src={profileImage} />
-        )}
+      <div className="right">
+        <div className="profile">
+          {profileResource === "Loaded" && (
+            <img className="image" src={profileImage} />
+          )}
+        </div>
       </div>
     </div>
   );

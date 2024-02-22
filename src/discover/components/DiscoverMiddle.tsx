@@ -24,15 +24,19 @@ function DiscoverMiddle() {
         </div>
       </div>
       <div className="right">
-        <img
-          className="artist-image"
-          src={
-            activeDeckItem.artists.length > 0
-              ? activeDeckItem.artists[0].artistImage
-              : ""
-          }
-        />
-        <img className="like-button" src="/src/assets/ic_like_empty.png" />
+        <div className="top">
+          <img
+            className="artist-image"
+            src={
+              activeDeckItem.artists.length > 0
+                ? activeDeckItem.artists[0].artistImage
+                : ""
+            }
+          />
+        </div>
+        <div className="bottom">
+          <img className="like-button" src="/src/assets/ic_like_empty.png" />
+        </div>
       </div>
     </div>
   );

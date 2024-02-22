@@ -7,15 +7,28 @@
   gap: 1rem;
 }
 
-.discover > .bottom .related-sources {
+.discover > .bottom > .left {
+  height: 100%;
   width: 80%;
+  overflow-y: auto;
+}
+
+.discover > .bottom > .right {
+  height: 100%;
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.discover > .bottom .related-sources {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  align-content: flex-start;
-  padding: 1rem;
+  align-content: center;
   gap: 0.5rem;
-  overflow-y: auto;
 }
 
 .discover > .bottom .source {
@@ -27,14 +40,14 @@
 }
 
 .discover > .bottom .profile {
-  width: 20%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 1rem;
+  width: 100%;
+  height: 50%;
+  padding: 10%;
 }
 
 .discover > .bottom .profile > .image {
   width: 100%;
-  border-radius: 50%;
+  height: 100%;
+  object-fit: contain;
+  clip-path: circle();
 }
