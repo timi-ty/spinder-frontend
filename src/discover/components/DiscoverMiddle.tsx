@@ -32,7 +32,7 @@ function DiscoverMiddle() {
               : ""
           }
         />
-        <img className="like-button" src="/src/assets/ic_like_empty.svg" />
+        <img className="like-button" src="/src/assets/ic_like_empty.png" />
       </div>
     </div>
   );

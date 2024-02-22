@@ -4,7 +4,7 @@ import {
   registerAudioElement,
   unregisterAudioElement,
 } from "../../client/client.audio";
-import "../styles/DiscoverTrack.scss";
+import "../styles/DiscoverDeckItemView.scss";
 import { useClickDrag } from "../../utils/hooks";
 import { DeckItem } from "../../client/client.model";
 import { useDispatch } from "react-redux";
@@ -29,7 +29,7 @@ function DiscoverDeckItemView({
 }: Props) {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(changeActiveDeckItem(mTrack));
+    if (isActiveDeckItemView) dispatch(changeActiveDeckItem(mTrack));
   }, [isActiveDeckItemView, mTrack]);
 
   const getAudioElement = () =>

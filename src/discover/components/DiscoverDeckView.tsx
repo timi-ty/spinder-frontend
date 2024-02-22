@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDeck } from "../../utils/hooks";
 import DiscoverDeckItemView from "./DiscoverDeckItemView";
-import "../styles/DiscoverDeck.scss";
+import "../styles/DiscoverDeckView.scss";
 import { getDeckItem } from "../../client/client.deck";
 import { playAudioElement } from "../../client/client.audio";
 
