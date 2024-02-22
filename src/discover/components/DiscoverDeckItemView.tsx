@@ -7,6 +7,8 @@ import {
 import "../styles/DiscoverTrack.scss";
 import { useClickDrag } from "../../utils/hooks";
 import { DeckItem } from "../../client/client.model";
+import { useDispatch } from "react-redux";
+import { changeActiveDeckItem } from "../../state/slice.deck";
 
 const dragActionThreshold = 20; // Drag must be at least 20px in magnitude to dispatch the action.
 
@@ -25,6 +27,11 @@ function DiscoverDeckItemView({
   onNext,
   onPrevious,
 }: Props) {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(changeActiveDeckItem(mTrack));
+  }, [isActiveDeckItemView, mTrack]);
+
   const getAudioElement = () =>
     document.getElementById(`audio${deckItemViewIndex}`) as HTMLAudioElement;
   const [audioElement, setAudioElement] = useState(getAudioElement); //The audio element is likely not available upon initialization of this state. Ensure to get it in useEffect.
@@ -70,11 +77,9 @@ function DiscoverDeckItemView({
   const translationY = isActiveDeckItemView
     ? Math.min(clickDragDelta.dy, 0)
     : 0;
-  const normalizedYDelta = Math.max(Math.min(clickDragDelta.dy, 100), 0) / 100; //Clamp between 0-100 then normalize;
-  const scale =
-    isActiveDeckItemView && clickDragDelta.dy > 0
-      ? 1 - 0.2 * normalizedYDelta
-      : 1;
+  const positiveNormYDelta =
+    Math.max(Math.min(clickDragDelta.dy, 100), 0) / 100; //Clamp between 0-100 then normalize;
+  const scale = isActiveDeckItemView ? 1 - 0.2 * positiveNormYDelta : 1;
 
   const onClickPlayPause = () => {
     if (!isActiveDeckItemView || Math.abs(endDelta.dy) > 1) return; //Hack. End delta lets us know if we were dragging just now.

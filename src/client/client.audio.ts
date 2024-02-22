@@ -11,9 +11,14 @@ function unregisterAudioElement(position: number) {
   audioElementMap.delete(position);
 }
 
-function playNextAudioElement(currentAudioElementIndex: number) {
-  const nextIndex = (currentAudioElementIndex + 1) % audioElementMap.size;
-  audioElementMap.get(nextIndex)?.play();
+function playAudioElement(audioElementIndex: number) {
+  const audioElement = audioElementMap.get(audioElementIndex);
+  if (!audioElement) {
+    throw new Error(
+      `Audio element at index ${audioElementIndex} is not registered.`
+    );
+  }
+  audioElement.play();
 }
 
 //Returns a number handle that can be used to remove the added listener.
@@ -37,7 +42,7 @@ function onAudioElementTimeUpdate(element: HTMLAudioElement) {
 export {
   registerAudioElement,
   unregisterAudioElement,
-  playNextAudioElement,
+  playAudioElement,
   addAudioElementTimeUpdateListener,
   removeAudioElementTimeUpdateListener,
   onAudioElementTimeUpdate,

@@ -1,4 +1,9 @@
-$font-stack: Helvetica, sans-serif;
+@font-face {
+  font-family: Inter;
+  src: url(./assets/Inter.ttf);
+}
+
+$font-stack: Inter, Helvetica, sans-serif;
 $primary-color: #333;
 $empty-area-bg-color: #333;
 $app-area-bg-color: #fcfcfc;

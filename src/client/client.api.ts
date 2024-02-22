@@ -17,12 +17,13 @@ import {
 const backendUrl = "http://localhost:3000/api";
 
 /**********LOGIN START**********/
-const loginWithSpotifyUrl = backendUrl + "/login";
-const finalizeLoginUrl = backendUrl + "/login/finalize";
+const loginWithSpotifyUrl = `${backendUrl}/login`;
 
 async function finalizeLogin(): Promise<string> {
   try {
-    const response = await fetch(finalizeLoginUrl, fetchConfig());
+    const url = `${backendUrl}/login/finalize`;
+
+    const response = await fetch(url, fetchConfig());
 
     if (response.ok) {
       const loginData: FinalizeLoginData = await response.json();
@@ -41,14 +42,12 @@ async function finalizeLogin(): Promise<string> {
 /**********LOGIN END**********/
 
 /**********AUTH START**********/
-const renewAuthenticationUrl = backendUrl + "/auth/renew";
 
 async function renewAuthentication(): Promise<RenewedAuth> {
   try {
-    const response = await fetch(
-      renewAuthenticationUrl,
-      fetchConfig(await getBearerToken())
-    );
+    const url = `${backendUrl}/auth/renew`;
+
+    const response = await fetch(url, fetchConfig(await getBearerToken()));
 
     if (response.ok) {
       const renewedAuth: RenewedAuth = await response.json();
@@ -67,12 +66,13 @@ async function renewAuthentication(): Promise<RenewedAuth> {
 /**********AUTH END**********/
 
 /**********USER START**********/
-const getSpotifyProfileDataUrl = backendUrl + "/user/spotify";
 
 /**This request is authenticated with cookies instead of an explicit authourization header.*/
 async function getSpotifyProfile(): Promise<SpotifyUserProfileData> {
   try {
-    const response = await fetch(getSpotifyProfileDataUrl, fetchConfig());
+    const url = `${backendUrl}/user/spotify`;
+
+    const response = await fetch(url, fetchConfig());
 
     if (response.ok) {
       const profileData: SpotifyUserProfileData = await response.json();
@@ -91,13 +91,9 @@ async function getSpotifyProfile(): Promise<SpotifyUserProfileData> {
 /**********USER END**********/
 
 /**********DISCOVER START**********/
-const getDiscoverSourcesUrl = backendUrl + "/discover/sources";
-const searchDiscoverSourcesUrl = backendUrl + "/discover/sources/search";
-const setDiscoverSourceUrl = backendUrl + "/discover/source";
-const getDiscoverDestinationsUrl = backendUrl + "/discover/destinations";
-const setDiscoverDestinationUrl = backendUrl + "/discover/destination";
 
 async function getDiscoverSources(): Promise<DiscoverSourceData> {
+  const getDiscoverSourcesUrl = `${backendUrl}/discover/sources`;
   try {
     const response = await fetch(
       getDiscoverSourcesUrl,
@@ -123,6 +119,8 @@ async function searchDiscoverSources(
   searchText: string
 ): Promise<DiscoverSourceSearchResult> {
   try {
+    const searchDiscoverSourcesUrl = `${backendUrl}/discover/sources/search`;
+
     const response = await fetch(
       `${searchDiscoverSourcesUrl}?q=${searchText}`,
       fetchConfig(await getBearerToken())
@@ -148,6 +146,8 @@ async function postDiscoverSource(
   source: DiscoverSource
 ): Promise<DiscoverSource> {
   try {
+    const setDiscoverSourceUrl = `${backendUrl}/discover/source`;
+
     const response = await fetch(
       `${setDiscoverSourceUrl}?source=${JSON.stringify(source)}`,
       fetchConfig(await getBearerToken(), "POST")
@@ -172,6 +172,8 @@ async function getDiscoverDestinations(
   offset: number
 ): Promise<DiscoverDestinationData> {
   try {
+    const getDiscoverDestinationsUrl = `${backendUrl}/discover/destinations`;
+
     const response = await fetch(
       `${getDiscoverDestinationsUrl}?offset=${offset}`,
       fetchConfig(await getBearerToken())
@@ -197,6 +199,8 @@ async function postDiscoverDestination(
   destination: DiscoverDestination
 ): Promise<DiscoverDestination> {
   try {
+    const setDiscoverDestinationUrl = `${backendUrl}/discover/destination`;
+
     const response = await fetch(
       `${setDiscoverDestinationUrl}?destination=${JSON.stringify(destination)}`,
       fetchConfig(await getBearerToken(), "POST")

@@ -3,6 +3,7 @@ import { useDeck } from "../../utils/hooks";
 import DiscoverDeckItemView from "./DiscoverDeckItemView";
 import "../styles/DiscoverDeck.scss";
 import { getDeckItem } from "../../client/client.deck";
+import { playAudioElement } from "../../client/client.audio";
 
 function DiscoverDeckView() {
   const isDeckReady = useDeck(); //Add a loader until deck get ready.
@@ -21,12 +22,15 @@ function DiscoverDeckView() {
     switch (deckItemCursor) {
       case 0:
         if (cursor2 < cursor0) setCursor2((i) => i + 3); //Only move cursor2 when it is behind cursor1.
+        playAudioElement(1);
         break;
       case 1:
         setCursor0((i) => i + 3);
+        playAudioElement(2);
         break;
       case 2:
         setCursor1((i) => i + 3);
+        playAudioElement(0);
         break;
     }
     console.log(
@@ -47,14 +51,17 @@ function DiscoverDeckView() {
         if (cursor0 < 3) {
           console.warn("Already at the top. Can't go previous.");
           return;
-        } //Reject previous when at the top. We use 3 because indexes increase in 3s.
+        } //Reject previous when at the top. We use 3 because cursors increase in 3s.
         setCursor1((i) => i - 3);
+        playAudioElement(2);
         break;
       case 1:
         if (cursor1 >= 4) setCursor2((i) => i - 3); //If there is only one place up to go to, leave the 2 index alone.
+        playAudioElement(0);
         break;
       case 2:
         setCursor0((i) => i - 3);
+        playAudioElement(1);
         break;
     }
     setActiveDeckItemCursor((c) => (c + 2) % 3);

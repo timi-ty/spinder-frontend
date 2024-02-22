@@ -200,9 +200,25 @@ interface DeckItem {
   previewUrl: string;
   trackName: string;
   trackUri: string;
-  artistName: string;
-  artistUri: string;
+  artists: DeckItemArtist[];
+  relatedSources: DiscoverSource[];
 }
 
-export { type DeckItem };
+interface DeckItemArtist {
+  artistName: string;
+  artistUri: string;
+  artistImage: string;
+}
+
+const emptyDeckItem: DeckItem = {
+  trackId: "",
+  image: "",
+  previewUrl: "",
+  trackName: "",
+  trackUri: "",
+  artists: [],
+  relatedSources: [],
+};
+
+export { type DeckItem, emptyDeckItem };
 /**********DECK END**********/
