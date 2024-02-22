@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { startDeckClient, stopDeckClient } from "../client/client.deck";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthStatus } from "../state/slice.auth";
@@ -9,7 +9,7 @@ import {
   loadDiscoverSource,
   loadUserProfile,
 } from "./loaders";
-import { setTracksReady } from "../state/slice.deck";
+import { setDeckReady } from "../state/slice.deck";
 
 /* The global state of this app is managaed by redux. The custom hooks here interface with react-redux hooks.
  * These hooks are built with a homogenous paradigm. They are primarily for loading app data/resources.
@@ -98,23 +98,23 @@ function useDiscoverDestinationResource() {
   return resourceStatus;
 }
 
-//This hook is not managed by redux.
-function useReadyTracks(): boolean {
+//These hooks are not managed by redux.
+function useDeck(): boolean {
   const dispatch = useDispatch();
   const userId = useSelector<StoreState, string>(
     (state) => state.authState.userId
   );
-  const isTracksReady = useSelector<StoreState, boolean>(
-    (state) => state.deckState.isTracksReady
+  const isDeckReady = useSelector<StoreState, boolean>(
+    (state) => state.deckState.isDeckReady
   );
   useEffect(() => {
     startDeckClient(
       userId,
       () => {
-        dispatch(setTracksReady(true));
+        dispatch(setDeckReady(true));
       },
       () => {
-        dispatch(setTracksReady(false));
+        dispatch(setDeckReady(false));
       }
     );
     return () => {
@@ -122,7 +122,62 @@ function useReadyTracks(): boolean {
     };
   }, [userId]);
 
-  return isTracksReady;
+  return isDeckReady;
+}
+
+function useClickDrag(
+  onFinish: (clickDragDelta: { dx: number; dy: number }) => void
+) {
+  const [clickDragDelta, setClickDragDelta] = useState({ dx: 0, dy: 0 });
+  const [endDelta, setEndDelta] = useState({ dx: 0, dy: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [mouseStartPos, setMouseStartPos] = useState({ x: 0, y: 0 });
+  const [mouseCurrentPos, setMouseCurrentPos] = useState({ x: 0, y: 0 });
+  const onMouseDown = useCallback((ev: MouseEvent) => {
+    setMouseStartPos({ x: ev.clientX, y: ev.clientY });
+    setIsDragging(true);
+  }, []);
+  const onMouseUp = useCallback(() => {
+    setIsDragging(false);
+    setClickDragDelta({ dx: 0, dy: 0 });
+  }, []);
+  const onMouseMove = useCallback((ev: MouseEvent) => {
+    setMouseCurrentPos({ x: ev.clientX, y: ev.clientY });
+  }, []);
+  useEffect(() => {
+    window.addEventListener("mousedown", onMouseDown);
+    window.addEventListener("mouseup", onMouseUp);
+    window.addEventListener("mousemove", onMouseMove);
+
+    return () => {
+      window.removeEventListener("mousedown", onMouseDown);
+      window.removeEventListener("mouseup", onMouseUp);
+      window.removeEventListener("mousemove", onMouseMove);
+    };
+  }, []);
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const deltaX = mouseCurrentPos.x - mouseStartPos.x;
+    const deltaY = mouseCurrentPos.y - mouseStartPos.y;
+    setClickDragDelta({ dx: deltaX, dy: deltaY });
+    setEndDelta(clickDragDelta);
+
+    return () => {
+      setClickDragDelta({ dx: 0, dy: 0 });
+      setEndDelta({ dx: 0, dy: 0 });
+    };
+  }, [mouseStartPos, mouseCurrentPos, isDragging]);
+
+  //Last effect that is called after drag is finished. onFinish is guaranteed to be called last after a drag action.
+  useEffect(() => {
+    if (!isDragging) {
+      if (Math.abs(endDelta.dx) > 0 || Math.abs(endDelta.dy) > 0)
+        onFinish(endDelta);
+    }
+  }, [endDelta, isDragging]);
+
+  return [clickDragDelta, endDelta];
 }
 
 export {
@@ -130,5 +185,6 @@ export {
   useSpotifyProfileResource,
   useDiscoverSourceResource,
   useDiscoverDestinationResource,
-  useReadyTracks,
+  useDeck,
+  useClickDrag,
 };

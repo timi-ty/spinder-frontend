@@ -1,3 +1,10 @@
 .icon-button {
   height: 100%;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+}
+
+.icon-button .icon {
+  height: 100%;
 }

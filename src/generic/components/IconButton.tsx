@@ -6,7 +6,11 @@ interface Props {
 }
 
 function IconButton({ icon, onAction }: Props) {
-  return <img className="icon-button" src={icon} onClick={onAction} />;
+  return (
+    <button className="icon-button" onClick={onAction}>
+      <img className="icon" src={icon} />
+    </button>
+  );
 }
 
 export default IconButton;

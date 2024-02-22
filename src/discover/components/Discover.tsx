@@ -1,11 +1,12 @@
 import { useState } from "react";
 import DiscoverTop from "./DiscoverTop";
-import DiscoverDeck from "./DiscoverDeck";
+import DiscoverDeckView from "./DiscoverDeckView";
 import DiscoverBottom from "./DiscoverBottom";
 import DiscoverSeeker from "./DiscoverSeeker";
 import DiscoverDestinationPicker from "./DiscoverDestinationPicker";
 import "../styles/Discover.scss";
 import DiscoverSourcePicker from "./DiscoverSourcePicker";
+import DiscoverMiddle from "./DiscoverMiddle";
 
 function Discover() {
   const [isSelectingDestination, setIsSelectingDestination] = useState(false);
@@ -17,7 +18,8 @@ function Discover() {
         onClickDestinationPicker={() => setIsSelectingDestination(true)}
         onClickSourcePicker={() => setIsSelectingSource(true)}
       />
-      <DiscoverDeck />
+      <DiscoverDeckView />
+      <DiscoverMiddle />
       <DiscoverBottom />
       <DiscoverSeeker />
       {isSelectingDestination && (

@@ -1,12 +1,12 @@
-.discover .deck {
+.discover > .deck {
   width: 100%;
-  height: 70%;
+  height: 50%;
   padding: 1rem;
   display: flex;
   justify-content: center;
 }
 
-.discover .deck .track-container {
+.discover > .deck > .deck-items-container {
   position: relative;
   height: 100%;
   width: 100%;

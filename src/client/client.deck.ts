@@ -10,19 +10,20 @@ var userId: string;
 //Track deck must be treated as a data store that gets fed from outside but never changes wrt to user interaction.
 //This way, we don't break React's state management paradigm.
 //Track deck grows indefinitely until the deck client is restarted. We can choose to address this.
-var trackDeck: DeckItem[] = [];
+var sourceDeck: DeckItem[] = [];
 var unsub: () => void = () => {};
 var onClearDeck: () => void = () => {};
 
 //Start deck client is called from react and we must ensure that every time it is called, the result is the same. Track deck is re-initialized on every call.
 function startDeckClient(
   clientId: string,
-  onTracksReady: () => void,
-  onTracksUnready: () => void
+  onDeckReady: () => void,
+  onDeckUnready: () => void,
+  minSourceDeckSize = 3
 ) {
   console.log("Starting deck client...");
   userId = clientId;
-  onClearDeck = onTracksUnready; //Mark the tracks as not ready everytime the deck is cleared.
+  onClearDeck = onDeckUnready; //Mark the tracks as not ready everytime the deck is cleared.
   clearDeck();
   unsub = listenToFirestoreCollection(
     `users/${clientId}/sourceDeck`,
@@ -30,10 +31,10 @@ function startDeckClient(
       snapshot.docChanges().forEach((change, index) => {
         if (change.type == "added") {
           const track: DeckItem = change.doc.data() as DeckItem;
-          trackDeck.push(track);
+          sourceDeck.push(track);
 
-          if (index >= 1) {
-            onTracksReady(); //There are at least two tracks ready to be used.
+          if (index >= minSourceDeckSize - 1) {
+            onDeckReady(); //There are at least minSourceDeckSize tracks ready to be used.
           }
         }
       });
@@ -48,17 +49,33 @@ function stopDeckClient() {
 }
 
 function clearDeck() {
-  trackDeck = [];
+  sourceDeck = [];
   onClearDeck();
 }
 
-function nextTrack(
+function getDeckItem(index: number): DeckItem {
+  if (index >= sourceDeck.length)
+    throw new Error(
+      `Source deck of size ${sourceDeck.length} does not have an item at index ${index}.`
+    );
+  return sourceDeck[index];
+}
+
+function saveTrack(currentTrack: DeckItem) {
+  console.log(`Saving track ${currentTrack.trackName}.`);
+  setFireStoreDoc(
+    `users/${userId}/yesDeck/${currentTrack.trackId}`,
+    currentTrack
+  );
+}
+
+function previousTrack(
   currentTrack: DeckItem | null,
   nextTrackIndex: number,
   saveTrack: boolean
 ): DeckItem | null {
   console.log(
-    `Track deck has ${trackDeck.length} tracks. Getting the one at index ${nextTrackIndex}...`
+    `Track deck has ${sourceDeck.length} tracks. Getting the one at index ${nextTrackIndex}...`
   );
   if (currentTrack) {
     deleteFireStoreDoc(`users/${userId}/sourceDeck/${currentTrack.trackId}`);
@@ -68,8 +85,36 @@ function nextTrack(
         currentTrack
       );
   }
-  const trackIndex = nextTrackIndex % trackDeck.length;
-  return trackDeck.length > 0 ? trackDeck[trackIndex] : null;
+  const trackIndex = nextTrackIndex % sourceDeck.length;
+  return sourceDeck.length > 0 ? sourceDeck[trackIndex] : null;
 }
 
-export { startDeckClient, stopDeckClient, nextTrack, clearDeck };
+function nextTrack(
+  currentTrack: DeckItem | null,
+  nextTrackIndex: number,
+  saveTrack: boolean
+): DeckItem | null {
+  console.log(
+    `Track deck has ${sourceDeck.length} tracks. Getting the one at index ${nextTrackIndex}...`
+  );
+  if (currentTrack) {
+    deleteFireStoreDoc(`users/${userId}/sourceDeck/${currentTrack.trackId}`);
+    if (saveTrack)
+      setFireStoreDoc(
+        `users/${userId}/yesDeck/${currentTrack.trackId}`,
+        currentTrack
+      );
+  }
+  const trackIndex = nextTrackIndex % sourceDeck.length;
+  return sourceDeck.length > 0 ? sourceDeck[trackIndex] : null;
+}
+
+export {
+  startDeckClient,
+  stopDeckClient,
+  getDeckItem,
+  saveTrack,
+  previousTrack,
+  nextTrack,
+  clearDeck,
+};

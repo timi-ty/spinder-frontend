@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface DeckState {
-  isTracksReady: boolean;
+  isDeckReady: boolean;
 }
 
 const defaultDeckState: DeckState = {
-  isTracksReady: false,
+  isDeckReady: false,
 };
 
 interface ReadyTracksAction {
@@ -17,13 +17,13 @@ const deckSlice = createSlice({
   name: "deckState",
   initialState: defaultDeckState,
   reducers: {
-    setTracksReady: (state, action: ReadyTracksAction) => {
-      state.isTracksReady = action.payload;
+    setDeckReady: (state, action: ReadyTracksAction) => {
+      state.isDeckReady = action.payload;
     },
   },
 });
 
-export const { setTracksReady } = deckSlice.actions;
+export const { setDeckReady } = deckSlice.actions;
 
 export { type DeckState };
 

@@ -1,16 +1,17 @@
-.discover .deck .track-container .track {
+.discover .track {
   position: absolute;
   height: 100%;
   width: 100%;
 }
 
-.discover .deck .track-container .track > .image {
+.discover .track > .image {
   height: 100%;
   width: 100%;
   object-fit: cover;
+  border-radius: 1rem;
 }
 
-.discover .deck .track-container .track .play-pause {
+.discover .track > .play-pause {
   position: absolute;
   top: 0;
   left: 0;
@@ -18,7 +19,7 @@
   width: 100%;
 }
 
-.discover .deck .track-container .track .play-pause .button {
+.discover .track > .play-pause .button {
   position: absolute;
   top: calc(50% - 4rem);
   left: calc(50% - 4rem);
@@ -26,7 +27,7 @@
   width: 8rem;
 }
 
-.discover .deck .track-container .track .actions {
+.discover .track > .actions {
   position: absolute;
   bottom: 0;
   height: 40%;
