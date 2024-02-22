@@ -33,11 +33,6 @@ function DiscoverDeckView() {
         playAudioElement(0);
         break;
     }
-    console.log(
-      `Setting new active cursor, old: ${activeDeckItemCursor}, new: ${
-        (activeDeckItemCursor + 1) % 3
-      }`
-    );
     setActiveDeckItemCursor((c) => (c + 1) % 3);
   };
   const onPreviousDeckItemView = (deckItemCursor: number) => {
@@ -76,6 +71,13 @@ function DiscoverDeckView() {
             deckItemViewIndex={0}
             isActiveDeckItemView={activeDeckItemCursor === 0}
             mTrack={getDeckItem(cursor0)}
+            zIndex={
+              activeDeckItemCursor === 0
+                ? 2
+                : activeDeckItemCursor === 2
+                ? 1
+                : 0
+            }
             onNext={onNextDeckItemView}
             onPrevious={onPreviousDeckItemView}
           />
@@ -85,6 +87,13 @@ function DiscoverDeckView() {
             deckItemViewIndex={1}
             isActiveDeckItemView={activeDeckItemCursor === 1}
             mTrack={getDeckItem(cursor1)}
+            zIndex={
+              activeDeckItemCursor === 1
+                ? 2
+                : activeDeckItemCursor === 0
+                ? 1
+                : 0
+            }
             onNext={onNextDeckItemView}
             onPrevious={onPreviousDeckItemView}
           />
@@ -94,6 +103,13 @@ function DiscoverDeckView() {
             deckItemViewIndex={2}
             isActiveDeckItemView={activeDeckItemCursor === 2}
             mTrack={getDeckItem(cursor2)}
+            zIndex={
+              activeDeckItemCursor === 2
+                ? 2
+                : activeDeckItemCursor === 1
+                ? 1
+                : 0
+            }
             onNext={onNextDeckItemView}
             onPrevious={onPreviousDeckItemView}
           />

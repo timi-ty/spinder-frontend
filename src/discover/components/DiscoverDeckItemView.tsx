@@ -16,6 +16,7 @@ interface Props {
   deckItemViewIndex: number;
   isActiveDeckItemView: boolean;
   mTrack: DeckItem;
+  zIndex: number;
   onNext: (deckItemViewIndex: number) => void;
   onPrevious: (deckItemViewIndex: number) => void;
 }
@@ -24,6 +25,7 @@ function DiscoverDeckItemView({
   deckItemViewIndex,
   isActiveDeckItemView,
   mTrack,
+  zIndex,
   onNext,
   onPrevious,
 }: Props) {
@@ -67,7 +69,6 @@ function DiscoverDeckItemView({
 
   const onDragFinish = (dragDelta: { dx: number; dy: number }) => {
     if (isActiveDeckItemView && Math.abs(dragDelta.dy) > dragActionThreshold) {
-      console.log(`Dispatching drag finish for ${deckItemViewIndex}`);
       if (dragDelta.dy < 0) next();
       else if (dragDelta.dy > 0) previous();
     }
@@ -90,7 +91,7 @@ function DiscoverDeckItemView({
     <div
       className="track"
       style={{
-        zIndex: isActiveDeckItemView ? 1 : 0,
+        zIndex: zIndex,
         translate: `0px ${translationY}px`,
         scale: `${scale}`,
       }}
@@ -102,7 +103,7 @@ function DiscoverDeckItemView({
           <audio id={`audio${deckItemViewIndex}`} src={mTrack.previewUrl} />
           <img className="image" src={mTrack.image} />
           <div className="play-pause" onClick={onClickPlayPause}>
-            {isPaused && (
+            {isActiveDeckItemView && isPaused && (
               <img className="button" src="./src/assets/btn_play.png" />
             )}
           </div>
