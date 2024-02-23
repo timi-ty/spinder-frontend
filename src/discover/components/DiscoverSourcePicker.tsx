@@ -13,7 +13,7 @@ import {
   emptySourceSearchResult,
 } from "../../client/client.model";
 import "../styles/DiscoverSourcePicker.scss";
-import ActionSearch from "../../generic/components/ActionSearch";
+import SearchArea from "../../generic/components/SearchArea";
 import TabListGroup, {
   TabListItem,
 } from "../../generic/components/TabListGroup";
@@ -122,9 +122,7 @@ function DiscoverSourcePicker({ onSourceSelected }: Props) {
       {!isLoading && (
         <>
           <div className="top">
-            <ActionSearch
-              actionImage={"/src/assets/ic_close.png"}
-              onAction={onSourceSelected}
+            <SearchArea
               onSearch={(text) => {
                 setIsSearching(text.length > 0);
                 setSearchText(text);

@@ -10,7 +10,7 @@ import {
 } from "../../client/client.model";
 import { selectDiscoverDestination } from "../../state/slice.discoverdestination";
 import "../styles/DiscoverDestinationPicker.scss";
-import ActionSearch from "../../generic/components/ActionSearch";
+import SearchArea from "../../generic/components/SearchArea";
 import TabListGroup, {
   TabListItem,
 } from "../../generic/components/TabListGroup";
@@ -115,9 +115,7 @@ function DiscoverDestinationPicker({ onDestinationSelected }: Props) {
       {!isLoading && (
         <>
           <div className="top">
-            <ActionSearch
-              actionImage={"/src/assets/ic_close.png"}
-              onAction={onDestinationSelected}
+            <SearchArea
               onSearch={(text) => {
                 setIsSearching(text.length > 0);
                 setSearchText(text);

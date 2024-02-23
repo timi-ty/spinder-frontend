@@ -1,0 +1,20 @@
+@use "../../base";
+
+.title-bar {
+  position: relative;
+  width: 100%;
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid base.$divider-color;
+}
+
+.title-bar > .close {
+  position: absolute;
+  height: 1.5rem;
+  top: 0.5rem;
+  left: 1rem;
+}

@@ -1,0 +1,37 @@
+@use "../../base";
+
+.search-area {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-area > .search-box {
+  align-self: stretch;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: base.$search-bar-color;
+  border-radius: 50000rem;
+  padding: 0% 1rem 0% 1rem;
+}
+
+.search-area > .search-box > .icon {
+  height: 41.667%;
+}
+
+.search-area > .search-box > .search {
+  font-family: inherit;
+  height: 100%;
+  width: 100%;
+  outline: none;
+  border: none;
+  background: none;
+}
+
+.search-area > .cancel {
+  height: 50%;
+  padding-left: 1rem;
+}
