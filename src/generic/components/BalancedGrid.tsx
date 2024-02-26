@@ -24,17 +24,27 @@ function BalancedGrid<T extends BalancedGridItem>({
 }: Props<T>) {
   return (
     <div className="balanced-grid">
+      <ImageTextGridItem
+        key={selectedItem.id}
+        image={selectedItem.image}
+        text={selectedItem.title}
+        isSelected={true}
+        onAction={() => onClickItem(selectedItem, true)}
+        useAvailableWidth={true}
+      />
       {items.map((item) => {
         const isSelected = item.id === selectedItem.id;
         return (
-          <ImageTextGridItem
-            key={item.id}
-            image={item.image}
-            text={item.title}
-            isSelected={isSelected}
-            onAction={() => onClickItem(item, isSelected)}
-            useAvailableWidth={true}
-          />
+          !isSelected && (
+            <ImageTextGridItem
+              key={item.id}
+              image={item.image}
+              text={item.title}
+              isSelected={false}
+              onAction={() => onClickItem(item, false)}
+              useAvailableWidth={true}
+            />
+          )
         );
       })}
     </div>

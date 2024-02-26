@@ -36,10 +36,12 @@ function ImageTextGridItem({
     }
   }, [useAvailableWidth]);
 
+  const selected = isSelected ? "selected" : "";
+
   return (
     <div
       ref={ref}
-      className="image-text-grid-item"
+      className={`image-text-grid-item ${selected}`}
       style={{
         height: `${size}rem`,
         width: `${useAvailableWidth ? "" : `${size}rem`}`,
