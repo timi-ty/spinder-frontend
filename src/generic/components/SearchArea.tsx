@@ -4,12 +4,13 @@ import "../styles/SearchArea.scss";
 
 interface Props {
   onSearch: (text: string) => void;
+  hint: string;
   matchParentHeight?: boolean;
 }
 
 const defaultHeight = 3; //rem
 
-function SearchArea({ onSearch, matchParentHeight = false }: Props) {
+function SearchArea({ onSearch, hint, matchParentHeight = false }: Props) {
   const [searchText, setSearchText] = useState("");
 
   return (
@@ -29,6 +30,7 @@ function SearchArea({ onSearch, matchParentHeight = false }: Props) {
           title="search"
           className="search"
           value={searchText}
+          placeholder={hint}
           onChange={(event) => {
             setSearchText(event.target.value);
             onSearch(event.target.value);

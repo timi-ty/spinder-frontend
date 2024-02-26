@@ -1,6 +1,6 @@
 @use "../base";
 
 .component-viewer {
-  position: relative;
+  position: absolute;
   @extend %app-area;
 }

@@ -1,21 +1,34 @@
-.discover .source-picker {
+@use "../../base";
+
+.discover > .source-picker {
   position: absolute;
   width: 100%;
   height: 100%;
-  padding: 1rem;
-  background: #f9f9f9;
-  z-index: 2;
+  background: base.$app-area-bg-color;
 }
 
-.discover .source-picker .top {
+.discover > .source-picker > .title {
   position: relative;
   width: 100%;
   height: 3rem;
 }
 
-.discover .source-picker .bottom {
+.discover > .source-picker > .search {
+  position: relative;
+  width: 100%;
+  height: 3rem;
+  margin-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.discover > .source-picker > .bottom {
   position: relative;
   width: 100%;
   margin-top: 1rem;
-  height: calc(100% - 4rem);
+  //Use rest of height less title, search and margins.
+  height: calc(100% - 8rem);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  overflow-y: auto;
 }

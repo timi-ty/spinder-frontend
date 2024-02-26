@@ -22,9 +22,10 @@ import BalancedGrid, {
 } from "../../generic/components/BalancedGrid";
 import { selectDiscoverSource } from "../../state/slice.discoversource";
 import { clearDeck } from "../../client/client.deck";
+import TitleBar from "../../generic/components/TitleBar";
 
 interface Props {
-  onSourceSelected: () => void;
+  close: () => void;
 }
 
 interface DiscoverSourceItem
@@ -38,14 +39,14 @@ function DiscoverSourceToItem(item: DiscoverSource): DiscoverSourceItem {
     id: item.id,
     name: item.name,
     title: item.name,
-    image: item.image,
+    image: "/src/assets/test_image.jpg",
     group: item.type,
   };
 
   return sourceItem;
 }
 
-function DiscoverSourcePicker({ onSourceSelected }: Props) {
+function DiscoverSourcePicker({ close }: Props) {
   const dispatch = useDispatch();
   const resourceStatus = useDiscoverSourceResource();
   const discoverSourceData = useSelector<StoreState, DiscoverSourceData>(
@@ -81,8 +82,8 @@ function DiscoverSourcePicker({ onSourceSelected }: Props) {
           const response = await postDiscoverSource(source);
           if (response.id === source.id) {
             dispatch(selectDiscoverSource(source));
-            onSourceSelected();
             setIsLoading(false);
+            close();
             return;
           }
           throw new Error(
@@ -121,12 +122,16 @@ function DiscoverSourcePicker({ onSourceSelected }: Props) {
     <div className="source-picker">
       {!isLoading && (
         <>
-          <div className="top">
+          <div className="title">
+            <TitleBar title={"Source"} onClose={() => close()} />
+          </div>
+          <div className="search">
             <SearchArea
               onSearch={(text) => {
                 setIsSearching(text.length > 0);
                 setSearchText(text);
               }}
+              hint={"Search for artists, playlists, spinder people..."}
             />
           </div>
           <div className="bottom">
@@ -135,6 +140,7 @@ function DiscoverSourcePicker({ onSourceSelected }: Props) {
                 items={availableSourceItems}
                 onClickItem={onSourceClick}
                 selectedItem={selectedDestinationItem}
+                graphicType={"Icon"}
               />
             )}
             {isSearching && (

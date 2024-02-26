@@ -6,8 +6,8 @@ import ComponentViewer, { isViewingComponent } from "../dev/ComponentViewer";
 function Root() {
   return (
     <Provider store={store}>
+      <App />
       {isViewingComponent && <ComponentViewer></ComponentViewer>}
-      {!isViewingComponent && <App />}
     </Provider>
   );
 }

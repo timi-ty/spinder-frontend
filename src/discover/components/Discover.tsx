@@ -24,13 +24,11 @@ function Discover() {
       <DiscoverSeeker />
       {isSelectingDestination && (
         <DiscoverDestinationPicker
-          onDestinationSelected={() => setIsSelectingDestination(false)}
+          close={() => setIsSelectingDestination(false)}
         />
       )}
       {isSelectingSource && (
-        <DiscoverSourcePicker
-          onSourceSelected={() => setIsSelectingSource(false)}
-        />
+        <DiscoverSourcePicker close={() => setIsSelectingSource(false)} />
       )}
     </div>
   );

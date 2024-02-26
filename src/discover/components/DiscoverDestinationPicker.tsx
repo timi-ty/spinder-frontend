@@ -17,9 +17,10 @@ import TabListGroup, {
 import BalancedGrid, {
   BalancedGridItem,
 } from "../../generic/components/BalancedGrid";
+import TitleBar from "../../generic/components/TitleBar";
 
 interface Props {
-  onDestinationSelected: () => void;
+  close: () => void;
 }
 
 interface DiscoverDestinationItem
@@ -50,7 +51,7 @@ function SearchFilterItems(
   );
 }
 
-function DiscoverDestinationPicker({ onDestinationSelected }: Props) {
+function DiscoverDestinationPicker({ close }: Props) {
   const dispatch = useDispatch();
   const resourceStatus = useDiscoverDestinationResource();
   const discoverDestinationData = useSelector<
@@ -80,7 +81,7 @@ function DiscoverDestinationPicker({ onDestinationSelected }: Props) {
           const response = await postDiscoverDestination(destination);
           if (response.id === destination.id) {
             dispatch(selectDiscoverDestination(destination));
-            onDestinationSelected();
+            close();
             setIsLoading(false);
             return;
           }
@@ -114,12 +115,16 @@ function DiscoverDestinationPicker({ onDestinationSelected }: Props) {
     <div className="destination-picker">
       {!isLoading && (
         <>
-          <div className="top">
+          <div className="title">
+            <TitleBar title={"Destination"} onClose={() => close()} />
+          </div>
+          <div className="search">
             <SearchArea
               onSearch={(text) => {
                 setIsSearching(text.length > 0);
                 setSearchText(text);
               }}
+              hint={"Search your playlists"}
             />
           </div>
           <div className="bottom">
@@ -128,6 +133,7 @@ function DiscoverDestinationPicker({ onDestinationSelected }: Props) {
                 items={destinationItems}
                 onClickItem={onDestinationClick}
                 selectedItem={selectedDestinationItem}
+                graphicType={"Image"}
               />
             )}
             {isSearching && (

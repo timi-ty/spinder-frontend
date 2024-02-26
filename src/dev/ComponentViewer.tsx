@@ -1,18 +1,9 @@
-import IconButton from "../generic/components/IconButton";
-import SearchArea from "../generic/components/SearchArea";
-import TitleBar from "../generic/components/TitleBar";
 import "./ComponentViewer.scss";
 
-const isViewingComponent = true;
+const isViewingComponent = false;
 
 function ComponentViewer() {
-  return (
-    <div className="component-viewer">
-      {/* <SearchArea onSearch={() => {}} /> */}
-      {/* <IconButton icon={"/src/assets/ic_close.png"} onAction={() => {}} /> */}
-      <TitleBar title={"Title"} onClose={() => {}} />
-    </div>
-  );
+  return <div className="component-viewer"></div>;
 }
 
 export default ComponentViewer;
