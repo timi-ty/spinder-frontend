@@ -34,12 +34,28 @@ interface DiscoverSourceItem
     BalancedGridItem {}
 
 function DiscoverSourceToItem(item: DiscoverSource): DiscoverSourceItem {
+  var graphic = item.image;
+  switch (item.type) {
+    case "Anything Me":
+      graphic = "/src/assets/ic_anything_me_stars.svg";
+      break;
+    case "Spinder People":
+      graphic = "/src/assets/ic_spinder_people_friends.svg";
+      break;
+    case "My Artists":
+      graphic = "/src/assets/ic_my_artists_mic.svg";
+      break;
+    case "My Playlists":
+      graphic = "/src/assets/ic_my_playlists_vinyl.svg";
+      break;
+  }
+
   const sourceItem: DiscoverSourceItem = {
     type: item.type,
     id: item.id,
     name: item.name,
     title: item.name,
-    image: "/src/assets/test_image.jpg",
+    image: graphic,
     group: item.type,
   };
 
@@ -113,7 +129,7 @@ function DiscoverSourcePicker({ close }: Props) {
       ),
     [sourceSearchResult]
   );
-  const selectedDestinationItem = useMemo(
+  const selectedSourceItem = useMemo(
     () => DiscoverSourceToItem(discoverSourceData.selectedSource),
     [discoverSourceData]
   );
@@ -139,15 +155,17 @@ function DiscoverSourcePicker({ close }: Props) {
               <BalancedGrid
                 items={availableSourceItems}
                 onClickItem={onSourceClick}
-                selectedItem={selectedDestinationItem}
+                selectedItem={selectedSourceItem}
                 graphicType={"Icon"}
+                showSelectedItem={false}
               />
             )}
             {isSearching && (
               <TabListGroup
                 items={searchedSourcedItems}
                 onClickItem={onSourceClick}
-                selectedItem={selectedDestinationItem}
+                selectedItem={selectedSourceItem}
+                useRoundedImage={(item) => item.type === "Playlist"}
               />
             )}
           </div>

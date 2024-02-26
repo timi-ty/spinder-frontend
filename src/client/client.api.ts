@@ -149,7 +149,7 @@ async function postDiscoverSource(
     const setDiscoverSourceUrl = `${backendUrl}/discover/source`;
 
     const response = await fetch(
-      `${setDiscoverSourceUrl}?source=${JSON.stringify(source)}`,
+      `${setDiscoverSourceUrl}?source=${safeStringify(source)}`,
       fetchConfig(await getBearerToken(), "POST")
     );
 
@@ -202,7 +202,7 @@ async function postDiscoverDestination(
     const setDiscoverDestinationUrl = `${backendUrl}/discover/destination`;
 
     const response = await fetch(
-      `${setDiscoverDestinationUrl}?destination=${JSON.stringify(destination)}`,
+      `${setDiscoverDestinationUrl}?destination=${safeStringify(destination)}`,
       fetchConfig(await getBearerToken(), "POST")
     );
 
@@ -238,6 +238,18 @@ function fetchConfig(
 
 async function getBearerToken(): Promise<string> {
   return await getFirebaseIdToken();
+}
+
+function safeStringify(data: any) {
+  return JSON.stringify(data, (_key, value) => {
+    if (typeof value === "string") {
+      return value.replace(/[^\w\s]/g, (char) => {
+        // Replace special characters with their Unicode escape sequences
+        return "\\u" + char.charCodeAt(0).toString(16).padStart(4, "0");
+      });
+    }
+    return value;
+  });
 }
 
 export {

@@ -22,6 +22,7 @@ function ImageTextGridItem({
   const ref: React.LegacyRef<HTMLDivElement> = useRef(null);
   const [size, setSize] = useState(defaultSize);
 
+  //Default size is used for width and height but if useAvailbleWidth is true, the available width obtained is set as the height to maintain a square shape.
   useLayoutEffect(() => {
     if (!useAvailableWidth) {
       setSize(defaultSize);

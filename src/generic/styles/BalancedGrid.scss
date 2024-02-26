@@ -17,5 +17,5 @@
   height: 30%;
   text-align: center;
   margin: auto;
-  translate: 0% calc(4rem - 50%);
+  translate: 0% calc(4rem - 50%); //auto margin places it at the center. translate half height down minus item half height.
 }

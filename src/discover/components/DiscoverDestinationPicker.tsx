@@ -134,6 +134,7 @@ function DiscoverDestinationPicker({ close }: Props) {
                 onClickItem={onDestinationClick}
                 selectedItem={selectedDestinationItem}
                 graphicType={"Image"}
+                showSelectedItem={true}
               />
             )}
             {isSearching && (
@@ -141,6 +142,7 @@ function DiscoverDestinationPicker({ close }: Props) {
                 items={SearchFilterItems(destinationItems, searchText)}
                 onClickItem={onDestinationClick}
                 selectedItem={selectedDestinationItem}
+                useRoundedImage={() => true}
               />
             )}
           </div>
