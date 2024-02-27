@@ -2,14 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./home/components/Home";
-import Root from "./root/Root";
 import "./main.scss";
+import App from "./App";
+import ComponentViewer, { isViewingComponent } from "./dev/ComponentViewer";
 
 //TODO: Create error page to handle error boundary.
 const browserRouter = createBrowserRouter([
   {
     path: "/",
-    element: <Root />, //The single page Web App is rendered under the root page of the frontend.
+    element: <App />, //The single page Web App is rendered under the root page of the frontend.
   },
   {
     path: "/home",
@@ -20,5 +21,6 @@ const browserRouter = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <RouterProvider router={browserRouter}></RouterProvider>
+    {isViewingComponent && <ComponentViewer></ComponentViewer>}
   </React.StrictMode>
 );

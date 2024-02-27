@@ -5,7 +5,7 @@ function Home() {
   return (
     <div className="home">
       <div>
-        <h1>Spinder</h1>
+        <h1>Spindr</h1>
       </div>
       <div>
         <a href={loginWithSpotifyUrl}>

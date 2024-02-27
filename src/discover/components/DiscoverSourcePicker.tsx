@@ -33,6 +33,15 @@ interface DiscoverSourceItem
     TabListItem,
     BalancedGridItem {}
 
+function isCompositeSource(item: DiscoverSource): boolean {
+  return (
+    item.type == "Anything Me" ||
+    item.type == "Spinder People" ||
+    item.type == "My Artists" ||
+    item.type == "My Playlists"
+  );
+}
+
 function DiscoverSourceToItem(item: DiscoverSource): DiscoverSourceItem {
   var graphic = item.image;
   switch (item.type) {
@@ -151,6 +160,32 @@ function DiscoverSourcePicker({ close }: Props) {
             />
           </div>
           <div className="bottom">
+            {!isSearching && (
+              <div
+                className={`selected-source-item`}
+                onClick={() => onSourceClick(selectedSourceItem, true)}
+              >
+                <img
+                  className="icon"
+                  src={selectedSourceItem.image}
+                  style={{
+                    clipPath: `${
+                      isCompositeSource(selectedSourceItem) ||
+                      selectedSourceItem.type === "Playlist"
+                        ? ""
+                        : "circle()"
+                    }`,
+                    borderRadius: `${
+                      selectedSourceItem.type === "Playlist" ? "0.25rem" : ""
+                    }`,
+                    width: `${
+                      isCompositeSource(selectedSourceItem) ? "" : "3rem"
+                    }`,
+                  }}
+                />
+                <div className="text">{selectedSourceItem.title}</div>
+              </div>
+            )}
             {!isSearching && (
               <BalancedGrid
                 items={availableSourceItems}

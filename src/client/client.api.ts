@@ -10,7 +10,7 @@ import {
   DiscoverSourceSearchResult,
   FinalizeLoginData,
   RenewedAuth,
-  SpinderErrorResponse,
+  SpinderError,
   SpotifyUserProfileData,
 } from "./client.model";
 
@@ -29,9 +29,10 @@ async function finalizeLogin(): Promise<string> {
       const loginData: FinalizeLoginData = await response.json();
       return firebaseSignInWithCustomToken(loginData.firebaseCustomToken);
     } else {
-      const errorResponse: SpinderErrorResponse = await response.json();
+      const errorResponse: SpinderError = await response.json();
+
       throw new Error(
-        `Status: ${errorResponse.error.status}, Message: ${errorResponse.error.message}`
+        `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
       );
     }
   } catch (error) {
@@ -53,9 +54,9 @@ async function renewAuthentication(): Promise<RenewedAuth> {
       const renewedAuth: RenewedAuth = await response.json();
       return renewedAuth;
     } else {
-      const errorResponse: SpinderErrorResponse = await response.json();
+      const errorResponse: SpinderError = await response.json();
       throw new Error(
-        `Status: ${errorResponse.error.status}, Message: ${errorResponse.error.message}`
+        `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
       );
     }
   } catch (error) {
@@ -78,9 +79,9 @@ async function getSpotifyProfile(): Promise<SpotifyUserProfileData> {
       const profileData: SpotifyUserProfileData = await response.json();
       return profileData;
     } else {
-      const errorResponse: SpinderErrorResponse = await response.json();
+      const errorResponse: SpinderError = await response.json();
       throw new Error(
-        `Status: ${errorResponse.error.status}, Message: ${errorResponse.error.message}`
+        `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
       );
     }
   } catch (error) {
@@ -104,9 +105,9 @@ async function getDiscoverSources(): Promise<DiscoverSourceData> {
       const discoverSourceData: DiscoverSourceData = await response.json();
       return discoverSourceData;
     } else {
-      const errorResponse: SpinderErrorResponse = await response.json();
+      const errorResponse: SpinderError = await response.json();
       throw new Error(
-        `Status: ${errorResponse.error.status}, Message: ${errorResponse.error.message}`
+        `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
       );
     }
   } catch (error) {
@@ -131,9 +132,9 @@ async function searchDiscoverSources(
         await response.json();
       return discoverSourceSearchResult;
     } else {
-      const errorResponse: SpinderErrorResponse = await response.json();
+      const errorResponse: SpinderError = await response.json();
       throw new Error(
-        `Status: ${errorResponse.error.status}, Message: ${errorResponse.error.message}`
+        `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
       );
     }
   } catch (error) {
@@ -157,9 +158,9 @@ async function postDiscoverSource(
       const responseData: DiscoverSource = await response.json();
       return responseData;
     } else {
-      const errorResponse: SpinderErrorResponse = await response.json();
+      const errorResponse: SpinderError = await response.json();
       throw new Error(
-        `Status: ${errorResponse.error.status}, Message: ${errorResponse.error.message}`
+        `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
       );
     }
   } catch (error) {
@@ -184,9 +185,9 @@ async function getDiscoverDestinations(
         await response.json();
       return discoverDestinationData;
     } else {
-      const errorResponse: SpinderErrorResponse = await response.json();
+      const errorResponse: SpinderError = await response.json();
       throw new Error(
-        `Status: ${errorResponse.error.status}, Message: ${errorResponse.error.message}`
+        `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
       );
     }
   } catch (error) {
@@ -210,9 +211,9 @@ async function postDiscoverDestination(
       const responseData: DiscoverDestination = await response.json();
       return responseData;
     } else {
-      const errorResponse: SpinderErrorResponse = await response.json();
+      const errorResponse: SpinderError = await response.json();
       throw new Error(
-        `Status: ${errorResponse.error.status}, Message: ${errorResponse.error.message}`
+        `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
       );
     }
   } catch (error) {

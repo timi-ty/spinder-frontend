@@ -26,9 +26,33 @@
   position: relative;
   width: 100%;
   margin-top: 1rem;
-  //Use rest of height less title, search and margins.
+  //Use rest of height less title, search and top-level margins.
   height: calc(100% - 8rem);
   padding-left: 1rem;
   padding-right: 1rem;
   overflow-y: auto;
+}
+
+.discover > .source-picker .selected-source-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 7.5rem;
+  background: base.$card-bg;
+  margin-bottom: 0.5rem;
+  border: 2px solid base.$selected-color;
+  border-radius: 0.75rem;
+}
+
+.discover > .source-picker .selected-source-item .icon {
+  height: 3rem;
+  object-fit: cover;
+}
+
+.discover > .source-picker .selected-source-item .text {
+  color: base.$secondary-color;
+  padding-top: 0.25rem;
+  font-size: 1rem;
 }

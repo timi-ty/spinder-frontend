@@ -9,11 +9,7 @@ class SpinderError {
   }
 }
 
-interface SpinderErrorResponse {
-  error: SpinderError;
-}
-
-export { SpinderError, type SpinderErrorResponse };
+export { SpinderError };
 /**********BASE END**********/
 
 /**********LOGIN START**********/
