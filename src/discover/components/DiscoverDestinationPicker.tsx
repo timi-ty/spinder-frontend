@@ -42,6 +42,18 @@ function DiscoverDestinationToItem(
   return destinationItem;
 }
 
+function ItemToDiscoverDestination(
+  item: DiscoverDestinationItem
+): DiscoverDestination {
+  const destination: DiscoverDestination = {
+    id: item.id,
+    name: item.name,
+    image: item.image,
+  };
+
+  return destination;
+}
+
 function SearchFilterItems(
   items: DiscoverDestinationItem[],
   searchText: string
@@ -78,7 +90,9 @@ function DiscoverDestinationPicker({ close }: Props) {
       if (!isSelected) {
         setIsLoading(true);
         try {
-          const response = await postDiscoverDestination(destination);
+          const response = await postDiscoverDestination(
+            ItemToDiscoverDestination(destination)
+          );
           if (response.id === destination.id) {
             dispatch(selectDiscoverDestination(destination));
             close();

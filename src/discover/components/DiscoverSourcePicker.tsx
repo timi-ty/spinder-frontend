@@ -71,6 +71,17 @@ function DiscoverSourceToItem(item: DiscoverSource): DiscoverSourceItem {
   return sourceItem;
 }
 
+function ItemToDiscoverSource(item: DiscoverSourceItem): DiscoverSource {
+  const discoverSource: DiscoverSource = {
+    type: item.type,
+    id: item.id,
+    name: item.name,
+    image: item.image,
+  };
+
+  return discoverSource;
+}
+
 function DiscoverSourcePicker({ close }: Props) {
   const dispatch = useDispatch();
   const resourceStatus = useDiscoverSourceResource();
@@ -104,7 +115,9 @@ function DiscoverSourcePicker({ close }: Props) {
         setIsLoading(true);
         clearDeck();
         try {
-          const response = await postDiscoverSource(source);
+          const response = await postDiscoverSource(
+            ItemToDiscoverSource(source)
+          );
           if (response.id === source.id) {
             dispatch(selectDiscoverSource(source));
             setIsLoading(false);
