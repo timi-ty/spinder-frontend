@@ -45,7 +45,13 @@ function stopRenewingAuthentication() {
 async function renewAutheticationCallback() {
   const renewedAuth = await renewAuthentication();
   console.log(
-    `Renewed Authentication - UserId: ${renewedAuth.userId}, SpotifyTokenExpiresInMillis: ${renewedAuth.spotifyAccessTokenExpiresIn}, FirebaseTokenExpiresInMillis: ${renewedAuth.firebaseIdTokenExpiresIn}.`
+    `Renewed Authentication - UserId: ${
+      renewedAuth.userId
+    }, SpotifyTokenExpiresIn: ${
+      renewedAuth.spotifyAccessTokenExpiresIn / 60000
+    } mins, FirebaseTokenExpiresIn: ${
+      renewedAuth.firebaseIdTokenExpiresIn / 60000
+    } mins.`
   );
 }
 

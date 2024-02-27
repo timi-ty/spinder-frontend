@@ -5,6 +5,8 @@ import Home from "./home/components/Home";
 import "./main.scss";
 import App from "./App";
 import ComponentViewer, { isViewingComponent } from "./dev/ComponentViewer";
+import { Provider } from "react-redux";
+import { store } from "./state/store";
 
 //TODO: Create error page to handle error boundary.
 const browserRouter = createBrowserRouter([
@@ -20,7 +22,9 @@ const browserRouter = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={browserRouter}></RouterProvider>
-    {isViewingComponent && <ComponentViewer></ComponentViewer>}
+    <Provider store={store}>
+      <RouterProvider router={browserRouter}></RouterProvider>
+      {isViewingComponent && <ComponentViewer></ComponentViewer>}
+    </Provider>
   </React.StrictMode>
 );

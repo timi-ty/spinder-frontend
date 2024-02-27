@@ -15,20 +15,19 @@ export { SpinderError };
 /**********LOGIN START**********/
 interface FinalizeLoginData {
   firebaseCustomToken: string;
-  spotifyAccessToken: string;
 }
+
+export { type FinalizeLoginData };
 /**********LOGIN END**********/
 
 /**********AUTH START**********/
-interface RenewedAuth {
+interface RenewedAuthData {
   userId: string;
-  spotifyAccessToken: string;
   spotifyAccessTokenExpiresIn: number;
-  firebaseIdToken: string;
   firebaseIdTokenExpiresIn: number;
 }
 
-export { type FinalizeLoginData, type RenewedAuth };
+export { type RenewedAuthData };
 /**********AUTH START**********/
 
 /**********USER START**********/
