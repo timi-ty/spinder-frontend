@@ -1,3 +1,4 @@
+import { refreshDeck } from "./client.api";
 import {
   deleteFireStoreDoc,
   listenToFirestoreCollection,
@@ -25,6 +26,7 @@ function startDeckClient(
   userId = clientId;
   onClearDeck = onDeckUnready; //Mark the tracks as not ready everytime the deck is cleared.
   clearDeck();
+  refreshDeck(); //A promise that we don't have to wait for because of firestore web sockets.
   unsub = listenToFirestoreCollection(
     `users/${clientId}/sourceDeck`,
     (snapshot) => {

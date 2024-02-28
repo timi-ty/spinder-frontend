@@ -43,7 +43,6 @@ async function finalizeLogin(): Promise<string> {
 /**********LOGIN END**********/
 
 /**********AUTH START**********/
-
 async function renewAuthentication(): Promise<RenewedAuthData> {
   try {
     const url = `${backendUrl}/auth/renew`;
@@ -67,7 +66,6 @@ async function renewAuthentication(): Promise<RenewedAuthData> {
 /**********AUTH END**********/
 
 /**********USER START**********/
-
 /**This request is authenticated with cookies instead of an explicit authourization header.*/
 async function getSpotifyProfile(): Promise<SpotifyUserProfileData> {
   try {
@@ -92,7 +90,6 @@ async function getSpotifyProfile(): Promise<SpotifyUserProfileData> {
 /**********USER END**********/
 
 /**********DISCOVER START**********/
-
 async function getDiscoverSources(): Promise<DiscoverSourceData> {
   const url = `${backendUrl}/discover/sources`;
 
@@ -219,6 +216,24 @@ async function postDiscoverDestination(
     throw new Error("Failed to set Discover destination.");
   }
 }
+
+async function refreshDeck(): Promise<void> {
+  try {
+    const url = `${backendUrl}/discover/refresh`;
+
+    const response = await fetch(url, fetchConfig(await getBearerToken()));
+
+    if (!response.ok) {
+      const errorResponse: SpinderError = await response.json();
+      throw new Error(
+        `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
+      );
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to set refresh deck.");
+  }
+}
 /**********DISCOVER END**********/
 
 function fetchConfig(
@@ -261,4 +276,5 @@ export {
   postDiscoverSource,
   getDiscoverDestinations,
   postDiscoverDestination,
+  refreshDeck,
 };
