@@ -217,13 +217,21 @@ async function postDiscoverDestination(
   }
 }
 
-async function refreshDeck(): Promise<void> {
+async function refreshSourceDeck(
+  source: DiscoverSource
+): Promise<DiscoverSource> {
   try {
-    const url = `${backendUrl}/discover/refresh`;
+    const url = `${backendUrl}/discover/deck/source/refresh`;
 
-    const response = await fetch(url, fetchConfig(await getBearerToken()));
+    const response = await fetch(
+      `${url}?source=${safeStringify(source)}`,
+      fetchConfig(await getBearerToken())
+    );
 
-    if (!response.ok) {
+    if (response.ok) {
+      const responseData: DiscoverSource = await response.json();
+      return responseData;
+    } else {
       const errorResponse: SpinderError = await response.json();
       throw new Error(
         `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
@@ -234,6 +242,33 @@ async function refreshDeck(): Promise<void> {
     throw new Error("Failed to set refresh deck.");
   }
 }
+
+async function refreshDestinationDeck(
+  destination: DiscoverDestination
+): Promise<DiscoverDestination> {
+  try {
+    const url = `${backendUrl}/discover/deck/destination/refresh`;
+
+    const response = await fetch(
+      `${url}?destination=${safeStringify(destination)}`,
+      fetchConfig(await getBearerToken())
+    );
+
+    if (response.ok) {
+      const responseData: DiscoverDestination = await response.json();
+      return responseData;
+    } else {
+      const errorResponse: SpinderError = await response.json();
+      throw new Error(
+        `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
+      );
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to refresh Discover destination.");
+  }
+}
+
 /**********DISCOVER END**********/
 
 function fetchConfig(
@@ -276,5 +311,6 @@ export {
   postDiscoverSource,
   getDiscoverDestinations,
   postDiscoverDestination,
-  refreshDeck,
+  refreshSourceDeck,
+  refreshDestinationDeck,
 };

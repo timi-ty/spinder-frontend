@@ -1,24 +1,27 @@
 import { useState } from "react";
-import { useDeck } from "../../utils/hooks";
 import DiscoverDeckItemView from "./DiscoverDeckItemView";
 import "../styles/DiscoverDeckView.scss";
-import { getDeckItem } from "../../client/client.deck";
+import { getDeckItem, markVisitedDeckItem } from "../../client/client.deck";
 import { playAudioElement } from "../../client/client.audio";
+import { DeckItem } from "../../client/client.model";
 
 function DiscoverDeckView() {
-  const isDeckReady = useDeck(); //Add a loader until deck get ready.
   //The Deck is a three item swap chain. We do this so that there's always a loaded item in front and behind the current one.
   const [activeDeckItemCursor, setActiveDeckItemCursor] = useState(0);
   const [cursor0, setCursor0] = useState(0);
   const [cursor1, setCursor1] = useState(1);
   const [cursor2, setCursor2] = useState(2);
 
-  const onNextDeckItemView = (deckItemCursor: number) => {
+  const onNextDeckItemView = (
+    deckItemCursor: number,
+    currentDeckItem: DeckItem
+  ) => {
     if (deckItemCursor != activeDeckItemCursor) {
       throw new Error(
         `Only active deck item views can be interactive. Active: ${activeDeckItemCursor}, Interactive: ${deckItemCursor}`
       );
     }
+    markVisitedDeckItem(currentDeckItem); //Marks the currently displaying deck item as visited before going to the next one.
     switch (deckItemCursor) {
       case 0:
         if (cursor2 < cursor0) setCursor2((i) => i + 3); //Only move cursor2 when it is behind cursor1.
@@ -66,55 +69,38 @@ function DiscoverDeckView() {
   return (
     <div className="deck">
       <div className="deck-items-container">
-        {isDeckReady && (
-          <DiscoverDeckItemView
-            deckItemViewIndex={0}
-            isActiveDeckItemView={activeDeckItemCursor === 0}
-            mTrack={getDeckItem(cursor0)}
-            zIndex={
-              activeDeckItemCursor === 0
-                ? 2
-                : activeDeckItemCursor === 2
-                ? 1
-                : 0
-            }
-            onNext={onNextDeckItemView}
-            onPrevious={onPreviousDeckItemView}
-          />
-        )}
-        {isDeckReady && (
-          <DiscoverDeckItemView
-            deckItemViewIndex={1}
-            isActiveDeckItemView={activeDeckItemCursor === 1}
-            mTrack={getDeckItem(cursor1)}
-            zIndex={
-              activeDeckItemCursor === 1
-                ? 2
-                : activeDeckItemCursor === 0
-                ? 1
-                : 0
-            }
-            onNext={onNextDeckItemView}
-            onPrevious={onPreviousDeckItemView}
-          />
-        )}
-        {isDeckReady && (
-          <DiscoverDeckItemView
-            deckItemViewIndex={2}
-            isActiveDeckItemView={activeDeckItemCursor === 2}
-            mTrack={getDeckItem(cursor2)}
-            zIndex={
-              activeDeckItemCursor === 2
-                ? 2
-                : activeDeckItemCursor === 1
-                ? 1
-                : 0
-            }
-            onNext={onNextDeckItemView}
-            onPrevious={onPreviousDeckItemView}
-          />
-        )}
-        {/* An etra view goes here. It shows a loader or a button to reload based on an expectancy state. */}
+        <DiscoverDeckItemView
+          deckItemViewIndex={0}
+          isActiveDeckItemView={activeDeckItemCursor === 0}
+          mDeckItem={getDeckItem(cursor0)}
+          zIndex={
+            activeDeckItemCursor === 0 ? 2 : activeDeckItemCursor === 2 ? 1 : 0
+          }
+          onNext={onNextDeckItemView}
+          onPrevious={onPreviousDeckItemView}
+        />
+
+        <DiscoverDeckItemView
+          deckItemViewIndex={1}
+          isActiveDeckItemView={activeDeckItemCursor === 1}
+          mDeckItem={getDeckItem(cursor1)}
+          zIndex={
+            activeDeckItemCursor === 1 ? 2 : activeDeckItemCursor === 0 ? 1 : 0
+          }
+          onNext={onNextDeckItemView}
+          onPrevious={onPreviousDeckItemView}
+        />
+
+        <DiscoverDeckItemView
+          deckItemViewIndex={2}
+          isActiveDeckItemView={activeDeckItemCursor === 2}
+          mDeckItem={getDeckItem(cursor2)}
+          zIndex={
+            activeDeckItemCursor === 2 ? 2 : activeDeckItemCursor === 1 ? 1 : 0
+          }
+          onNext={onNextDeckItemView}
+          onPrevious={onPreviousDeckItemView}
+        />
       </div>
     </div>
   );

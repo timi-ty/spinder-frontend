@@ -7,8 +7,10 @@ import DiscoverDestinationPicker from "./DiscoverDestinationPicker";
 import "../styles/Discover.scss";
 import DiscoverSourcePicker from "./DiscoverSourcePicker";
 import DiscoverMiddle from "./DiscoverMiddle";
+import { useDeck } from "../../utils/hooks";
 
 function Discover() {
+  const isDeckReady = useDeck(); //Add a loader until deck get ready.
   const [isSelectingDestination, setIsSelectingDestination] = useState(false);
   const [isSelectingSource, setIsSelectingSource] = useState(false);
 
@@ -18,10 +20,10 @@ function Discover() {
         onClickDestinationPicker={() => setIsSelectingDestination(true)}
         onClickSourcePicker={() => setIsSelectingSource(true)}
       />
-      <DiscoverDeckView />
-      <DiscoverMiddle />
-      <DiscoverBottom />
-      <DiscoverSeeker />
+      {isDeckReady && <DiscoverDeckView />}
+      {isDeckReady && <DiscoverMiddle />}
+      {isDeckReady && <DiscoverBottom />}
+      {isDeckReady && <DiscoverSeeker />}
       {isSelectingDestination && (
         <DiscoverDestinationPicker
           close={() => setIsSelectingDestination(false)}

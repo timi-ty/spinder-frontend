@@ -15,24 +15,24 @@ const dragActionThreshold = 20; // Drag must be at least 20px in magnitude to di
 interface Props {
   deckItemViewIndex: number;
   isActiveDeckItemView: boolean;
-  mTrack: DeckItem;
+  mDeckItem: DeckItem;
   zIndex: number;
-  onNext: (deckItemViewIndex: number) => void;
+  onNext: (deckItemViewIndex: number, currentDeckItem: DeckItem) => void;
   onPrevious: (deckItemViewIndex: number) => void;
 }
 
 function DiscoverDeckItemView({
   deckItemViewIndex,
   isActiveDeckItemView,
-  mTrack,
+  mDeckItem,
   zIndex,
   onNext,
   onPrevious,
 }: Props) {
   const dispatch = useDispatch();
   useEffect(() => {
-    if (isActiveDeckItemView) dispatch(changeActiveDeckItem(mTrack));
-  }, [isActiveDeckItemView, mTrack]);
+    if (isActiveDeckItemView) dispatch(changeActiveDeckItem(mDeckItem));
+  }, [isActiveDeckItemView, mDeckItem]);
 
   const getAudioElement = () =>
     document.getElementById(`audio${deckItemViewIndex}`) as HTMLAudioElement;
@@ -60,7 +60,7 @@ function DiscoverDeckItemView({
 
   const next = () => {
     audioElement.pause();
-    onNext(deckItemViewIndex);
+    onNext(deckItemViewIndex, mDeckItem);
   };
   const previous = () => {
     audioElement.pause();
@@ -89,19 +89,19 @@ function DiscoverDeckItemView({
 
   return (
     <div
-      className="track"
+      className="deck-item"
       style={{
         zIndex: zIndex,
         translate: `0px ${translationY}px`,
         scale: `${scale}`,
       }}
     >
-      {mTrack === null ? (
+      {mDeckItem === null ? (
         <div>No Valid Track Here</div>
       ) : (
         <>
-          <audio id={`audio${deckItemViewIndex}`} src={mTrack.previewUrl} />
-          <img className="image" src={mTrack.image} />
+          <audio id={`audio${deckItemViewIndex}`} src={mDeckItem.previewUrl} />
+          <img className="image" src={mDeckItem.image} />
           <div className="play-pause" onClick={onClickPlayPause}>
             {isActiveDeckItemView && isPaused && (
               <img className="button" src="./src/assets/btn_play.png" />

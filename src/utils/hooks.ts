@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { startDeckClient, stopDeckClient } from "../client/client.deck";
+import {
+  startDestinationDeckClient,
+  startSourceDeckClient,
+  stopDestinationDeckClient,
+  stopSourceDeckClient,
+} from "../client/client.deck";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthStatus } from "../state/slice.auth";
 import { ResourceStatus, StoreState } from "../state/store";
@@ -10,6 +15,7 @@ import {
   loadUserProfile,
 } from "./loaders";
 import { setDeckReady } from "../state/slice.deck";
+import { DiscoverDestination, DiscoverSource } from "../client/client.model";
 
 /* The global state of this app is managaed by redux. The custom hooks here interface with react-redux hooks.
  * These hooks are built with a homogenous paradigm. They are primarily for loading app data/resources.
@@ -18,7 +24,7 @@ import { setDeckReady } from "../state/slice.deck";
  * This means that these hooks can be used anywhere in the app without reloading performance concerns.
  * A resource is only loaded if it is not available or currently loading.
  */
-
+/**********RESOURCE HOOKS START**********/
 function useAuthResource() {
   const authStatus = useSelector<StoreState, AuthStatus>(
     (state) => state.authState.status
@@ -97,8 +103,9 @@ function useDiscoverDestinationResource() {
 
   return resourceStatus;
 }
+/**********RESOURCE HOOKS END**********/
 
-//These hooks are not managed by redux.
+/**********REGULAR HOOKS START**********/
 function useDeck(): boolean {
   const dispatch = useDispatch();
   const userId = useSelector<StoreState, string>(
@@ -107,9 +114,25 @@ function useDeck(): boolean {
   const isDeckReady = useSelector<StoreState, boolean>(
     (state) => state.deckState.isDeckReady
   );
+
+  const sourceResourceStatus = useDiscoverSourceResource();
+  const destinationResourceStatus = useDiscoverDestinationResource();
+
+  const selectedSource = useSelector<StoreState, DiscoverSource>(
+    (state) => state.discoverSourceState.data.selectedSource
+  );
+  const selectedDestination = useSelector<StoreState, DiscoverDestination>(
+    (state) => state.discoverDestinationState.data.selectedDestination
+  );
+
+  const canStartSourceDeckClient =
+    sourceResourceStatus === "Loaded" || sourceResourceStatus === "LoadingMore";
+
   useEffect(() => {
-    startDeckClient(
+    if (!canStartSourceDeckClient) return;
+    startSourceDeckClient(
       userId,
+      selectedSource,
       () => {
         dispatch(setDeckReady(true));
       },
@@ -118,9 +141,21 @@ function useDeck(): boolean {
       }
     );
     return () => {
-      stopDeckClient();
+      stopSourceDeckClient();
     };
-  }, [userId]);
+  }, [userId, canStartSourceDeckClient, selectedSource.id]); //If the id doesn't change, it is the same source.
+
+  const canStartDestinationDeckClient =
+    destinationResourceStatus === "Loaded" ||
+    destinationResourceStatus === "LoadingMore";
+
+  useEffect(() => {
+    if (!canStartDestinationDeckClient) return;
+    startDestinationDeckClient(userId, selectedDestination);
+    return () => {
+      stopDestinationDeckClient();
+    };
+  }, [userId, canStartDestinationDeckClient, selectedDestination.id]); //If the id doesn't change, it is the same destination.
 
   return isDeckReady;
 }
@@ -179,6 +214,7 @@ function useClickDrag(
 
   return [clickDragDelta, endDelta];
 }
+/**********REGULAR HOOKS END**********/
 
 export {
   useAuthResource,
