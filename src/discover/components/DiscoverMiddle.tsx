@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import "../styles/DiscoverMiddle.scss";
 import { DeckItem } from "../../client/client.model";
 import { StoreState } from "../../state/store";
+import DiscoverLikeButton from "./DiscoverLikeButton";
 
 function DiscoverMiddle() {
   const activeDeckItem = useSelector<StoreState, DeckItem>(
@@ -35,7 +36,7 @@ function DiscoverMiddle() {
           />
         </div>
         <div className="bottom">
-          <img className="like-button" src="/src/assets/ic_like_empty.png" />
+          <DiscoverLikeButton />
         </div>
       </div>
     </div>

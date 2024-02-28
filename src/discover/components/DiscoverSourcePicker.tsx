@@ -21,7 +21,7 @@ import BalancedGrid, {
   BalancedGridItem,
 } from "../../generic/components/BalancedGrid";
 import { selectDiscoverSource } from "../../state/slice.discoversource";
-import { clearDeck } from "../../client/client.deck";
+import { clearSourceDeck } from "../../client/client.deck";
 import TitleBar from "../../generic/components/TitleBar";
 
 interface Props {
@@ -113,7 +113,7 @@ function DiscoverSourcePicker({ close }: Props) {
     async (source: DiscoverSourceItem, isSelected: boolean = false) => {
       if (!isSelected) {
         setIsLoading(true);
-        clearDeck();
+        clearSourceDeck();
         try {
           const response = await postDiscoverSource(
             ItemToDiscoverSource(source)

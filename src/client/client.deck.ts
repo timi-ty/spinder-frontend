@@ -8,26 +8,33 @@ import { DeckItem } from "./client.model";
 
 var userId: string;
 
-//Track deck must be treated as a data store that gets fed from outside but never changes wrt to user interaction.
+//The source deck must be treated as a data store that gets fed from outside but never changes wrt to user interaction.
 //This way, we don't break React's state management paradigm.
-//Track deck grows indefinitely until the deck client is restarted. We can choose to address this.
+//The source deck grows indefinitely until the deck client is restarted. We can choose to address this.
 var sourceDeck: DeckItem[] = [];
-var unsub: () => void = () => {};
-var onClearDeck: () => void = () => {};
+//The destination deck gets updated on user interaction but does not break the application state for the following reasons:
+//1. It is a Set which means repeated removals and repeated additions amount to a single operation meaning it is not broken by re-renders.
+//2. It is silent. It is never supposed to and will never trigger a re-render on it's own. The UI chooses when to check it to decide what to render.
+var destDeck: Set<string> = new Set(); //The destination deck has only the track ids.
+var unsubSource: () => void = () => {};
+var unsubDest: () => void = () => {};
+var onClearSourceDeck: () => void = () => {};
 
 //Start deck client is called from react and we must ensure that every time it is called, the result is the same. Track deck is re-initialized on every call.
 function startDeckClient(
   clientId: string,
-  onDeckReady: () => void,
-  onDeckUnready: () => void,
+  onSourceDeckReady: () => void,
+  onSourceDeckUnready: () => void,
   minSourceDeckSize = 3
 ) {
   console.log("Starting deck client...");
-  userId = clientId;
-  onClearDeck = onDeckUnready; //Mark the tracks as not ready everytime the deck is cleared.
-  clearDeck();
+  userId = clientId; //After starting the deck client, the userId becomes a globally available variable for saving and other operations.
+  onClearSourceDeck = onSourceDeckUnready; //Mark the tracks as not ready everytime the deck is cleared.
+  clearSourceDeck();
   refreshDeck(); //A promise that we don't have to wait for because of firestore web sockets.
-  unsub = listenToFirestoreCollection(
+
+  //Listen to source deck.
+  unsubSource = listenToFirestoreCollection(
     `users/${clientId}/sourceDeck`,
     (snapshot) => {
       snapshot.docChanges().forEach((change, index) => {
@@ -36,8 +43,25 @@ function startDeckClient(
           sourceDeck.push(track);
 
           if (index >= minSourceDeckSize - 1) {
-            onDeckReady(); //There are at least minSourceDeckSize tracks ready to be used.
+            onSourceDeckReady(); //There are at least minSourceDeckSize tracks ready to be used.
           }
+        }
+      });
+    }
+  );
+
+  clearDestinationDeck();
+
+  //Listen to destination deck.
+  unsubDest = listenToFirestoreCollection(
+    `users/${clientId}/destinationDeck`,
+    (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type == "added") {
+          destDeck.add(change.doc.id);
+        }
+        if (change.type == "removed") {
+          destDeck.delete(change.doc.id);
         }
       });
     }
@@ -46,13 +70,19 @@ function startDeckClient(
 
 function stopDeckClient() {
   console.log("Stopping deck client...");
-  unsub();
-  clearDeck();
+  unsubSource();
+  unsubDest();
+  clearSourceDeck();
+  clearDestinationDeck();
 }
 
-function clearDeck() {
+function clearSourceDeck() {
   sourceDeck = [];
-  onClearDeck();
+  onClearSourceDeck();
+}
+
+function clearDestinationDeck() {
+  destDeck.clear();
 }
 
 function getDeckItem(index: number): DeckItem {
@@ -60,63 +90,42 @@ function getDeckItem(index: number): DeckItem {
     throw new Error(
       `Source deck of size ${sourceDeck.length} does not have an item at index ${index}.`
     );
-  return sourceDeck[index];
+  const deckItem = sourceDeck[index];
+  deleteFireStoreDoc(`users/${userId}/sourceDeck/${deckItem.trackId}`); //Delete the deck item as soon as it is visited. This keeps the deck experience fresh evrytime.
+  return deckItem;
 }
 
-function saveTrack(currentTrack: DeckItem) {
-  console.log(`Saving track ${currentTrack.trackName}.`);
+function saveDeckItem(
+  currentDeckItem: DeckItem,
+  onSuccess: () => void,
+  onFailure: () => void
+) {
+  console.log(`Saving deck item ${currentDeckItem.trackName}.`);
+  destDeck.add(currentDeckItem.trackId); //Locally track deck items we expect to reach our destination.
   setFireStoreDoc(
-    `users/${userId}/yesDeck/${currentTrack.trackId}`,
-    currentTrack
-  );
+    `users/${userId}/yesDeck/${currentDeckItem.trackId}`,
+    currentDeckItem
+  )
+    .then(() => {
+      onSuccess();
+    })
+    .catch(() => {
+      onFailure();
+      destDeck.delete(currentDeckItem.trackId); //The item failed to reach our destination. Delete it.
+    });
 }
 
-function previousTrack(
-  currentTrack: DeckItem | null,
-  nextTrackIndex: number,
-  saveTrack: boolean
-): DeckItem | null {
-  console.log(
-    `Track deck has ${sourceDeck.length} tracks. Getting the one at index ${nextTrackIndex}...`
-  );
-  if (currentTrack) {
-    deleteFireStoreDoc(`users/${userId}/sourceDeck/${currentTrack.trackId}`);
-    if (saveTrack)
-      setFireStoreDoc(
-        `users/${userId}/yesDeck/${currentTrack.trackId}`,
-        currentTrack
-      );
-  }
-  const trackIndex = nextTrackIndex % sourceDeck.length;
-  return sourceDeck.length > 0 ? sourceDeck[trackIndex] : null;
-}
-
-function nextTrack(
-  currentTrack: DeckItem | null,
-  nextTrackIndex: number,
-  saveTrack: boolean
-): DeckItem | null {
-  console.log(
-    `Track deck has ${sourceDeck.length} tracks. Getting the one at index ${nextTrackIndex}...`
-  );
-  if (currentTrack) {
-    deleteFireStoreDoc(`users/${userId}/sourceDeck/${currentTrack.trackId}`);
-    if (saveTrack)
-      setFireStoreDoc(
-        `users/${userId}/yesDeck/${currentTrack.trackId}`,
-        currentTrack
-      );
-  }
-  const trackIndex = nextTrackIndex % sourceDeck.length;
-  return sourceDeck.length > 0 ? sourceDeck[trackIndex] : null;
+//This method works for deck items the user just saved as well as deck items that were already in the user's destination even before ever using Spinder.
+function isDeckItemSaved(currentTrack: DeckItem) {
+  return destDeck.has(currentTrack.trackId);
 }
 
 export {
   startDeckClient,
   stopDeckClient,
   getDeckItem,
-  saveTrack,
-  previousTrack,
-  nextTrack,
-  clearDeck,
+  saveDeckItem,
+  isDeckItemSaved,
+  clearSourceDeck,
+  clearDestinationDeck,
 };

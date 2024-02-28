@@ -131,14 +131,14 @@ function listenToFirestoreCollection(
   return unsubscribe;
 }
 
-function setFireStoreDoc(docPath: string, data: any) {
+async function setFireStoreDoc(docPath: string, data: any): Promise<void> {
   const document = doc(firestore, docPath);
-  setDoc(document, data);
+  await setDoc(document, data);
 }
 
-function deleteFireStoreDoc(docPath: string) {
+async function deleteFireStoreDoc(docPath: string): Promise<void> {
   const document = doc(firestore, docPath);
-  deleteDoc(document);
+  await deleteDoc(document);
 }
 
 export {
