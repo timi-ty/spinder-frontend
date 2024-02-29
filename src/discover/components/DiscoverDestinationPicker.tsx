@@ -136,10 +136,8 @@ function DiscoverDestinationPicker({ close }: Props) {
           </div>
           <div className="search">
             <SearchArea
-              onSearch={(text) => {
-                setIsSearching(text.length > 0);
-                setSearchText(text);
-              }}
+              onSearch={(text) => setSearchText(text)}
+              onTextChanged={(text) => setIsSearching(text.length > 0)}
               hint={"Search your playlists"}
             />
           </div>
