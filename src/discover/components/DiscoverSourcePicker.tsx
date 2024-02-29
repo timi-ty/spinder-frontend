@@ -146,9 +146,11 @@ function DiscoverSourcePicker({ close }: Props) {
   );
   const searchedSourcedItems = useMemo(
     () =>
-      [...sourceSearchResult.artists, ...sourceSearchResult.playlists].map(
-        (source) => DiscoverSourceToItem(source)
-      ),
+      [
+        ...sourceSearchResult.artists,
+        ...sourceSearchResult.playlists,
+        ...sourceSearchResult.spinderPeople,
+      ].map((source) => DiscoverSourceToItem(source)),
     [sourceSearchResult]
   );
   const selectedSourceItem = useMemo(

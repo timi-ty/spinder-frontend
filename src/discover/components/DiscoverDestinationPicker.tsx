@@ -36,7 +36,7 @@ function DiscoverDestinationToItem(
     name: item.name,
     title: item.name,
     image: item.image,
-    group: "Playlists",
+    group: item.isFavourites ? "Favourites" : "Playlists",
     isFavourites: item.isFavourites,
   };
 
@@ -139,6 +139,7 @@ function DiscoverDestinationPicker({ close }: Props) {
               onSearch={(text) => setSearchText(text)}
               onTextChanged={(text) => setIsSearching(text.length > 0)}
               hint={"Search your playlists"}
+              millisToSettle={10}
             />
           </div>
           <div className="bottom">

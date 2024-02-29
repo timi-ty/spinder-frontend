@@ -57,6 +57,10 @@ function TabListGroup<T extends TabListItem>({
     setSelectorTranslation(translationRem);
   }, [selectedTab, items]);
 
+  if (selectedTab >= tabArray.length) {
+    setSelectedTab(Math.max(tabArray.length - 1, 0));
+  } //Makesure that an empty tab/non-existent tab does not remain selected.
+
   return (
     <div className="tab-list-group">
       <div className="tabs">
@@ -86,7 +90,7 @@ function TabListGroup<T extends TabListItem>({
         }}
       ></div>
       <div className="list">
-        {tabArray.length > 0 &&
+        {tabArray.length > selectedTab &&
           tabArray[selectedTab].map((item) => {
             const isSelected = item.id === selectedItem.id;
             return (

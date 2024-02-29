@@ -131,7 +131,7 @@ function useDeck(): boolean {
   );
 
   const canStartSourceDeckClient =
-    sourceResourceStatus === "Loaded" || sourceResourceStatus === "LoadingMore";
+    sourceResourceStatus === "Loaded" || sourceResourceStatus === "LoadingMore"; //Can only start the source deck client after we know our selected source.
 
   useEffect(() => {
     if (!canStartSourceDeckClient) return;
@@ -152,7 +152,7 @@ function useDeck(): boolean {
 
   const canStartDestinationDeckClient =
     destinationResourceStatus === "Loaded" ||
-    destinationResourceStatus === "LoadingMore";
+    destinationResourceStatus === "LoadingMore"; //Can only start the source deck client after we know our selected destination.
 
   useEffect(() => {
     if (!canStartDestinationDeckClient) return;

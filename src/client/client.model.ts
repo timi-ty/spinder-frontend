@@ -142,11 +142,13 @@ const emptyDiscoverSourceData: DiscoverSourceData = {
 interface DiscoverSourceSearchResult {
   artists: DiscoverSource[];
   playlists: DiscoverSource[];
+  spinderPeople: DiscoverSource[];
 }
 
 const emptySourceSearchResult: DiscoverSourceSearchResult = {
   artists: [],
   playlists: [],
+  spinderPeople: [],
 };
 
 //For now, destination has to be a Spotify Playlist.
