@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   onAudioElementTimeUpdate,
   registerAudioElement,
@@ -34,9 +34,7 @@ function DiscoverDeckItemView({
     if (isActiveDeckItemView) dispatch(changeActiveDeckItem(mDeckItem));
   }, [isActiveDeckItemView, mDeckItem]);
 
-  const getAudioElement = () =>
-    document.getElementById(`audio${deckItemViewIndex}`) as HTMLAudioElement;
-  const [audioElement, setAudioElement] = useState(getAudioElement); //The audio element is likely not available upon initialization of this state. Ensure to get it in useEffect.
+  const audioRef: React.LegacyRef<HTMLAudioElement> = useRef(null);
   const [isPaused, setIsPaused] = useState(true);
 
   const onPause = () => setIsPaused(true);
@@ -44,26 +42,26 @@ function DiscoverDeckItemView({
   const onTimeUpdate = (ev: Event) =>
     onAudioElementTimeUpdate(ev.target as HTMLAudioElement);
   useEffect(() => {
-    const audioDomElement = getAudioElement();
-    audioDomElement.addEventListener("pause", onPause);
-    audioDomElement.addEventListener("play", onPlay);
-    audioDomElement.addEventListener("timeupdate", onTimeUpdate);
-    setAudioElement(audioDomElement);
-    registerAudioElement(audioDomElement, deckItemViewIndex);
-    return () => {
-      unregisterAudioElement(deckItemViewIndex);
-      audioDomElement.removeEventListener("pause", onPause);
-      audioDomElement.removeEventListener("play", onPlay);
-      audioDomElement.removeEventListener("timeupdate", onTimeUpdate);
-    };
+    if (audioRef.current) {
+      audioRef.current.addEventListener("pause", onPause);
+      audioRef.current.addEventListener("play", onPlay);
+      audioRef.current.addEventListener("timeupdate", onTimeUpdate);
+      registerAudioElement(audioRef.current, deckItemViewIndex);
+      return () => {
+        unregisterAudioElement(deckItemViewIndex);
+        audioRef.current?.removeEventListener("pause", onPause);
+        audioRef.current?.removeEventListener("play", onPlay);
+        audioRef.current?.removeEventListener("timeupdate", onTimeUpdate);
+      };
+    }
   }, [deckItemViewIndex]);
 
   const next = () => {
-    audioElement.pause();
+    audioRef.current?.pause();
     onNext(deckItemViewIndex, mDeckItem);
   };
   const previous = () => {
-    audioElement.pause();
+    audioRef.current?.pause();
     onPrevious(deckItemViewIndex);
   };
 
@@ -84,7 +82,9 @@ function DiscoverDeckItemView({
 
   const onClickPlayPause = () => {
     if (!isActiveDeckItemView || Math.abs(endDelta.dy) > 1) return; //Hack. End delta lets us know if we were dragging just now.
-    audioElement.paused ? audioElement.play() : audioElement.pause();
+    audioRef.current?.paused
+      ? audioRef.current?.play()
+      : audioRef.current?.pause();
   };
 
   return (
@@ -100,7 +100,11 @@ function DiscoverDeckItemView({
         <div>No Valid Track Here</div>
       ) : (
         <>
-          <audio id={`audio${deckItemViewIndex}`} src={mDeckItem.previewUrl} />
+          <audio
+            ref={audioRef}
+            id={`audio${deckItemViewIndex}`}
+            src={mDeckItem.previewUrl}
+          />
           <img className="image" src={mDeckItem.image} />
           <div className="play-pause" onClick={onClickPlayPause}>
             {isActiveDeckItemView && isPaused && (
