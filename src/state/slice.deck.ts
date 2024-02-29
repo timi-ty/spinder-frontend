@@ -2,13 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 import { DeckItem, emptyDeckItem } from "../client/client.model";
 
 interface DeckState {
-  isDeckReady: boolean;
+  isSourceDeckReady: boolean;
   activeDeckItem: DeckItem;
+  destinationDeckSize: number;
 }
 
 const defaultDeckState: DeckState = {
-  isDeckReady: false,
+  isSourceDeckReady: false,
   activeDeckItem: emptyDeckItem,
+  destinationDeckSize: 0,
 };
 
 interface ReadyDeckAction {
@@ -26,15 +28,31 @@ const deckSlice = createSlice({
   initialState: defaultDeckState,
   reducers: {
     setDeckReady: (state, action: ReadyDeckAction) => {
-      state.isDeckReady = action.payload;
+      state.isSourceDeckReady = action.payload;
     },
     changeActiveDeckItem: (state, action: ActiveDeckItemAction) => {
       state.activeDeckItem = action.payload;
     },
+    addDestinationDeckItem: (state) => {
+      state.destinationDeckSize += 1;
+    },
+    removeDestinationDeckItem: (state) => {
+      state.destinationDeckSize -= 1;
+      if (state.destinationDeckSize < 0) state.destinationDeckSize = 0;
+    },
+    clearDestinationDeck: (state) => {
+      state.destinationDeckSize = 0;
+    },
   },
 });
 
-export const { setDeckReady, changeActiveDeckItem } = deckSlice.actions;
+export const {
+  setDeckReady,
+  changeActiveDeckItem,
+  addDestinationDeckItem,
+  removeDestinationDeckItem,
+  clearDestinationDeck,
+} = deckSlice.actions;
 
 export { type DeckState };
 

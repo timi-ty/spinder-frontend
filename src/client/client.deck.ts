@@ -1,8 +1,12 @@
-import { refreshDestinationDeck, refreshSourceDeck } from "./client.api";
+import {
+  refreshDestinationDeck,
+  refreshSourceDeck,
+  removeFromDestination,
+  saveToDestination,
+} from "./client.api";
 import {
   deleteFireStoreDoc,
   listenToFirestoreCollection,
-  setFireStoreDoc,
 } from "./client.firebase";
 import { DeckItem, DiscoverDestination, DiscoverSource } from "./client.model";
 
@@ -19,8 +23,12 @@ var destinationDeck: Set<string> = new Set(); //The destination deck has only th
 var unsubSourceDeckListener: () => void = () => {};
 var unsubDestinationDeckListener: () => void = () => {};
 var onClearSourceDeck: () => void = () => {};
+var onClearDestinationDeck: () => void = () => {};
 
-//Start deck client is called from react and we must ensure that every time it is called, the result is the same. Track deck is re-initialized on every call.
+var addDestinationDeckItem: (itemId: string) => void = () => {};
+var removeDestinationDeckItem: (itemId: string) => void = () => {};
+
+//Start deck client is called from react and we must ensure that every time it is called, the result is the same. Source deck is re-initialized on every call.
 function startSourceDeckClient(
   clientId: string,
   source: DiscoverSource,
@@ -31,7 +39,8 @@ function startSourceDeckClient(
   console.log("Starting source deck client...");
   userId = clientId; //After starting the deck client, the userId becomes a globally available variable for saving and other operations.
   onClearSourceDeck = onSourceDeckUnready; //Mark the tracks as not ready everytime the deck is cleared.
-  clearSourceDeck();
+
+  clearSourceDeck(); // Re-initialize source deck.
   refreshSourceDeck(source); //A promise that we don't have to wait for because of firestore web sockets.
 
   //Listen to source deck.
@@ -52,16 +61,29 @@ function startSourceDeckClient(
   );
 }
 
-//Start deck client is called from react and we must ensure that every time it is called, the result is the same. Track deck is re-initialized on every call.
+//Start deck client is called from react and we must ensure that every time it is called, the result is the same. Destination deck is re-initialized on every call.
 function startDestinationDeckClient(
   clientId: string,
-  destination: DiscoverDestination
+  destination: DiscoverDestination,
+  onAddDeckItem: () => void,
+  onRemoveDeckItem: () => void,
+  onClearDeck: () => void
 ) {
   console.log("Starting destination deck client...");
   userId = clientId; //After starting the deck client, the userId becomes a globally available variable for saving and other operations.
+  onClearDestinationDeck = onClearDeck;
 
-  clearDestinationDeck();
+  clearDestinationDeck(); // Re-initialize destination deck.
   refreshDestinationDeck(destination); //A promise that we don't have to wait for because of firestore web sockets.
+
+  addDestinationDeckItem = (itemId) => {
+    destinationDeck.add(itemId);
+    onAddDeckItem();
+  };
+  removeDestinationDeckItem = (itemId) => {
+    destinationDeck.delete(itemId);
+    onRemoveDeckItem();
+  };
 
   //Listen to destination deck.
   unsubDestinationDeckListener = listenToFirestoreCollection(
@@ -69,10 +91,10 @@ function startDestinationDeckClient(
     (snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type == "added") {
-          destinationDeck.add(change.doc.id);
+          addDestinationDeckItem(change.doc.id);
         }
         if (change.type == "removed") {
-          destinationDeck.delete(change.doc.id);
+          removeDestinationDeckItem(change.doc.id);
         }
       });
     }
@@ -98,6 +120,7 @@ function clearSourceDeck() {
 
 function clearDestinationDeck() {
   destinationDeck.clear();
+  onClearDestinationDeck();
 }
 
 function getDeckItem(index: number): DeckItem {
@@ -114,22 +137,38 @@ function markVisitedDeckItem(currentDeckItem: DeckItem) {
 }
 
 function saveDeckItem(
+  destination: DiscoverDestination,
   currentDeckItem: DeckItem,
   onSuccess: () => void,
   onFailure: () => void
 ) {
-  console.log(`Saving deck item ${currentDeckItem.trackName}.`);
-  destinationDeck.add(currentDeckItem.trackId); //Locally track deck items we expect to reach our destination.
-  setFireStoreDoc(
-    `users/${userId}/yesDeck/${currentDeckItem.trackId}`,
-    currentDeckItem
-  )
+  console.log(`Saving deck item:: ${currentDeckItem.trackName}.`);
+  addDestinationDeckItem(currentDeckItem.trackId); //Locally track deck items we expect to reach our destination.
+  saveToDestination(destination, currentDeckItem)
     .then(() => {
       onSuccess();
     })
     .catch(() => {
       onFailure();
-      destinationDeck.delete(currentDeckItem.trackId); //The item failed to reach our destination. Delete it.
+      removeDestinationDeckItem(currentDeckItem.trackId); //The item failed to reach our destination. Delete it.
+    });
+}
+
+function unsaveDeckItem(
+  destination: DiscoverDestination,
+  currentDeckItem: DeckItem,
+  onSuccess: () => void,
+  onFailure: () => void
+) {
+  console.log(`Unsaving deck item:: ${currentDeckItem.trackName}.`);
+  removeDestinationDeckItem(currentDeckItem.trackId); //Locally track deck items we expect to reach our destination.
+  removeFromDestination(destination, currentDeckItem)
+    .then(() => {
+      onSuccess();
+    })
+    .catch(() => {
+      onFailure();
+      addDestinationDeckItem(currentDeckItem.trackId); //The item failed to reach our destination. Delete it.
     });
 }
 
@@ -146,6 +185,7 @@ export {
   getDeckItem,
   markVisitedDeckItem,
   saveDeckItem,
+  unsaveDeckItem,
   isDeckItemSaved,
   clearSourceDeck,
   clearDestinationDeck,

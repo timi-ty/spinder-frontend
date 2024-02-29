@@ -37,6 +37,7 @@ function DiscoverDestinationToItem(
     title: item.name,
     image: item.image,
     group: "Playlists",
+    isFavourites: item.isFavourites,
   };
 
   return destinationItem;
@@ -49,6 +50,7 @@ function ItemToDiscoverDestination(
     id: item.id,
     name: item.name,
     image: item.image,
+    isFavourites: item.isFavourites,
   };
 
   return destination;

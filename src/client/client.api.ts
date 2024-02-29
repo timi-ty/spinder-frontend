@@ -3,6 +3,7 @@ import {
   getFirebaseIdToken,
 } from "./client.firebase";
 import {
+  DeckItem,
   DiscoverDestination,
   DiscoverDestinationData,
   DiscoverSource,
@@ -269,6 +270,57 @@ async function refreshDestinationDeck(
   }
 }
 
+async function saveToDestination(
+  destination: DiscoverDestination,
+  item: DeckItem
+): Promise<void> {
+  try {
+    const url = `${backendUrl}/discover/deck/destination/save`;
+
+    const response = await fetch(
+      `${url}?destination=${safeStringify(destination)}&item=${safeStringify(
+        item
+      )}`,
+      fetchConfig(await getBearerToken())
+    );
+
+    if (!response.ok) {
+      const errorResponse: SpinderError = await response.json();
+      throw new Error(
+        `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
+      );
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to refresh Discover destination.");
+  }
+}
+
+async function removeFromDestination(
+  destination: DiscoverDestination,
+  item: DeckItem
+): Promise<void> {
+  try {
+    const url = `${backendUrl}/discover/deck/destination/remove`;
+
+    const response = await fetch(
+      `${url}?destination=${safeStringify(destination)}&item=${safeStringify(
+        item
+      )}`,
+      fetchConfig(await getBearerToken())
+    );
+
+    if (!response.ok) {
+      const errorResponse: SpinderError = await response.json();
+      throw new Error(
+        `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
+      );
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to refresh Discover destination.");
+  }
+}
 /**********DISCOVER END**********/
 
 function fetchConfig(
@@ -313,4 +365,6 @@ export {
   postDiscoverDestination,
   refreshSourceDeck,
   refreshDestinationDeck,
+  saveToDestination,
+  removeFromDestination,
 };

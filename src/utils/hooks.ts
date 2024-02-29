@@ -14,7 +14,12 @@ import {
   loadDiscoverSource,
   loadUserProfile,
 } from "./loaders";
-import { setDeckReady } from "../state/slice.deck";
+import {
+  addDestinationDeckItem,
+  clearDestinationDeck,
+  removeDestinationDeckItem,
+  setDeckReady,
+} from "../state/slice.deck";
 import { DiscoverDestination, DiscoverSource } from "../client/client.model";
 
 /* The global state of this app is managaed by redux. The custom hooks here interface with react-redux hooks.
@@ -112,7 +117,7 @@ function useDeck(): boolean {
     (state) => state.authState.userId
   );
   const isDeckReady = useSelector<StoreState, boolean>(
-    (state) => state.deckState.isDeckReady
+    (state) => state.deckState.isSourceDeckReady
   );
 
   const sourceResourceStatus = useDiscoverSourceResource();
@@ -151,7 +156,19 @@ function useDeck(): boolean {
 
   useEffect(() => {
     if (!canStartDestinationDeckClient) return;
-    startDestinationDeckClient(userId, selectedDestination);
+    startDestinationDeckClient(
+      userId,
+      selectedDestination,
+      () => {
+        dispatch(addDestinationDeckItem());
+      },
+      () => {
+        dispatch(removeDestinationDeckItem());
+      },
+      () => {
+        dispatch(clearDestinationDeck());
+      }
+    );
     return () => {
       stopDestinationDeckClient();
     };

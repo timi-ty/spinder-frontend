@@ -124,9 +124,9 @@ interface DiscoverSource {
 
 const defaultDiscoverSource: DiscoverSource = {
   type: "Anything Me",
-  id: "Anything Me",
+  id: "anythingme",
   name: "Anything Me",
-  image: "",
+  image: "src/assets/ic_anything_me_stars.svg",
 };
 
 interface DiscoverSourceData {
@@ -154,12 +154,14 @@ interface DiscoverDestination {
   name: string;
   image: string;
   id: string;
+  isFavourites: boolean;
 }
 
-const emptyDiscoverDestination: DiscoverDestination = {
-  name: "",
-  image: "",
-  id: "",
+const defaultDiscoverDestination: DiscoverDestination = {
+  name: "Favourites",
+  image: "src/assets/ic_favourites_heart.svg",
+  id: "favourites",
+  isFavourites: true,
 };
 
 interface DiscoverDestinationData {
@@ -170,7 +172,7 @@ interface DiscoverDestinationData {
 }
 
 const emptyDiscoverDestinationData: DiscoverDestinationData = {
-  selectedDestination: emptyDiscoverDestination,
+  selectedDestination: defaultDiscoverDestination,
   offset: 0,
   total: 0,
   availableDestinations: [],
