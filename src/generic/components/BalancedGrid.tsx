@@ -27,13 +27,23 @@ function BalancedGrid<T extends BalancedGridItem>({
 }: Props<T>) {
   return (
     <div className="balanced-grid">
-      {showSelectedItem && (
+      {showSelectedItem && graphicType === "Image" && (
         <ImageTextGridItem
           key={selectedItem.id}
           image={selectedItem.image}
           text={selectedItem.title}
           isSelected={true}
           onAction={() => onClickItem(selectedItem, true)}
+          useAvailableWidth={true}
+        />
+      )}
+      {showSelectedItem && graphicType === "Icon" && (
+        <IconTextGridItem
+          key={selectedItem.id}
+          icon={selectedItem.image}
+          text={selectedItem.title}
+          isSelected={true}
+          onAction={() => onClickItem(selectedItem, false)}
           useAvailableWidth={true}
         />
       )}

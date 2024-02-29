@@ -173,7 +173,7 @@ function DiscoverSourcePicker({ close }: Props) {
             />
           </div>
           <div className="bottom">
-            {!isSearching && (
+            {!isSearching && !isCompositeSource(selectedSourceItem) && (
               <div
                 className={`selected-source-item`}
                 onClick={() => onSourceClick(selectedSourceItem, true)}
@@ -205,7 +205,7 @@ function DiscoverSourcePicker({ close }: Props) {
                 onClickItem={onSourceClick}
                 selectedItem={selectedSourceItem}
                 graphicType={"Icon"}
-                showSelectedItem={false}
+                showSelectedItem={isCompositeSource(selectedSourceItem)}
               />
             )}
             {isSearching && (
