@@ -12,15 +12,19 @@ function DiscoverMiddle() {
   return (
     <div className="middle">
       <div className="left">
-        <div className="track-title">{activeDeckItem.trackName}</div>
+        <a href={`${activeDeckItem.trackUri}`}>
+          <div className="track-title">{activeDeckItem.trackName}</div>
+        </a>
         <div className="track-artists">
           {activeDeckItem.artists.map((artist, index) => (
-            <span key={artist.artistUri}>{`${artist.artistName}${
-              activeDeckItem.artists.length > 0 &&
-              index < activeDeckItem.artists.length - 1
-                ? ", "
-                : ""
-            }`}</span>
+            <a key={artist.artistUri} href={`${artist.artistUri}`}>
+              <span>{`${artist.artistName}${
+                activeDeckItem.artists.length > 0 &&
+                index < activeDeckItem.artists.length - 1
+                  ? ", "
+                  : ""
+              }`}</span>
+            </a>
           ))}
         </div>
       </div>
