@@ -34,7 +34,6 @@ function DiscoverLikeButton() {
           onClick={() => {
             setIsLiked(true);
             saveDeckItem(
-              destination,
               activeDeckItem,
               () => {
                 /*show saved success message*/

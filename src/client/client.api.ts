@@ -139,7 +139,7 @@ async function searchDiscoverSources(
   }
 }
 
-async function postDiscoverSource(
+async function changeDiscoverSource(
   source: DiscoverSource
 ): Promise<DiscoverSource> {
   try {
@@ -192,7 +192,7 @@ async function getDiscoverDestinations(
   }
 }
 
-async function postDiscoverDestination(
+async function changeDiscoverDestination(
   destination: DiscoverDestination
 ): Promise<DiscoverDestination> {
   try {
@@ -218,16 +218,11 @@ async function postDiscoverDestination(
   }
 }
 
-async function refreshSourceDeck(
-  source: DiscoverSource
-): Promise<DiscoverSource> {
+async function refillDiscoverSourceDeck(): Promise<DiscoverSource> {
   try {
-    const url = `${backendUrl}/discover/deck/source/refresh`;
+    const url = `${backendUrl}/discover/deck/source/refill`;
 
-    const response = await fetch(
-      `${url}?source=${safeStringify(source)}`,
-      fetchConfig(await getBearerToken())
-    );
+    const response = await fetch(url, fetchConfig(await getBearerToken()));
 
     if (response.ok) {
       const responseData: DiscoverSource = await response.json();
@@ -240,20 +235,15 @@ async function refreshSourceDeck(
     }
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to set refresh deck.");
+    throw new Error("Failed to set refill source deck.");
   }
 }
 
-async function refreshDestinationDeck(
-  destination: DiscoverDestination
-): Promise<DiscoverDestination> {
+async function resetDiscoverDestinationDeck(): Promise<DiscoverDestination> {
   try {
-    const url = `${backendUrl}/discover/deck/destination/refresh`;
+    const url = `${backendUrl}/discover/deck/destination/reset`;
 
-    const response = await fetch(
-      `${url}?destination=${safeStringify(destination)}`,
-      fetchConfig(await getBearerToken())
-    );
+    const response = await fetch(url, fetchConfig(await getBearerToken()));
 
     if (response.ok) {
       const responseData: DiscoverDestination = await response.json();
@@ -266,21 +256,16 @@ async function refreshDestinationDeck(
     }
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to refresh Discover destination.");
+    throw new Error("Failed to reset destination deck.");
   }
 }
 
-async function saveToDestination(
-  destination: DiscoverDestination,
-  item: DeckItem
-): Promise<void> {
+async function saveToDestination(item: DeckItem): Promise<void> {
   try {
     const url = `${backendUrl}/discover/deck/destination/save`;
 
     const response = await fetch(
-      `${url}?destination=${safeStringify(destination)}&item=${safeStringify(
-        item
-      )}`,
+      `${url}?item=${safeStringify(item)}`,
       fetchConfig(await getBearerToken())
     );
 
@@ -360,11 +345,11 @@ export {
   getSpotifyProfile,
   getDiscoverSources,
   searchDiscoverSources,
-  postDiscoverSource,
+  changeDiscoverSource,
   getDiscoverDestinations,
-  postDiscoverDestination,
-  refreshSourceDeck,
-  refreshDestinationDeck,
+  changeDiscoverDestination,
+  refillDiscoverSourceDeck,
+  resetDiscoverDestinationDeck,
   saveToDestination,
   removeFromDestination,
 };

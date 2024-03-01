@@ -4,8 +4,7 @@ import { StoreState, dispatch } from "../../state/store";
 import "../styles/DiscoverBottom.scss";
 import { useSpotifyProfileResource } from "../../utils/hooks";
 import { useCallback } from "react";
-import { postDiscoverSource } from "../../client/client.api";
-import { clearSourceDeck } from "../../client/client.deck";
+import { changeSource } from "../../client/client.deck";
 import { selectDiscoverSource } from "../../state/slice.discoversource";
 
 function DiscoverBottom() {
@@ -22,21 +21,16 @@ function DiscoverBottom() {
     (state) => state.userProfileState.data.uri
   );
 
-  const onSourceClick = useCallback(async (source: DiscoverSource) => {
-    clearSourceDeck();
-    try {
-      const response = await postDiscoverSource(source);
-      if (response.id === source.id) {
-        dispatch(selectDiscoverSource(source));
-        return;
+  const onSourceClick = useCallback((source: DiscoverSource) => {
+    changeSource(
+      source,
+      (newSource) => {
+        dispatch(selectDiscoverSource(newSource));
+      },
+      () => {
+        /*Show error, failed to change source.*/
       }
-      throw new Error(
-        `Discover source set mismatch. Asked for ${source.id} but got ${response.id}.`
-      );
-    } catch (error) {
-      console.error(error);
-      console.error("Failed to set discover source.");
-    }
+    );
   }, []);
 
   return (

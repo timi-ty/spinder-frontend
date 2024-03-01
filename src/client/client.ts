@@ -42,17 +42,28 @@ function stopRenewingAuthentication() {
   renewAuthHandle = null;
 }
 
+var retryAttempts = 0;
+
 async function renewAutheticationCallback() {
-  const renewedAuth = await renewAuthentication();
-  console.log(
-    `Renewed Authentication - UserId: ${
-      renewedAuth.userId
-    }, SpotifyTokenExpiresIn: ${
-      renewedAuth.spotifyAccessTokenExpiresIn / 60000
-    } mins, FirebaseTokenExpiresIn: ${
-      renewedAuth.firebaseIdTokenExpiresIn / 60000
-    } mins.`
-  );
+  renewAuthentication()
+    .then((renewedAuth) => {
+      retryAttempts = 0;
+      console.log(
+        `Renewed Authentication - UserId: ${
+          renewedAuth.userId
+        }, SpotifyTokenExpiresIn: ${
+          renewedAuth.spotifyAccessTokenExpiresIn / 60000
+        } mins, FirebaseTokenExpiresIn: ${
+          renewedAuth.firebaseIdTokenExpiresIn / 60000
+        } mins.`
+      );
+    })
+    .catch(() => {
+      if (retryAttempts < 5) {
+        retryAttempts++;
+        setTimeout(renewAutheticationCallback, 120000); //Retry in 2 mins.
+      }
+    });
 }
 
 export { startRenewingAuthentication, stopRenewingAuthentication };

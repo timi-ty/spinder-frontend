@@ -2,10 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreState } from "../../state/store";
 import { useDiscoverSourceResource } from "../../utils/hooks";
-import {
-  postDiscoverSource,
-  searchDiscoverSources,
-} from "../../client/client.api";
+import { searchDiscoverSources } from "../../client/client.api";
 import FullComponentLoader from "../../loaders/components/FullComponentLoader";
 import {
   DiscoverSource,
@@ -21,9 +18,9 @@ import BalancedGrid, {
   BalancedGridItem,
 } from "../../generic/components/BalancedGrid";
 import { selectDiscoverSource } from "../../state/slice.discoversource";
-import { clearSourceDeck } from "../../client/client.deck";
 import TitleBar from "../../generic/components/TitleBar";
 import DiscoverVibePicker from "./DiscoverVibePicker";
+import { changeSource } from "../../client/client.deck";
 
 interface Props {
   close: () => void;
@@ -126,25 +123,18 @@ function DiscoverSourcePicker({ close }: Props) {
     async (source: DiscoverSourceItem, isSelected: boolean = false) => {
       if (!isSelected) {
         setIsLoading(true);
-        clearSourceDeck();
-        try {
-          const response = await postDiscoverSource(
-            ItemToDiscoverSource(source)
-          );
-          if (response.id === source.id) {
-            dispatch(selectDiscoverSource(source));
+        changeSource(
+          ItemToDiscoverSource(source),
+          (newSource) => {
+            dispatch(selectDiscoverSource(newSource));
             setIsLoading(false);
             close();
-            return;
+          },
+          () => {
+            /*Show error, failed to change destination.*/
+            setIsLoading(false);
           }
-          throw new Error(
-            `Discover source set mismatch. Asked for ${source.id} but got ${response.id}.`
-          );
-        } catch (error) {
-          console.error(error);
-          console.error("Failed to set discover source.");
-          setIsLoading(false);
-        }
+        );
       }
     },
     []

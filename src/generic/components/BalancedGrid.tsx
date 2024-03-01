@@ -50,28 +50,28 @@ function BalancedGrid<T extends BalancedGridItem>({
       {items.map((item) => {
         const isSelected = item.id === selectedItem.id;
         return (
-          <>
-            {!isSelected && graphicType === "Image" && (
-              <ImageTextGridItem
-                key={item.id}
-                image={item.image}
-                text={item.title}
-                isSelected={false}
-                onAction={() => onClickItem(item, false)}
-                useAvailableWidth={true}
-              />
-            )}
-            {!isSelected && graphicType === "Icon" && (
-              <IconTextGridItem
-                key={item.id}
-                icon={item.image}
-                text={item.title}
-                isSelected={false}
-                onAction={() => onClickItem(item, false)}
-                useAvailableWidth={true}
-              />
-            )}
-          </>
+          !isSelected && (
+            <div key={item.id}>
+              {graphicType === "Image" && (
+                <ImageTextGridItem
+                  image={item.image}
+                  text={item.title}
+                  isSelected={false}
+                  onAction={() => onClickItem(item, false)}
+                  useAvailableWidth={true}
+                />
+              )}
+              {graphicType === "Icon" && (
+                <IconTextGridItem
+                  icon={item.image}
+                  text={item.title}
+                  isSelected={false}
+                  onAction={() => onClickItem(item, false)}
+                  useAvailableWidth={true}
+                />
+              )}
+            </div>
+          )
         );
       })}
     </div>

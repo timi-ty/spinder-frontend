@@ -20,7 +20,6 @@ import {
   removeDestinationDeckItem,
   setDeckReady,
 } from "../state/slice.deck";
-import { DiscoverDestination, DiscoverSource } from "../client/client.model";
 
 /* The global state of this app is managaed by redux. The custom hooks here interface with react-redux hooks.
  * These hooks are built with a homogenous paradigm. They are primarily for loading app data/resources.
@@ -120,24 +119,9 @@ function useDeck(): boolean {
     (state) => state.deckState.isSourceDeckReady
   );
 
-  const sourceResourceStatus = useDiscoverSourceResource();
-  const destinationResourceStatus = useDiscoverDestinationResource();
-
-  const selectedSource = useSelector<StoreState, DiscoverSource>(
-    (state) => state.discoverSourceState.data.selectedSource
-  );
-  const selectedDestination = useSelector<StoreState, DiscoverDestination>(
-    (state) => state.discoverDestinationState.data.selectedDestination
-  );
-
-  const canStartSourceDeckClient =
-    sourceResourceStatus === "Loaded" || sourceResourceStatus === "LoadingMore"; //Can only start the source deck client after we know our selected source.
-
   useEffect(() => {
-    if (!canStartSourceDeckClient) return;
     startSourceDeckClient(
       userId,
-      selectedSource,
       () => {
         dispatch(setDeckReady(true));
       },
@@ -148,17 +132,11 @@ function useDeck(): boolean {
     return () => {
       stopSourceDeckClient();
     };
-  }, [userId, canStartSourceDeckClient, selectedSource.id]); //If the id doesn't change, it is the same source.
-
-  const canStartDestinationDeckClient =
-    destinationResourceStatus === "Loaded" ||
-    destinationResourceStatus === "LoadingMore"; //Can only start the source deck client after we know our selected destination.
+  }, [userId]);
 
   useEffect(() => {
-    if (!canStartDestinationDeckClient) return;
     startDestinationDeckClient(
       userId,
-      selectedDestination,
       () => {
         dispatch(addDestinationDeckItem());
       },
@@ -172,7 +150,7 @@ function useDeck(): boolean {
     return () => {
       stopDestinationDeckClient();
     };
-  }, [userId, canStartDestinationDeckClient, selectedDestination.id]); //If the id doesn't change, it is the same destination.
+  }, [userId]);
 
   return isDeckReady;
 }

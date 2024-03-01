@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreState } from "../../state/store";
 import { useDiscoverDestinationResource } from "../../utils/hooks";
-import { postDiscoverDestination } from "../../client/client.api";
 import FullComponentLoader from "../../loaders/components/FullComponentLoader";
 import {
   DiscoverDestination,
@@ -18,6 +17,7 @@ import BalancedGrid, {
   BalancedGridItem,
 } from "../../generic/components/BalancedGrid";
 import TitleBar from "../../generic/components/TitleBar";
+import { changeDestination } from "../../client/client.deck";
 
 interface Props {
   close: () => void;
@@ -91,24 +91,18 @@ function DiscoverDestinationPicker({ close }: Props) {
     ) => {
       if (!isSelected) {
         setIsLoading(true);
-        try {
-          const response = await postDiscoverDestination(
-            ItemToDiscoverDestination(destination)
-          );
-          if (response.id === destination.id) {
-            dispatch(selectDiscoverDestination(destination));
+        changeDestination(
+          ItemToDiscoverDestination(destination),
+          (newDestination) => {
+            dispatch(selectDiscoverDestination(newDestination));
             close();
             setIsLoading(false);
-            return;
+          },
+          () => {
+            /*Show error, failed to change destination.*/
+            setIsLoading(false);
           }
-          throw new Error(
-            `Discover destination set mismatch. Asked for ${destination.id} but got ${response.id}.`
-          );
-        } catch (error) {
-          console.error(error);
-          console.error("Failed to set discover desination.");
-          setIsLoading(false);
-        }
+        );
       }
     },
     []
