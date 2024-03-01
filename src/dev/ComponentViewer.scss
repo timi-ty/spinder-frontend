@@ -3,4 +3,6 @@
 .component-viewer {
   position: absolute;
   @extend %app-area;
+  padding: 1rem;
+  background-color: #131722;
 }

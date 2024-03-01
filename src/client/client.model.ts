@@ -140,12 +140,14 @@ const emptyDiscoverSourceData: DiscoverSourceData = {
 };
 
 interface DiscoverSourceSearchResult {
+  foundVibe: boolean;
   artists: DiscoverSource[];
   playlists: DiscoverSource[];
   spinderPeople: DiscoverSource[];
 }
 
 const emptySourceSearchResult: DiscoverSourceSearchResult = {
+  foundVibe: false,
   artists: [],
   playlists: [],
   spinderPeople: [],
