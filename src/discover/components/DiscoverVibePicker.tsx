@@ -23,7 +23,7 @@ function DiscoverVibePicker({
       {pickerStatus === "Found" && (
         <div className="found-a-vibe">Found a vibe</div>
       )}
-      {pickerStatus === "Found" && <div className="vibe-name">{vibeName}</div>}
+      {pickerStatus === "Found" && <div className="vibe-name">#{vibeName}</div>}
       {pickerStatus === "Searching" && (
         <div className="search-overlay">Searching for a vibe...</div>
       )}
@@ -35,3 +35,5 @@ function DiscoverVibePicker({
 }
 
 export default DiscoverVibePicker;
+
+export { type VibePickerStatus };

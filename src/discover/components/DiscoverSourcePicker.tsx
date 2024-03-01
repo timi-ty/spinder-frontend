@@ -23,6 +23,7 @@ import BalancedGrid, {
 import { selectDiscoverSource } from "../../state/slice.discoversource";
 import { clearSourceDeck } from "../../client/client.deck";
 import TitleBar from "../../generic/components/TitleBar";
+import DiscoverVibePicker from "./DiscoverVibePicker";
 
 interface Props {
   close: () => void;
@@ -93,7 +94,7 @@ function DiscoverSourcePicker({ close }: Props) {
     resourceStatus === "Loading" || resourceStatus === "Empty"
   ); //Also used as local loader for changing source. May want to change this.
   const [isSearching, setIsSearching] = useState(false);
-  const [searchText, setSearchText] = useState("");
+  const [isResultUpdated, setIsResultUpdated] = useState(false);
   const [sourceSearchResult, setSourceSearchResult] = useState(
     emptySourceSearchResult
   );
@@ -102,12 +103,24 @@ function DiscoverSourcePicker({ close }: Props) {
       setIsLoading(resourceStatus === "Loading" || resourceStatus === "Empty"),
     [resourceStatus]
   );
-  useEffect(() => {
+
+  const onSearchTextChanged = (text: string) => {
+    setIsSearching(text.length > 0);
+    setIsResultUpdated(false); //As soon as the search text changes, mark that we are pending results.
+  };
+
+  const onSearch = (searchText: string) => {
     if (searchText === "") return;
-    searchDiscoverSources(searchText).then((result) =>
-      setSourceSearchResult(result)
-    );
-  }, [searchText]);
+    searchDiscoverSources(searchText)
+      .then((result) => {
+        setSourceSearchResult(result);
+        setIsResultUpdated(true); //As soon as we get new results, mark that no result is pending until the search text changes again.
+      })
+      .catch(() => {
+        setSourceSearchResult(emptySourceSearchResult); //An error means we have no results
+        setIsResultUpdated(true);
+      });
+  };
 
   const onSourceClick = useCallback(
     async (source: DiscoverSourceItem, isSelected: boolean = false) => {
@@ -167,8 +180,8 @@ function DiscoverSourcePicker({ close }: Props) {
           </div>
           <div className="search">
             <SearchArea
-              onSearch={(text) => setSearchText(text)}
-              onTextChanged={(text) => setIsSearching(text.length > 0)}
+              onSearch={onSearch}
+              onTextChanged={onSearchTextChanged}
               hint={"Search for artists, playlists, spinder people..."}
             />
           </div>
@@ -206,6 +219,31 @@ function DiscoverSourcePicker({ close }: Props) {
                 selectedItem={selectedSourceItem}
                 graphicType={"Icon"}
                 showSelectedItem={isCompositeSource(selectedSourceItem)}
+              />
+            )}
+            {isSearching && (
+              <DiscoverVibePicker
+                pickerStatus={
+                  isResultUpdated
+                    ? sourceSearchResult.foundVibe
+                      ? "Found"
+                      : "Not Found"
+                    : "Searching"
+                }
+                vibeName={sourceSearchResult.searchText}
+                onClick={() =>
+                  onSourceClick(
+                    {
+                      type: "Vibe",
+                      id: `${sourceSearchResult.searchText}`,
+                      name: `${sourceSearchResult.searchText}`,
+                      image: "/src/assets/ic_vibe_hashtag.png",
+                      title: `${sourceSearchResult.searchText}`,
+                      group: "Vibe",
+                    },
+                    false
+                  )
+                }
               />
             )}
             {isSearching && (

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import "../styles/TabListGroup.scss";
 import ImageTextListItem from "./ImageTextListItem";
 import { pxToRem } from "../../utils/utils";
@@ -57,9 +57,11 @@ function TabListGroup<T extends TabListItem>({
     setSelectorTranslation(translationRem);
   }, [selectedTab, items]);
 
-  if (selectedTab >= tabArray.length) {
-    setSelectedTab(Math.max(tabArray.length - 1, 0));
-  } //Makesure that an empty tab/non-existent tab does not remain selected.
+  useEffect(() => {
+    if (selectedTab >= tabArray.length) {
+      setSelectedTab(Math.max(tabArray.length - 1, 0)); //Makesure that an empty tab/non-existent tab does not remain selected.
+    }
+  }, [tabArray.length]);
 
   return (
     <div className="tab-list-group">
