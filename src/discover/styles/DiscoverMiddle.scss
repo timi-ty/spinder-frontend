@@ -9,7 +9,6 @@
 
 .discover > .middle > .left {
   height: 100%;
-  padding-top: 1rem;
   width: 80%;
 }
 
@@ -32,14 +31,31 @@
   padding: 10%;
 }
 
+.discover > .middle .spotify-icon {
+  width: 2rem;
+  height: 2rem;
+}
+
 .discover > .middle .track-title {
   font-size: 1.5rem;
   font-weight: 500;
+  padding-top: 1rem;
+  //max 2 lines with elipsis
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .discover > .middle .track-artists {
   font-size: 1rem;
   font-weight: 400;
+  padding-top: 0.5rem;
+  //max 1 lines with elipsis
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .discover > .middle .artist-image {

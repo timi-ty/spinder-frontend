@@ -1,6 +1,6 @@
 .discover > .bottom {
   width: 100%;
-  height: 20%;
+  height: calc(100% - 5rem - 50% - 20%);
   padding: 1rem 1rem 2rem 1rem;
   display: flex;
   justify-content: space-between;
@@ -10,15 +10,16 @@
 .discover > .bottom > .left {
   height: 100%;
   width: 80%;
-  overflow-y: auto;
+  overflow-y: hidden;
+  padding-bottom: 1%; //Hack to fake an alignment with the profile image. The profile image may not flush with the bottom because of cover/circle().
 }
 
 .discover > .bottom > .right {
   height: 100%;
-  width: 20%;
+  width: 18%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .discover > .bottom .related-sources {
@@ -27,7 +28,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  align-content: flex-start;
+  align-content: flex-end;
   gap: 0.5rem;
 }
 
@@ -37,12 +38,15 @@
   border-width: 1px;
   border-radius: 50000000rem;
   padding: 0.5rem;
+  //max 1 line with elipsis
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .discover > .bottom .profile {
   width: 100%;
   height: 50%;
-  padding: 10%;
 }
 
 .discover > .bottom .profile .image {

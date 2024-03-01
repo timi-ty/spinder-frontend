@@ -13,6 +13,9 @@ function DiscoverMiddle() {
     <div className="middle">
       <div className="left">
         <a href={`${activeDeckItem.trackUri}`}>
+          <img className="spotify-icon" src="src/assets/ic_spotify_black.png" />
+        </a>
+        <a href={`${activeDeckItem.trackUri}`}>
           <div className="track-title">{activeDeckItem.trackName}</div>
         </a>
         <div className="track-artists">
