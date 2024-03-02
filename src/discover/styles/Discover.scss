@@ -5,7 +5,7 @@
   @extend %app-area;
 }
 
-.discover > .loader {
+.discover > .deck-loader-error {
   height: calc(100% - 5rem); //Full minus top
   display: flex;
   flex-direction: column;

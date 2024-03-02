@@ -55,8 +55,7 @@ function startSourceDeckClient(
     }
   };
 
-  clearSourceDeck(); // Re-initialize source deck.
-  refillDiscoverSourceDeck(); //A promise that we don't have to wait for because of firestore web sockets.
+  resetSourceDeck();
 
   //Listen to source deck.
   unsubSourceDeckListener = listenToFirestoreCollection(
@@ -94,6 +93,8 @@ function startDestinationDeckClient(
   };
 
   //Listen to destination deck.
+  //Unlinke source deck, destination deck is allowed to be empty which means there is really no way to differentiate between an error that prevents the deck from filling and an empty deck. This is an infra problem, not fixing for now.
+  //The effect of this problem is that the liked feature may work only partially sometimes. It means that items previously in the destination can be added again.
   unsubDestinationDeckListener = listenToFirestoreCollection(
     `users/${clientId}/destinationDeck`,
     (snapshot) => {
@@ -109,7 +110,12 @@ function startDestinationDeckClient(
   );
 }
 
-//The only reason to ever use this API is if we want to keep liked items up to date with items that were added outside of Spinder. We don't currently do this.
+function resetSourceDeck() {
+  clearSourceDeck(); // Re-initialize source deck.
+  refillDiscoverSourceDeck(); //A promise that we don't have to wait for because of firestore web sockets.
+}
+
+//The only reason to ever use this API is if we want to keep liked items up to date with items that were added outside of Spinder, or if we encounter an error an want to retry. We don't currently do either of these.
 function resetDestinationDeck() {
   clearDestinationDeck(); // Re-initialize destination deck before refreshing it. We don't want to mix stale items with new items here.
   resetDiscoverDestinationDeck(); //A promise that we don't have to wait for because of firestore web sockets.
@@ -223,6 +229,7 @@ export {
   saveDeckItem,
   unsaveDeckItem,
   isDeckItemSaved,
+  resetSourceDeck,
   resetDestinationDeck,
   changeSource,
   changeDestination,

@@ -7,4 +7,6 @@ function pxToRem(px: number): number {
   return px / rootFontSizePx;
 }
 
-export { pxToRem };
+const nullTimeoutHandle: NodeJS.Timeout | null = null;
+
+export { pxToRem, nullTimeoutHandle };

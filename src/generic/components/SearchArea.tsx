@@ -1,6 +1,7 @@
 import { useState } from "react";
 import IconButton from "./IconButton";
 import "../styles/SearchArea.scss";
+import { nullTimeoutHandle } from "../../utils/utils";
 
 interface Props {
   onSearch: (text: string) => void;
@@ -12,7 +13,6 @@ interface Props {
 }
 
 const defaultHeight = 3; //rem
-const nullTimeoutHandle: NodeJS.Timeout | null = null;
 
 function SearchArea({
   onSearch,
