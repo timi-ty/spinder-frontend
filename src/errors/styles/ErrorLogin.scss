@@ -1,0 +1,18 @@
+@use "../../base";
+
+.error-login {
+  @extend %app-area;
+  justify-content: center;
+  text-align: center;
+  gap: 0.5rem;
+  background: base.$app-area-bg-color;
+  padding: 1rem;
+}
+
+.error-login > .message {
+  padding-bottom: 1rem;
+}
+
+.error-login > .button {
+  height: 2rem;
+}
