@@ -22,6 +22,8 @@ import TitleBar from "../../generic/components/TitleBar";
 import DiscoverVibePicker from "./DiscoverVibePicker";
 import { changeSource } from "../../client/client.deck";
 import EmptyView from "../../generic/components/EmptyView";
+import ErrorOneMessageTwoAction from "../../errors/components/ErrorOneMessageTwoAction";
+import { loadDiscoverSource } from "../../utils/loaders";
 
 interface Props {
   close: () => void;
@@ -88,19 +90,24 @@ function DiscoverSourcePicker({ close }: Props) {
     (state) => state.discoverSourceState.data
   );
 
-  const [isLoading, setIsLoading] = useState(
+  const [isLoadingPicker, setIsLoadingPicker] = useState(
     resourceStatus === "Loading" || resourceStatus === "Empty"
-  ); //Also used as local loader for changing source. May want to change this.
+  );
+  const [isPickerError, setIsPickerError] = useState(
+    resourceStatus === "Error"
+  );
+  const [isLoadingSourceChange, setIsLoadingSourceChange] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [isResultUpdated, setIsResultUpdated] = useState(false);
   const [sourceSearchResult, setSourceSearchResult] = useState(
     emptySourceSearchResult
   );
-  useEffect(
-    () =>
-      setIsLoading(resourceStatus === "Loading" || resourceStatus === "Empty"),
-    [resourceStatus]
-  );
+  useEffect(() => {
+    setIsLoadingPicker(
+      resourceStatus === "Loading" || resourceStatus === "Empty"
+    );
+    setIsPickerError(resourceStatus === "Error");
+  }, [resourceStatus]);
 
   const onSearchTextChanged = (text: string) => {
     setIsSearching(text.length > 0);
@@ -123,17 +130,17 @@ function DiscoverSourcePicker({ close }: Props) {
   const onSourceClick = useCallback(
     async (source: DiscoverSourceItem, isSelected: boolean = false) => {
       if (!isSelected) {
-        setIsLoading(true);
+        setIsLoadingSourceChange(true);
         changeSource(
           ItemToDiscoverSource(source),
           (newSource) => {
             dispatch(selectDiscoverSource(newSource));
-            setIsLoading(false);
+            setIsLoadingSourceChange(false);
             close();
           },
           () => {
             /*Show error, failed to change destination.*/
-            setIsLoading(false);
+            setIsLoadingSourceChange(false);
           }
         );
       }
@@ -162,9 +169,14 @@ function DiscoverSourcePicker({ close }: Props) {
     [discoverSourceData]
   );
 
+  const retrySourcePicker = () => {
+    //Load here interacts with redux to update the resource state which this picker listens to stay fresh.
+    loadDiscoverSource();
+  };
+
   return (
     <div className="source-picker">
-      {!isLoading && (
+      {!isLoadingPicker && !isLoadingSourceChange && !isPickerError && (
         <>
           <div className="title">
             <TitleBar title={"Source"} onClose={() => close()} />
@@ -263,9 +275,28 @@ function DiscoverSourcePicker({ close }: Props) {
           </div>
         </>
       )}
-      {isLoading && (
-        <div className="loader-full-page">
+      {(isLoadingPicker || isLoadingSourceChange) && (
+        <div className="loader-error-full-page">
           <FullComponentLoader />
+        </div>
+      )}
+      {isPickerError && (
+        <div className="loader-error-full-page">
+          <ErrorOneMessageTwoAction
+            message={"There was a problem loading the source picker."}
+            actionOne={{
+              name: "Retry",
+              action: () => {
+                retrySourcePicker();
+              },
+            }}
+            actionTwo={{
+              name: "Close",
+              action: () => {
+                close();
+              },
+            }}
+          />
         </div>
       )}
     </div>

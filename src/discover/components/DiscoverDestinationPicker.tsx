@@ -19,6 +19,8 @@ import BalancedGrid, {
 import TitleBar from "../../generic/components/TitleBar";
 import { changeDestination } from "../../client/client.deck";
 import EmptyView from "../../generic/components/EmptyView";
+import ErrorOneMessageTwoAction from "../../errors/components/ErrorOneMessageTwoAction";
+import { loadDiscoverDestination } from "../../utils/loaders";
 
 interface Props {
   close: () => void;
@@ -74,16 +76,22 @@ function DiscoverDestinationPicker({ close }: Props) {
     DiscoverDestinationData
   >((state) => state.discoverDestinationState.data);
 
-  const [isLoading, setIsLoading] = useState(
+  const [isLoadingPicker, setIsLoadingPicker] = useState(
     resourceStatus === "Loading" || resourceStatus === "Empty"
-  ); //Also used as local loader for changing destination. May want to change this.
+  );
+  const [isPickerError, setIsPickerError] = useState(
+    resourceStatus === "Error"
+  );
+  const [isLoadingDestinationChange, setIsLoadingDestinationChange] =
+    useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [searchText, setSearchText] = useState("");
-  useEffect(
-    () =>
-      setIsLoading(resourceStatus === "Loading" || resourceStatus === "Empty"),
-    [resourceStatus]
-  );
+  useEffect(() => {
+    setIsLoadingPicker(
+      resourceStatus === "Loading" || resourceStatus === "Empty"
+    );
+    setIsPickerError(resourceStatus === "Error");
+  }, [resourceStatus]);
 
   const onDestinationClick = useCallback(
     async (
@@ -91,17 +99,17 @@ function DiscoverDestinationPicker({ close }: Props) {
       isSelected: boolean = false
     ) => {
       if (!isSelected) {
-        setIsLoading(true);
+        setIsLoadingDestinationChange(true);
         changeDestination(
           ItemToDiscoverDestination(destination),
           (newDestination) => {
             dispatch(selectDiscoverDestination(newDestination));
             close();
-            setIsLoading(false);
+            setIsLoadingDestinationChange(false);
           },
           () => {
             /*Show error, failed to change destination.*/
-            setIsLoading(false);
+            setIsLoadingDestinationChange(false);
           }
         );
       }
@@ -127,9 +135,14 @@ function DiscoverDestinationPicker({ close }: Props) {
     [destinationItems, searchText]
   );
 
+  const retryDestinationPicker = () => {
+    //Load here interacts with redux to update the resource state which this picker listens to stay fresh.
+    loadDiscoverDestination();
+  };
+
   return (
     <div className="destination-picker">
-      {!isLoading && (
+      {!isLoadingPicker && !isLoadingDestinationChange && !isPickerError && (
         <>
           <div className="title">
             <TitleBar title={"Destination"} onClose={() => close()} />
@@ -173,9 +186,28 @@ function DiscoverDestinationPicker({ close }: Props) {
           </div>
         </>
       )}
-      {isLoading && (
-        <div className="loader-full-page">
+      {(isLoadingPicker || isLoadingDestinationChange) && (
+        <div className="loader-error-full-page">
           <FullComponentLoader />
+        </div>
+      )}
+      {isPickerError && (
+        <div className="loader-error-full-page">
+          <ErrorOneMessageTwoAction
+            message={"There was a problem loading the destination picker."}
+            actionOne={{
+              name: "Retry",
+              action: () => {
+                retryDestinationPicker();
+              },
+            }}
+            actionTwo={{
+              name: "Close",
+              action: () => {
+                close();
+              },
+            }}
+          />
         </div>
       )}
     </div>

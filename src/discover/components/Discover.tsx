@@ -14,7 +14,7 @@ import {
 } from "../../utils/hooks";
 import FullComponentLoader from "../../generic/components/FullComponentLoader";
 import { nullTimeoutHandle } from "../../utils/utils";
-import ErrorSourceDeck from "../../errors/components/ErrorSourceDeck";
+import ErrorOneMessageTwoAction from "../../errors/components/ErrorOneMessageTwoAction";
 import { resetSourceDeck } from "../../client/client.deck";
 import { useSelector } from "react-redux";
 import { StoreState } from "../../state/store";
@@ -81,10 +81,21 @@ function Discover() {
       )}
       {!isDeckReady && isTimedOut && (
         <div className="deck-loader-error">
-          <ErrorSourceDeck
-            resetSourceDeck={retrySourceDeck}
-            openSourcePicker={() => {
-              setIsSelectingSource(true);
+          <ErrorOneMessageTwoAction
+            message={
+              "We encountered a problem while curating your deck. If this error persists, please try a different source."
+            }
+            actionOne={{
+              name: "Retry",
+              action: () => {
+                retrySourceDeck();
+              },
+            }}
+            actionTwo={{
+              name: "Change Source",
+              action: () => {
+                setIsSelectingSource(true);
+              },
             }}
           />
         </div>

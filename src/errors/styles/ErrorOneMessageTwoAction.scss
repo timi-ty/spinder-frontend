@@ -1,6 +1,6 @@
 @use "../../base";
 
-.error-source-deck {
+.error-one-message-two-action {
   width: 100%;
   height: 100%;
   display: flex;
@@ -12,10 +12,10 @@
   padding: 1rem;
 }
 
-.error-source-deck > .message {
+.error-one-message-two-action > .message {
   padding-bottom: 1rem;
 }
 
-.error-source-deck > .button {
+.error-one-message-two-action > .button {
   height: 2rem;
 }
