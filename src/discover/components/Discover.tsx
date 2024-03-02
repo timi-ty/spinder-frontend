@@ -12,7 +12,7 @@ import {
   useDiscoverDestinationResource,
   useDiscoverSourceResource,
 } from "../../utils/hooks";
-import FullComponentLoader from "../../loaders/components/FullComponentLoader";
+import FullComponentLoader from "../../generic/components/FullComponentLoader";
 
 function Discover() {
   const isDeckReady = useDeck(); //Add a loader until deck get ready.

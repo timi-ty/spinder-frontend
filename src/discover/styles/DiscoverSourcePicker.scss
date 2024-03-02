@@ -57,9 +57,16 @@
   font-size: 1rem;
 }
 
-.discover > .source-picker .bottom > .loader {
+.discover > .source-picker .bottom > .loader-empty {
   //Use rest of height less title, search and top-level margins.
   height: calc(100% - 8rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.discover > .source-picker .loader-full-page {
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;

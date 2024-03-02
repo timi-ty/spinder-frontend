@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { StoreState } from "../../state/store";
 import { useDiscoverSourceResource } from "../../utils/hooks";
 import { searchDiscoverSources } from "../../client/client.api";
-import FullComponentLoader from "../../loaders/components/FullComponentLoader";
+import FullComponentLoader from "../../generic/components/FullComponentLoader";
 import {
   DiscoverSource,
   DiscoverSourceData,
@@ -21,6 +21,7 @@ import { selectDiscoverSource } from "../../state/slice.discoversource";
 import TitleBar from "../../generic/components/TitleBar";
 import DiscoverVibePicker from "./DiscoverVibePicker";
 import { changeSource } from "../../client/client.deck";
+import EmptyView from "../../generic/components/EmptyView";
 
 interface Props {
   close: () => void;
@@ -245,15 +246,28 @@ function DiscoverSourcePicker({ close }: Props) {
                 useRoundedImage={(item) => item.type === "Playlist"}
               />
             )}
-            {isSearching && searchedSourcedItems.length === 0 && (
-              <div className="loader">
-                <FullComponentLoader />
-              </div>
-            )}
+            {isSearching &&
+              !isResultUpdated &&
+              searchedSourcedItems.length === 0 && (
+                <div className="loader-empty">
+                  <FullComponentLoader />
+                </div>
+              )}
+            {isSearching &&
+              isResultUpdated &&
+              searchedSourcedItems.length === 0 && (
+                <div className="loader-empty">
+                  <EmptyView />
+                </div>
+              )}
           </div>
         </>
       )}
-      {isLoading && <FullComponentLoader />}
+      {isLoading && (
+        <div className="loader-full-page">
+          <FullComponentLoader />
+        </div>
+      )}
     </div>
   );
 }

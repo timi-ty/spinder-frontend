@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreState } from "../../state/store";
 import { useDiscoverDestinationResource } from "../../utils/hooks";
-import FullComponentLoader from "../../loaders/components/FullComponentLoader";
+import FullComponentLoader from "../../generic/components/FullComponentLoader";
 import {
   DiscoverDestination,
   DiscoverDestinationData,
@@ -18,6 +18,7 @@ import BalancedGrid, {
 } from "../../generic/components/BalancedGrid";
 import TitleBar from "../../generic/components/TitleBar";
 import { changeDestination } from "../../client/client.deck";
+import EmptyView from "../../generic/components/EmptyView";
 
 interface Props {
   close: () => void;
@@ -77,7 +78,6 @@ function DiscoverDestinationPicker({ close }: Props) {
     resourceStatus === "Loading" || resourceStatus === "Empty"
   ); //Also used as local loader for changing destination. May want to change this.
   const [isSearching, setIsSearching] = useState(false);
-  const [isResultUpdated, setIsResultUpdated] = useState(false);
   const [searchText, setSearchText] = useState("");
   useEffect(
     () =>
@@ -122,6 +122,11 @@ function DiscoverDestinationPicker({ close }: Props) {
     [discoverDestinationData]
   );
 
+  const searchResults = useMemo(
+    () => SearchFilterItems(destinationItems, searchText),
+    [destinationItems, searchText]
+  );
+
   return (
     <div className="destination-picker">
       {!isLoading && (
@@ -133,15 +138,13 @@ function DiscoverDestinationPicker({ close }: Props) {
             <SearchArea
               onSearch={(text) => {
                 setSearchText(text);
-                setIsResultUpdated(true);
               }}
               onTextChanged={(text) => {
                 setIsSearching(text.length > 0);
-                setIsResultUpdated(false);
               }}
               hint={"Search your playlists"}
               millisToSettle={10}
-              isLoading={isSearching && !isResultUpdated}
+              isLoading={false} //The load time here is always too small to matter.
             />
           </div>
           <div className="bottom">
@@ -154,18 +157,27 @@ function DiscoverDestinationPicker({ close }: Props) {
                 showSelectedItem={true}
               />
             )}
-            {isSearching && (
+            {isSearching && searchResults.length > 0 && (
               <TabListGroup
-                items={SearchFilterItems(destinationItems, searchText)}
+                items={searchResults}
                 onClickItem={onDestinationClick}
                 selectedItem={selectedDestinationItem}
                 useRoundedImage={() => true}
               />
             )}
+            {isSearching && searchResults.length === 0 && (
+              <div className="loader-empty">
+                <EmptyView />
+              </div>
+            )}
           </div>
         </>
       )}
-      {isLoading && <FullComponentLoader />}
+      {isLoading && (
+        <div className="loader-full-page">
+          <FullComponentLoader />
+        </div>
+      )}
     </div>
   );
 }
