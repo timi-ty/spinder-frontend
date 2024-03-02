@@ -1,4 +1,10 @@
 @use "./base";
+@use "./animations";
+
+@font-face {
+  font-family: Inter;
+  src: url(./assets/Inter.ttf);
+}
 
 * {
   box-sizing: border-box;

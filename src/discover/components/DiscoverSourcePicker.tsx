@@ -173,6 +173,7 @@ function DiscoverSourcePicker({ close }: Props) {
               onSearch={onSearch}
               onTextChanged={onSearchTextChanged}
               hint={"Search for artists, playlists, spinder people..."}
+              isLoading={isSearching && !isResultUpdated}
             />
           </div>
           <div className="bottom">
@@ -236,13 +237,18 @@ function DiscoverSourcePicker({ close }: Props) {
                 }
               />
             )}
-            {isSearching && (
+            {isSearching && searchedSourcedItems.length > 0 && (
               <TabListGroup
                 items={searchedSourcedItems}
                 onClickItem={onSourceClick}
                 selectedItem={selectedSourceItem}
                 useRoundedImage={(item) => item.type === "Playlist"}
               />
+            )}
+            {isSearching && searchedSourcedItems.length === 0 && (
+              <div className="loader">
+                <FullComponentLoader />
+              </div>
             )}
           </div>
         </>

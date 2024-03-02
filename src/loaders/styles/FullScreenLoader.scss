@@ -2,4 +2,11 @@
 
 .screen-loader {
   @extend %app-area;
+  justify-content: center;
+  align-items: center;
+}
+
+.screen-loader .spinner {
+  width: 50%;
+  animation: rotate 3s linear infinite;
 }

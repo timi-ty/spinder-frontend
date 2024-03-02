@@ -77,6 +77,7 @@ function DiscoverDestinationPicker({ close }: Props) {
     resourceStatus === "Loading" || resourceStatus === "Empty"
   ); //Also used as local loader for changing destination. May want to change this.
   const [isSearching, setIsSearching] = useState(false);
+  const [isResultUpdated, setIsResultUpdated] = useState(false);
   const [searchText, setSearchText] = useState("");
   useEffect(
     () =>
@@ -130,10 +131,17 @@ function DiscoverDestinationPicker({ close }: Props) {
           </div>
           <div className="search">
             <SearchArea
-              onSearch={(text) => setSearchText(text)}
-              onTextChanged={(text) => setIsSearching(text.length > 0)}
+              onSearch={(text) => {
+                setSearchText(text);
+                setIsResultUpdated(true);
+              }}
+              onTextChanged={(text) => {
+                setIsSearching(text.length > 0);
+                setIsResultUpdated(false);
+              }}
               hint={"Search your playlists"}
               millisToSettle={10}
+              isLoading={isSearching && !isResultUpdated}
             />
           </div>
           <div className="bottom">

@@ -12,6 +12,7 @@ import {
   useDiscoverDestinationResource,
   useDiscoverSourceResource,
 } from "../../utils/hooks";
+import FullComponentLoader from "../../loaders/components/FullComponentLoader";
 
 function Discover() {
   const isDeckReady = useDeck(); //Add a loader until deck get ready.
@@ -32,6 +33,11 @@ function Discover() {
       {isDeckReady && <DiscoverMiddle />}
       {isDeckReady && <DiscoverBottom />}
       {isDeckReady && <DiscoverSeeker />}
+      {!isDeckReady && (
+        <div className="loader">
+          <FullComponentLoader />
+        </div>
+      )}
       {isSelectingDestination && (
         <DiscoverDestinationPicker
           close={() => setIsSelectingDestination(false)}

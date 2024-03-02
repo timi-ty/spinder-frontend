@@ -6,6 +6,7 @@ interface Props {
   onSearch: (text: string) => void;
   onTextChanged: (text: string) => void;
   hint: string;
+  isLoading: boolean;
   matchParentHeight?: boolean;
   millisToSettle?: number;
 }
@@ -17,6 +18,7 @@ function SearchArea({
   onSearch,
   onTextChanged,
   hint,
+  isLoading,
   matchParentHeight = false,
   millisToSettle = 1000,
 }: Props) {
@@ -59,6 +61,13 @@ function SearchArea({
             dispatchSearchOnSettle(event.target.value);
           }}
         />
+        {isLoading && (
+          <img
+            title="loader"
+            className="loader"
+            src={"/src/assets/ic_loader.svg"}
+          />
+        )}
       </div>
       {searchText.length > 0 && (
         <div className="cancel">

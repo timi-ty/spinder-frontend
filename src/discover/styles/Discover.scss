@@ -4,3 +4,10 @@
   position: relative;
   @extend %app-area;
 }
+
+.discover > .loader {
+  height: calc(100% - 5rem); //Full minus top
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

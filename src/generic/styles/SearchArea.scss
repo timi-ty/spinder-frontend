@@ -22,6 +22,11 @@
   height: 41.667%;
 }
 
+.search-area > .search-box > .loader {
+  height: 41.667%;
+  animation: rotate 3s linear infinite;
+}
+
 .search-area > .search-box > .search {
   font-family: inherit;
   height: 100%;
