@@ -22,7 +22,7 @@ import TitleBar from "../../generic/components/TitleBar";
 import DiscoverVibePicker from "./DiscoverVibePicker";
 import { changeSource } from "../../client/client.deck";
 import EmptyView from "../../generic/components/EmptyView";
-import ErrorOneMessageTwoAction from "../../errors/components/ErrorOneMessageTwoAction";
+import ErrorOneMessageTwoAction from "../../generic/components/ErrorOneMessageTwoAction";
 import { loadDiscoverSource } from "../../utils/loaders";
 
 interface Props {

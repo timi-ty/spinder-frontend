@@ -1,8 +1,7 @@
-@use "../../base";
-
 .discover {
   position: relative;
-  @extend %app-area;
+  width: 100%;
+  height: 100%;
 }
 
 .discover > .deck-loader-error {

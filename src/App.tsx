@@ -1,20 +1,33 @@
 import { Navigate } from "react-router-dom";
 import Discover from "./discover/components/Discover";
-import FullScreenLoader from "./generic/components/FullScreenLoader";
 import { useAuthResource } from "./utils/hooks";
-import ErrorLogin from "./errors/components/ErrorLogin";
+import ErrorOneMessageTwoAction from "./generic/components/ErrorOneMessageTwoAction";
+import { useDispatch } from "react-redux";
+import { logoutAuthResource } from "./state/slice.auth";
+import FullComponentLoader from "./generic/components/FullComponentLoader";
 
 function App() {
   const authStatus = useAuthResource();
+  const dispatch = useDispatch();
+
+  const logout = () => {
+    dispatch(logoutAuthResource());
+  };
+
   return (
     <>
-      {authStatus === "Loading" && <FullScreenLoader />}
+      {authStatus === "Loading" && <FullComponentLoader />}
       {authStatus === "LoggedIn" && <Discover />}
-      {authStatus === "Error" && <ErrorLogin />}
-      {
-        /* This will onload the store because it is outside the app root.*/
-        authStatus === "LoggedOut" && <Navigate to="/home" />
-      }
+      {authStatus === "Error" && (
+        <ErrorOneMessageTwoAction
+          message={
+            "There was an error with login. If this error persists, logout and then login with Spotify again."
+          }
+          actionOne={{ name: "Retry", action: () => window.location.reload() }}
+          actionTwo={{ name: "Logout", action: () => logout() }}
+        />
+      )}
+      {authStatus === "LoggedOut" && <Navigate to="/home" />}
     </>
   );
 }

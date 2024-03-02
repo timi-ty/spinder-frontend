@@ -19,7 +19,7 @@ import BalancedGrid, {
 import TitleBar from "../../generic/components/TitleBar";
 import { changeDestination } from "../../client/client.deck";
 import EmptyView from "../../generic/components/EmptyView";
-import ErrorOneMessageTwoAction from "../../errors/components/ErrorOneMessageTwoAction";
+import ErrorOneMessageTwoAction from "../../generic/components/ErrorOneMessageTwoAction";
 import { loadDiscoverDestination } from "../../utils/loaders";
 
 interface Props {

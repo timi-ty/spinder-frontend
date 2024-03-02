@@ -2,7 +2,8 @@
 
 .component-loader {
   width: 100%;
-  background: base.$app-area-bg-color;
+  height: 100%;
+  background: base.$root-area-bg-color;
   display: flex;
   justify-content: center;
   align-items: center;

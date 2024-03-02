@@ -26,10 +26,10 @@ body {
   color: base.$primary-color;
   background: base.$empty-area-bg-color;
   width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 #root {
-  width: 100%;
-  display: flex;
-  justify-content: center;
+  @extend %root-area;
 }

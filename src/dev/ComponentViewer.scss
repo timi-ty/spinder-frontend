@@ -1,8 +1,6 @@
-@use "../base";
-
 .component-viewer {
-  position: absolute;
-  @extend %app-area;
+  width: 100%;
+  height: 100%;
   padding: 1rem;
   background-color: #131722;
 }

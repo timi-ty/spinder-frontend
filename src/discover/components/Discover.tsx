@@ -14,7 +14,7 @@ import {
 } from "../../utils/hooks";
 import FullComponentLoader from "../../generic/components/FullComponentLoader";
 import { nullTimeoutHandle } from "../../utils/utils";
-import ErrorOneMessageTwoAction from "../../errors/components/ErrorOneMessageTwoAction";
+import ErrorOneMessageTwoAction from "../../generic/components/ErrorOneMessageTwoAction";
 import { resetSourceDeck } from "../../client/client.deck";
 import { useSelector } from "react-redux";
 import { StoreState } from "../../state/store";
