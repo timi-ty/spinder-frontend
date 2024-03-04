@@ -205,7 +205,10 @@ function changeSource(
   clearSourceDeck(); //We need to cache the entire source deck here and restore it if we fail.
   changeDiscoverSource(source)
     .then((currentSource) => onSourceChanged(currentSource))
-    .catch(() => onError());
+    .catch((error) => {
+      console.error(error);
+      onError();
+    });
 }
 
 function changeDestination(

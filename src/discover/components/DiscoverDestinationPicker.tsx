@@ -21,6 +21,7 @@ import { changeDestination } from "../../client/client.deck";
 import EmptyView from "../../generic/components/EmptyView";
 import ErrorOneMessageTwoAction from "../../generic/components/ErrorOneMessageTwoAction";
 import { loadDiscoverDestination } from "../../utils/loaders";
+import { showToast } from "../../toast/ToastOverlay";
 
 interface Props {
   close: () => void;
@@ -108,7 +109,10 @@ function DiscoverDestinationPicker({ close }: Props) {
             setIsLoadingDestinationChange(false);
           },
           () => {
-            /*Show error, failed to change destination.*/
+            showToast(
+              "Something went wrong, your destination did not change.",
+              "Bottom"
+            );
             setIsLoadingDestinationChange(false);
           }
         );

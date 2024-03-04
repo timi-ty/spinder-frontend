@@ -5,6 +5,7 @@ import ErrorOneMessageTwoAction from "./generic/components/ErrorOneMessageTwoAct
 import { useDispatch } from "react-redux";
 import { logoutAuthResource } from "./state/slice.auth";
 import FullComponentLoader from "./generic/components/FullComponentLoader";
+import ToastOverlay from "./toast/ToastOverlay";
 
 function App() {
   const authStatus = useAuthResource();
@@ -28,6 +29,7 @@ function App() {
         />
       )}
       {authStatus === "LoggedOut" && <Navigate to="/home" />}
+      <ToastOverlay />
     </>
   );
 }

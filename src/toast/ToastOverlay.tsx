@@ -24,7 +24,7 @@ function ToastOverlay() {
     (state) => state.toastState.topToastMessage
   );
   const bottomToastMessage = useSelector<StoreState, string>(
-    (state) => state.toastState.topToastMessage
+    (state) => state.toastState.bottomToastMessage
   );
 
   const topTimeoutHandle = useRef(nullTimeoutHandle);

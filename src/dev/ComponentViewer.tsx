@@ -1,18 +1,9 @@
-import { useEffect } from "react";
-import ToastOverlay, { showToast } from "../toast/ToastOverlay";
 import "./ComponentViewer.scss";
 
-const isViewingComponent = true;
+const isViewingComponent = false;
 
 function ComponentViewer() {
-  useEffect(() => {
-    showToast("Time to triangle", "Bottom");
-  }, []);
-  return (
-    <div className="component-viewer">
-      <ToastOverlay />
-    </div>
-  );
+  return <div className="component-viewer"></div>;
 }
 
 export default ComponentViewer;

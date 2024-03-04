@@ -161,7 +161,7 @@ async function changeDiscoverSource(
     }
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to set Discover destination.");
+    throw new Error("Failed to set Discover source.");
   }
 }
 

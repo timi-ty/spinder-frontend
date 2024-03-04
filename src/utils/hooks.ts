@@ -38,8 +38,7 @@ function useAuthResource() {
       console.log(`Already using Auth Resource:: Status: ${authStatus}`);
       return;
     }
-    const unloader = loadAuth();
-    return unloader;
+    loadAuth();
   }, []);
 
   return authStatus;

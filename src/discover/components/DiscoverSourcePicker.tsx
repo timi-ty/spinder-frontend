@@ -24,6 +24,7 @@ import { changeSource } from "../../client/client.deck";
 import EmptyView from "../../generic/components/EmptyView";
 import ErrorOneMessageTwoAction from "../../generic/components/ErrorOneMessageTwoAction";
 import { loadDiscoverSource } from "../../utils/loaders";
+import { showToast } from "../../toast/ToastOverlay";
 
 interface Props {
   close: () => void;
@@ -128,7 +129,7 @@ function DiscoverSourcePicker({ close }: Props) {
   };
 
   const onSourceClick = useCallback(
-    async (source: DiscoverSourceItem, isSelected: boolean = false) => {
+    (source: DiscoverSourceItem, isSelected: boolean = false) => {
       if (!isSelected) {
         setIsLoadingSourceChange(true);
         changeSource(
@@ -139,7 +140,10 @@ function DiscoverSourcePicker({ close }: Props) {
             close();
           },
           () => {
-            /*Show error, failed to change destination.*/
+            showToast(
+              "Something went wrong, your source did not change.",
+              "Bottom"
+            );
             setIsLoadingSourceChange(false);
           }
         );
