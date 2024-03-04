@@ -14,9 +14,10 @@ function unregisterAudioElement(position: number) {
 function playAudioElement(audioElementIndex: number) {
   const audioElement = audioElementMap.get(audioElementIndex);
   if (!audioElement) {
-    throw new Error(
+    console.error(
       `Audio element at index ${audioElementIndex} is not registered.`
     );
+    return;
   }
   audioElement.play();
 }

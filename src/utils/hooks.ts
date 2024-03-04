@@ -59,9 +59,6 @@ function useSpotifyProfileResource() {
       return;
     }
     loadUserProfile();
-    return () => {
-      console.log("Unload User Profile");
-    };
   }, [authStatus]);
 
   return resourceStatus;

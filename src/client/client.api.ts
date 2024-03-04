@@ -235,7 +235,7 @@ async function refillDiscoverSourceDeck(): Promise<DiscoverSource> {
     }
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to set refill source deck.");
+    throw new Error("Failed to refill source deck.");
   }
 }
 
@@ -323,7 +323,15 @@ function fetchConfig(
 }
 
 async function getBearerToken(): Promise<string> {
-  return await getFirebaseIdToken();
+  try {
+    return await getFirebaseIdToken();
+  } catch (error) {
+    console.error(error);
+    console.error(
+      "Failed to attach auth credentials. This request will likely fail."
+    );
+    return "";
+  }
 }
 
 function safeStringify(data: any) {

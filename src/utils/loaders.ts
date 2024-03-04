@@ -87,7 +87,7 @@ function loadUserProfile() {
     .catch((error) => {
       console.error(error);
       dispatch(errorUserProfileResource());
-      throw new Error("Failed to use Spotify Profile:: Error.");
+      console.error("Failed to use Spotify Profile:: Error.");
     });
 }
 
@@ -104,7 +104,7 @@ function loadDiscoverSource() {
     .catch((error) => {
       console.error(error);
       dispatch(errorDiscoverSourceResource());
-      throw new Error("Failed to use Discover Sources:: Error.");
+      console.error("Failed to use Discover Sources:: Error.");
     });
 }
 
@@ -124,7 +124,7 @@ function loadDiscoverDestination() {
     .catch((error) => {
       console.error(error);
       dispatch(errorDiscoverDestinationResource());
-      throw new Error("Failed to use Discover Destination:: Error.");
+      console.error("Failed to use Discover Destinations:: Error.");
     });
 }
 
@@ -149,7 +149,7 @@ function loadMoreDiscoverDestination() {
     .catch((error) => {
       console.error(error);
       dispatch(errorMoreDiscoverDestinationResource());
-      throw new Error("Failed to use Discover Destination:: Error.");
+      console.error("Failed to use more Discover Destinations:: Error.");
     });
 }
 
