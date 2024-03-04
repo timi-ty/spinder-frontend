@@ -31,5 +31,6 @@ body {
 }
 
 #root {
+  position: relative;
   @extend %root-area;
 }

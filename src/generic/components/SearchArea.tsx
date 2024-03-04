@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import IconButton from "./IconButton";
 import "../styles/SearchArea.scss";
 import { nullTimeoutHandle } from "../../utils/utils";
@@ -23,18 +23,17 @@ function SearchArea({
   millisToSettle = 1000,
 }: Props) {
   const [searchText, setSearchText] = useState("");
-  const [lastTimeoutHandle, setLastTimeoutHandle] = useState(nullTimeoutHandle);
+  const lastTimeoutHandle = useRef(nullTimeoutHandle);
 
   //Instead of dispatching the search action on every keystroke, we allow the search to settle for period before dispatching.
   const dispatchSearchOnSettle = (dipatchSearchText: string) => {
-    if (lastTimeoutHandle) {
-      clearTimeout(lastTimeoutHandle); //Before we start a new timer to dispatch the current search stroke, cancel the timer for the last search stroke.
+    if (lastTimeoutHandle.current) {
+      clearTimeout(lastTimeoutHandle.current); //Before we start a new timer to dispatch the current search stroke, cancel the timer for the last search stroke.
     }
-    const handle = setTimeout(
+    lastTimeoutHandle.current = setTimeout(
       () => onSearch(dipatchSearchText),
       millisToSettle
     );
-    setLastTimeoutHandle(handle);
   };
 
   return (
