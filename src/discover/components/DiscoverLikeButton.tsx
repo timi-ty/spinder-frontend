@@ -75,6 +75,7 @@ function DiscoverLikeButton() {
               : "/src/assets/ic_like_empty.svg"
           }
           containerRef={containerRef}
+          forceIsWidthLimited
         />
       }
     </div>

@@ -44,6 +44,7 @@ function DiscoverBottomRight() {
               }
               containerRef={artistImageRef}
               circleCrop
+              forceIsWidthLimited
             />
           </a>
         </div>
@@ -56,6 +57,7 @@ function DiscoverBottomRight() {
               image={profileImage}
               containerRef={rightBottomRef}
               circleCrop
+              forceIsWidthLimited
             />
           </a>
         )}

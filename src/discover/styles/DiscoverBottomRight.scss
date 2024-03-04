@@ -9,7 +9,6 @@
 
 .discover .bottom-right .top {
   width: 100%;
-  height: 100%; //Share space evelny with bottom
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -31,9 +30,9 @@
 
 .discover .bottom-right .bottom {
   width: 100%;
-  height: 100%; //Share space evelny with top
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   padding: 0rem 0.5rem 0rem 0.5rem;
+  text-align: center;
 }

@@ -12,10 +12,16 @@ interface Props {
   image: string;
   containerRef: MutableRefObject<HTMLDivElement | null>;
   circleCrop?: boolean;
+  forceIsWidthLimited?: boolean;
 }
 
 //A tight circle crop image with no space at the edges.
-function SquareImage({ image, containerRef, circleCrop = false }: Props) {
+function SquareImage({
+  image,
+  containerRef,
+  circleCrop = false,
+  forceIsWidthLimited = false,
+}: Props) {
   const [contanerHeight, setContainerHeight] = useState(0);
   const [contanerWidth, setContainerWidth] = useState(0);
   const [size, setSize] = useState(0);
@@ -45,7 +51,7 @@ function SquareImage({ image, containerRef, circleCrop = false }: Props) {
   });
 
   useLayoutEffect(() => {
-    if (contanerWidth > contanerHeight) {
+    if (contanerWidth > contanerHeight && !forceIsWidthLimited) {
       setIsHeightLimited(true);
       setIsWidthLimited(false);
       console.log(
