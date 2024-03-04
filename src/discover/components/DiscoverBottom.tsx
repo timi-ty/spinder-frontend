@@ -6,6 +6,7 @@ import { useSpotifyProfileResource } from "../../utils/hooks";
 import { useCallback } from "react";
 import { changeSource } from "../../client/client.deck";
 import { selectDiscoverSource } from "../../state/slice.discoversource";
+import { showToast } from "../../toast/ToastOverlay";
 
 function DiscoverBottom() {
   const relatedSources = useSelector<StoreState, DiscoverSource[]>(
@@ -28,7 +29,10 @@ function DiscoverBottom() {
         dispatch(selectDiscoverSource(newSource));
       },
       () => {
-        /*Show error, failed to change source.*/
+        showToast(
+          "Something went wrong, your source did not change.",
+          "Bottom"
+        );
       }
     );
   }, []);
