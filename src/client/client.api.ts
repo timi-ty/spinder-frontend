@@ -277,21 +277,16 @@ async function saveToDestination(item: DeckItem): Promise<void> {
     }
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to refresh Discover destination.");
+    throw new Error("Failed to save deck item.");
   }
 }
 
-async function removeFromDestination(
-  destination: DiscoverDestination,
-  item: DeckItem
-): Promise<void> {
+async function removeFromDestination(item: DeckItem): Promise<void> {
   try {
     const url = `${backendUrl}/discover/deck/destination/remove`;
 
     const response = await fetch(
-      `${url}?destination=${safeStringify(destination)}&item=${safeStringify(
-        item
-      )}`,
+      `${url}?item=${safeStringify(item)}`,
       fetchConfig(await getBearerToken())
     );
 
@@ -303,7 +298,7 @@ async function removeFromDestination(
     }
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to refresh Discover destination.");
+    throw new Error("Failed to remove deck item.");
   }
 }
 /**********DISCOVER END**********/

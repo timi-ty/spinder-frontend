@@ -1,3 +1,4 @@
+import { nullTimeoutHandle } from "../utils/utils";
 import {
   changeDiscoverDestination,
   changeDiscoverSource,
@@ -146,11 +147,25 @@ function clearDestinationDeck() {
 function getDeckItem(index: number): DeckItem {
   if (index > sourceDeck.length - 20) {
     //Attempt a refill if we have fewer than 20 fresh items ahead of us.
-    refillDiscoverSourceDeck();
+    refillSourceDeckManaged();
   }
   index %= sourceDeck.length; //Go round and round. Never let the user know that the deck is stale.
   const deckItem = sourceDeck[index];
   return deckItem;
+}
+
+//Managing the refill to prevent it being called too much.
+var canRefillEvery = 20000; //Can refill every 20 seconds.
+var lastRefillTimeoutHandle = nullTimeoutHandle;
+var canRefill = true;
+function refillSourceDeckManaged() {
+  if (!canRefill) return;
+  canRefill = false;
+  refillDiscoverSourceDeck();
+  if (lastRefillTimeoutHandle) clearTimeout(lastRefillTimeoutHandle);
+  lastRefillTimeoutHandle = setTimeout(() => {
+    canRefill = true;
+  }, canRefillEvery);
 }
 
 function markVisitedDeckItem(currentDeckItem: DeckItem) {
@@ -175,14 +190,13 @@ function saveDeckItem(
 }
 
 function unsaveDeckItem(
-  destination: DiscoverDestination,
   currentDeckItem: DeckItem,
   onSuccess: () => void,
   onFailure: () => void
 ) {
   console.log(`Unsaving deck item:: ${currentDeckItem.trackName}.`);
   removeDestinationDeckItem(currentDeckItem.trackId); //Locally track deck items we expect to reach our destination.
-  removeFromDestination(destination, currentDeckItem)
+  removeFromDestination(currentDeckItem)
     .then(() => {
       onSuccess();
     })
