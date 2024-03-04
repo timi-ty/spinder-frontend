@@ -7,6 +7,7 @@ import {
   saveDeckItem,
   unsaveDeckItem,
 } from "../../client/client.deck";
+import { showToast } from "../../toast/ToastOverlay";
 
 function DiscoverLikeButton() {
   const activeDeckItem = useSelector<StoreState, DeckItem>(
@@ -36,10 +37,13 @@ function DiscoverLikeButton() {
             saveDeckItem(
               activeDeckItem,
               () => {
-                /*show saved success message*/
+                showToast(
+                  `${activeDeckItem.trackName} saved to ${destination.name}`,
+                  "Bottom"
+                );
               },
               () => {
-                /*show error message*/
+                showToast("Something went wrong. Could not save", "Bottom");
                 setIsLiked(false);
               }
             );
@@ -56,10 +60,13 @@ function DiscoverLikeButton() {
               destination,
               activeDeckItem,
               () => {
-                /*show unsaved success message*/
+                showToast(
+                  `${activeDeckItem.trackName} removed from ${destination.name}`,
+                  "Bottom"
+                );
               },
               () => {
-                /*show error message*/
+                showToast("Something went wrong. Could not remove", "Bottom");
                 setIsLiked(true);
               }
             );
