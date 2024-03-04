@@ -1,0 +1,70 @@
+.discover .bottom-left {
+  width: 80%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.discover .bottom-left .spotify-icon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.discover .bottom-left .track-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  padding-top: 1rem;
+  //max 2 lines with elipsis
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.discover .bottom-left .track-artists {
+  font-size: 1rem;
+  font-weight: 400;
+  padding-top: 0.5rem;
+  //max 1 lines with elipsis
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.discover .bottom-left .related-sources {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: flex-end;
+  gap: 0.5rem;
+}
+
+.discover .bottom-left .source {
+  font-size: 0.875rem;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 50000000rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  //max 1 line with elipsis
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.discover .bottom-left .top {
+  width: 100%;
+  height: 100%; //Share space evenly with bottom
+}
+
+.discover .bottom-left .bottom {
+  width: 100%;
+  height: 100%; //Share space evenly with top
+  overflow-y: hidden;
+  padding-bottom: 4px; //Makeup for the a link space on teh profile image to align them at the bottom
+}

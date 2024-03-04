@@ -6,7 +6,6 @@ import DiscoverSeeker from "./DiscoverSeeker";
 import DiscoverDestinationPicker from "./DiscoverDestinationPicker";
 import "../styles/Discover.scss";
 import DiscoverSourcePicker from "./DiscoverSourcePicker";
-import DiscoverMiddle from "./DiscoverMiddle";
 import {
   useDeck,
   useDiscoverDestinationResource,
@@ -71,7 +70,6 @@ function Discover() {
         onClickSourcePicker={() => setIsSelectingSource(true)}
       />
       {isDeckReady && <DiscoverDeckView />}
-      {isDeckReady && <DiscoverMiddle />}
       {isDeckReady && <DiscoverBottom />}
       {isDeckReady && <DiscoverSeeker />}
       {!isDeckReady && !isTimedOut && (

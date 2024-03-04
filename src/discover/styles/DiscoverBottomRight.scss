@@ -1,0 +1,39 @@
+.discover .bottom-right {
+  width: 20%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.discover .bottom-right .top {
+  width: 100%;
+  height: 100%; //Share space evelny with bottom
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.discover .bottom-right .artist-image {
+  width: 100%;
+  height: 100%; //Stretch to share height evenly with like-button
+  text-align: center;
+}
+
+.discover .bottom-right .like-button {
+  width: 100%;
+  height: 100%; //Stretch to share height evenly with artist-image
+  text-align: center;
+  cursor: pointer;
+}
+
+.discover .bottom-right .bottom {
+  width: 100%;
+  height: 100%; //Share space evelny with top
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0rem 0.5rem 0rem 0.5rem;
+}

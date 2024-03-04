@@ -1,52 +1,10 @@
 .discover > .bottom {
   width: 100%;
   height: calc(
-    100% - 5rem - 50% - 20%
-  ); //Full minus top minus deck view minus middle
+    (100% - 5rem) / 2
+  ); //Share space evenly with deck-view (full minus top divided by 2)
   padding: 1rem 1rem 2rem 1rem;
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-}
-
-.discover > .bottom > .left {
-  height: 100%;
-  width: 80%;
-  overflow-y: hidden;
-  padding-bottom: 0.25rem; //Padding to make up for a link induced gap on the right
-}
-
-.discover > .bottom > .right {
-  height: 100%;
-  width: 15%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-
-.discover > .bottom .related-sources {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  align-content: flex-end;
-  gap: 0.5rem;
-}
-
-.discover > .bottom .source {
-  font-size: 0.875rem;
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 50000000rem;
-  padding: 0.5rem;
-  cursor: pointer;
-  //max 1 line with elipsis
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.discover > .bottom .profile {
-  width: 100%;
 }

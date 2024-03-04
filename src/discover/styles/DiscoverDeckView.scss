@@ -1,6 +1,8 @@
 .discover > .deck {
   width: 100%;
-  height: 50%;
+  height: calc(
+    (100% - 5rem) / 2
+  ); //Share space evenly with bottom (full minus top divided by 2)
   padding: 1rem;
   display: flex;
   justify-content: center;

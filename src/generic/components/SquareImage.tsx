@@ -45,13 +45,18 @@ function SquareImage({ image, containerRef, circleCrop = false }: Props) {
   });
 
   useLayoutEffect(() => {
-    console.log(`Resizing ${contanerWidth}, ${contanerHeight}`);
     if (contanerWidth > contanerHeight) {
       setIsHeightLimited(true);
       setIsWidthLimited(false);
+      console.log(
+        `height limited ${contanerHeight} ${containerRef.current?.className}`
+      );
       const sizeRem = pxToRem(contanerHeight);
       setSize(sizeRem);
     } else {
+      console.log(
+        `width limited ${contanerWidth} ${containerRef.current?.className}`
+      );
       setIsHeightLimited(false);
       setIsWidthLimited(true);
       const sizeRem = pxToRem(contanerWidth);
