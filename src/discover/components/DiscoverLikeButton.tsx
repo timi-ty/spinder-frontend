@@ -27,6 +27,18 @@ function DiscoverLikeButton() {
   const [isLiked, setIsLiked] = useState(isDeckItemSaved(activeDeckItem));
   const [isLocallyControlled, setIsLocallyControlled] = useState(false); //At the start, allow externally sourced like updates.
 
+  //Control the like animation
+  const [isAnimating, setIsAnimating] = useState(false);
+  const stopAnimationTimeoutHandle = useRef(nullTimeoutHandle);
+  useEffect(() => {
+    if (isLiked) {
+      if (stopAnimationTimeoutHandle.current)
+        clearTimeout(stopAnimationTimeoutHandle.current);
+      setIsAnimating(true);
+      setTimeout(() => setIsAnimating(false), 250); //Pulse animation lasts for 0.25s.
+    }
+  }, [isLiked]);
+
   useEffect(() => {
     setIsLiked(isDeckItemSaved(activeDeckItem)); //Whether or not we are on local control, change in deck item updates the like state.
     setIsLocallyControlled(false); //Each time the active deck item changes, allow externally sourced like updates. (Source of truth).
@@ -41,12 +53,12 @@ function DiscoverLikeButton() {
   const lastActionTimestamp = useRef(Date.now());
 
   //Instead of dispatching the like action on every click, we allow the action to settle for a period before dispatching.
-  const lastTimeoutHandle = useRef(nullTimeoutHandle);
+  const dispatchLikeTimeoutHandle = useRef(nullTimeoutHandle);
   const dispatchLikeOnSettle = (actionTimestamp: number) => {
-    if (lastTimeoutHandle.current) {
-      clearTimeout(lastTimeoutHandle.current); //Before we start a new timer to dispatch the current like action, cancel the timer for the last like action.
+    if (dispatchLikeTimeoutHandle.current) {
+      clearTimeout(dispatchLikeTimeoutHandle.current); //Before we start a new timer to dispatch the current like action, cancel the timer for the last like action.
     }
-    lastTimeoutHandle.current = setTimeout(() => {
+    dispatchLikeTimeoutHandle.current = setTimeout(() => {
       if (isLiked) {
         unsaveDeckItem(
           activeDeckItem,
@@ -86,7 +98,7 @@ function DiscoverLikeButton() {
   return (
     <div
       ref={containerRef}
-      className="like-button"
+      className={`like-button ${isAnimating ? "animate" : ""}`}
       onClick={() => {
         setIsLocallyControlled(true); //Any time the user interacts with the like button, switch to local control.
         const actionTimestamp = Date.now(); //We intentionally closure this so it always represents the click time of this particular action.

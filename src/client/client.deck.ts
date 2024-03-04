@@ -178,6 +178,12 @@ function saveDeckItem(
   onFailure: () => void
 ) {
   console.log(`Saving deck item:: ${currentDeckItem.trackName}.`);
+  if (destinationDeck.has(currentDeckItem.trackId)) {
+    console.log(
+      `${currentDeckItem.trackName} is expected to already be in the destination. Ignoring save...`
+    );
+    return;
+  }
   addDestinationDeckItem(currentDeckItem.trackId); //Locally track deck items we expect to reach our destination.
   saveToDestination(currentDeckItem)
     .then(() => {

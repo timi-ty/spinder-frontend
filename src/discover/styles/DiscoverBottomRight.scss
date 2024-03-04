@@ -28,6 +28,10 @@
   cursor: pointer;
 }
 
+.discover .bottom-right .like-button.animate {
+  animation: pulse 0.25s ease;
+}
+
 .discover .bottom-right .bottom {
   width: 100%;
   display: flex;
