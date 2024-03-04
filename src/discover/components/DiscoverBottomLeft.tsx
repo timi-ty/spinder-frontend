@@ -36,9 +36,11 @@ function DiscoverBottomLeft() {
         <a href={`${activeDeckItem.trackUri}`}>
           <img className="spotify-icon" src="src/assets/ic_spotify_black.png" />
         </a>
-        <a href={`${activeDeckItem.trackUri}`}>
-          <div className="track-title">{activeDeckItem.trackName}</div>
-        </a>
+        <div className="track-title">
+          <a href={`${activeDeckItem.trackUri}`}>
+            <span>{activeDeckItem.trackName}</span>
+          </a>
+        </div>
         <div className="track-artists">
           {activeDeckItem.artists.map((artist, index) => (
             <a key={artist.artistUri} href={`${artist.artistUri}`}>

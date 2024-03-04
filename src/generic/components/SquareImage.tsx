@@ -54,15 +54,9 @@ function SquareImage({
     if (contanerWidth > contanerHeight && !forceIsWidthLimited) {
       setIsHeightLimited(true);
       setIsWidthLimited(false);
-      console.log(
-        `height limited ${contanerHeight} ${containerRef.current?.className}`
-      );
       const sizeRem = pxToRem(contanerHeight);
       setSize(sizeRem);
     } else {
-      console.log(
-        `width limited ${contanerWidth} ${containerRef.current?.className}`
-      );
       setIsHeightLimited(false);
       setIsWidthLimited(true);
       const sizeRem = pxToRem(contanerWidth);
