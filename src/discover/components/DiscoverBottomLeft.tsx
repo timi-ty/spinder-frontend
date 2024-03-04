@@ -61,32 +61,6 @@ function DiscoverBottomLeft() {
               onClick={() => onSourceClick(source)}
             >{`#${source.name}`}</div>
           ))}
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
-          <div className="source">#related source</div>
         </div>
       </div>
     </div>
