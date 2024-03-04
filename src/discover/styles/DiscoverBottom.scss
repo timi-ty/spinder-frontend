@@ -13,12 +13,12 @@
   height: 100%;
   width: 80%;
   overflow-y: hidden;
-  padding-bottom: 1%; //Hack to fake an alignment with the profile image. The profile image may not flush with the bottom because of cover/circle().
+  padding-bottom: 0.25rem; //Padding to make up for a link induced gap on the right
 }
 
 .discover > .bottom > .right {
   height: 100%;
-  width: 18%;
+  width: 15%;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -49,12 +49,4 @@
 
 .discover > .bottom .profile {
   width: 100%;
-  height: 50%;
-}
-
-.discover > .bottom .profile .image {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  clip-path: circle();
 }

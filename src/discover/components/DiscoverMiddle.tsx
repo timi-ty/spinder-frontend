@@ -3,11 +3,14 @@ import "../styles/DiscoverMiddle.scss";
 import { DeckItem } from "../../client/client.model";
 import { StoreState } from "../../state/store";
 import DiscoverLikeButton from "./DiscoverLikeButton";
+import SquareImage from "../../generic/components/SquareImage";
+import { useRef } from "react";
 
 function DiscoverMiddle() {
   const activeDeckItem = useSelector<StoreState, DeckItem>(
     (state) => state.deckState.activeDeckItem
   );
+  const rightTopRef = useRef(null);
 
   return (
     <div className="middle">
@@ -32,7 +35,7 @@ function DiscoverMiddle() {
         </div>
       </div>
       <div className="right">
-        <div className="top">
+        <div ref={rightTopRef} className="top">
           <a
             href={`${
               activeDeckItem.artists.length > 0
@@ -40,13 +43,14 @@ function DiscoverMiddle() {
                 : ""
             }`}
           >
-            <img
-              className="artist-image"
-              src={
+            <SquareImage
+              image={
                 activeDeckItem.artists.length > 0
                   ? activeDeckItem.artists[0].artistImage
                   : ""
               }
+              containerRef={rightTopRef}
+              circleCrop
             />
           </a>
         </div>

@@ -3,10 +3,11 @@ import { DiscoverSource } from "../../client/client.model";
 import { StoreState, dispatch } from "../../state/store";
 import "../styles/DiscoverBottom.scss";
 import { useSpotifyProfileResource } from "../../utils/hooks";
-import { useCallback } from "react";
+import { MutableRefObject, useCallback, useRef } from "react";
 import { changeSource } from "../../client/client.deck";
 import { selectDiscoverSource } from "../../state/slice.discoversource";
 import { showToast } from "../../toast/ToastOverlay";
+import SquareImage from "../../generic/components/SquareImage";
 
 function DiscoverBottom() {
   const relatedSources = useSelector<StoreState, DiscoverSource[]>(
@@ -21,6 +22,8 @@ function DiscoverBottom() {
   const profleUri = useSelector<StoreState, string>(
     (state) => state.userProfileState.data.uri
   );
+
+  const rightRef: MutableRefObject<HTMLDivElement | null> = useRef(null);
 
   const onSourceClick = useCallback((source: DiscoverSource) => {
     changeSource(
@@ -50,11 +53,15 @@ function DiscoverBottom() {
           ))}
         </div>
       </div>
-      <div className="right">
+      <div ref={rightRef} className="right">
         <div className="profile">
           {profileResource === "Loaded" && (
             <a href={`${profleUri}`}>
-              <img className="image" src={profileImage} />
+              <SquareImage
+                image={profileImage}
+                containerRef={rightRef}
+                circleCrop
+              />
             </a>
           )}
         </div>
