@@ -12,10 +12,12 @@ function DiscoverTop({ onClickSourcePicker, onClickDestinationPicker }: Props) {
       <IconButton
         icon={"./src/assets/ic_discover_source.svg"}
         onAction={onClickSourcePicker}
+        title={"Source"}
       />
       <IconButton
         icon={"./src/assets/ic_discover_dest.svg"}
         onAction={onClickDestinationPicker}
+        title={"Destination"}
       />
     </div>
   );

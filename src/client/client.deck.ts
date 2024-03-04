@@ -219,7 +219,10 @@ function changeDestination(
   clearDestinationDeck(); //We need to cache the entire destination deck here and restore it if we fail.
   changeDiscoverDestination(destination)
     .then((currentDestination) => onDestinationChanged(currentDestination))
-    .catch(() => onError());
+    .catch((error) => {
+      console.error(error);
+      onError();
+    });
 }
 
 export {

@@ -3,6 +3,7 @@ import "../styles/IconButton.scss";
 import { pxToRem } from "../../utils/utils";
 
 interface Props {
+  title: string;
   icon: string;
   onAction: () => void;
   matchParentHeight?: boolean;
@@ -12,6 +13,7 @@ interface Props {
 const defaultSize = 3; //rem
 
 function IconButton({
+  title,
   icon,
   onAction,
   matchParentHeight = false,
@@ -37,7 +39,7 @@ function IconButton({
   return (
     <button
       type="button"
-      title="close"
+      title={`${title}`}
       ref={ref}
       className="icon-button"
       onClick={onAction}
@@ -47,7 +49,7 @@ function IconButton({
         background: `${showBackground ? "" : "none"}`,
       }}
     >
-      <img title="close" className="icon" src={icon} />
+      <img title={`${title}`} className="icon" src={icon} />
     </button>
   );
 }

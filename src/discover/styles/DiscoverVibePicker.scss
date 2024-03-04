@@ -8,6 +8,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .vibe-picker > .search-overlay {
@@ -22,6 +23,7 @@
   justify-content: center;
   align-items: center;
   color: #f1fbf5;
+  cursor: not-allowed;
 }
 
 .vibe-picker .found-a-vibe {
@@ -50,4 +52,5 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: not-allowed;
 }

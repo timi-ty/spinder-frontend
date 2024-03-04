@@ -78,6 +78,7 @@ function SearchArea({
             }}
             showBackground={false}
             matchParentHeight
+            title={"Cancel"}
           />
         </div>
       )}

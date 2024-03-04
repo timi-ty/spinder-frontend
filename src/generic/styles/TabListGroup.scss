@@ -5,12 +5,14 @@
   justify-content: space-between;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+  gap: 1rem;
 }
 
 .tab-list-group .tabs .tab-item {
   font-size: 0.875rem;
   width: 100%;
   text-align: center;
+  cursor: pointer;
 }
 
 .tab-list-group .divider {

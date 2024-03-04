@@ -8,6 +8,7 @@
   z-index: 0; //Create a stacking context just for this item.
   background-color: base.$card-bg;
   border-radius: 0.75rem;
+  cursor: pointer;
 }
 
 .image-text-grid-item.selected {

@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import "../styles/TabListGroup.scss";
 import ImageTextListItem from "./ImageTextListItem";
-import { pxToRem } from "../../utils/utils";
+import { pxToRem, remToPx } from "../../utils/utils";
 
 interface TabListItem {
   id: string;
@@ -50,7 +50,7 @@ function TabListGroup<T extends TabListItem>({
     for (var i = 0; i < selectedTab; i++) {
       const tabRect = tabRefs.current[i]?.getBoundingClientRect();
       if (tabRect) {
-        totalTranslation += tabRect.width;
+        totalTranslation += tabRect.width + remToPx(1);
       }
     }
     const translationRem = pxToRem(totalTranslation);

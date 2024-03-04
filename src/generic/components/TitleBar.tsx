@@ -23,6 +23,7 @@ function TitleBar({ title, onClose, matchParentHeight = false }: Props) {
           onAction={onClose}
           matchParentHeight
           showBackground={false}
+          title={"Close"}
         />
       </div>
       {title}

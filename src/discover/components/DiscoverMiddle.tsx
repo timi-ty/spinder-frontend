@@ -33,14 +33,22 @@ function DiscoverMiddle() {
       </div>
       <div className="right">
         <div className="top">
-          <img
-            className="artist-image"
-            src={
+          <a
+            href={`${
               activeDeckItem.artists.length > 0
-                ? activeDeckItem.artists[0].artistImage
+                ? activeDeckItem.artists[0].artistUri
                 : ""
-            }
-          />
+            }`}
+          >
+            <img
+              className="artist-image"
+              src={
+                activeDeckItem.artists.length > 0
+                  ? activeDeckItem.artists[0].artistImage
+                  : ""
+              }
+            />
+          </a>
         </div>
         <div className="bottom">
           <DiscoverLikeButton />
