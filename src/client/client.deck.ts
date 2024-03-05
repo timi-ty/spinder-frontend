@@ -1,4 +1,4 @@
-import { nullTimeoutHandle } from "../utils/utils";
+import { nullTimeoutHandle, shuffleArrayInPlace } from "../utils/utils";
 import {
   changeDiscoverDestination,
   changeDiscoverSource,
@@ -62,12 +62,15 @@ function startSourceDeckClient(
   unsubSourceDeckListener = listenToFirestoreCollection(
     `users/${clientId}/sourceDeck`,
     (snapshot) => {
+      const bufferForShuffle: DeckItem[] = [];
       snapshot.docChanges().forEach((change) => {
         if (change.type == "added") {
           const track: DeckItem = change.doc.data() as DeckItem;
-          addSourceDeckItem(track);
+          bufferForShuffle.push(track);
         }
       });
+      shuffleArrayInPlace(bufferForShuffle); //Non persistent front-end shuffling only.
+      bufferForShuffle.forEach((deckItem) => addSourceDeckItem(deckItem));
     }
   );
 }
@@ -169,7 +172,7 @@ function refillSourceDeckManaged() {
 }
 
 function markVisitedDeckItem(currentDeckItem: DeckItem) {
-  deleteFireStoreDoc(`users/${userId}/sourceDeck/${currentDeckItem.trackId}`); //Delete the deck item as soon as it is visited. This keeps the deck experience fresh evrytime.
+  deleteFireStoreDoc(`users/${userId}/sourceDeck/${currentDeckItem.trackId}`); //Delete the deck item as soon as it is visited. This keeps the deck experience fresh everytime.
 }
 
 function saveDeckItem(
