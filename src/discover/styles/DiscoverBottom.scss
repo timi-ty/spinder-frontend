@@ -4,7 +4,7 @@
     (100% - 5rem) / 2
   ); //Share space evenly with deck-view (full minus top divided by 2)
   padding: 1rem 1rem 2rem 1rem;
-  display: flex;
-  justify-content: space-between;
   gap: 1rem;
+  display: grid;
+  grid-template-columns: calc(80% - 0.5rem) calc(20% - 0.5rem);
 }
