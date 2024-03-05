@@ -6,6 +6,7 @@ import FullComponentLoader from "../../generic/components/FullComponentLoader";
 import {
   DiscoverDestination,
   DiscoverDestinationData,
+  emptyDestinationSearchResult,
 } from "../../client/client.model";
 import { selectDiscoverDestination } from "../../state/slice.discoverdestination";
 import "../styles/DiscoverDestinationPicker.scss";
@@ -22,6 +23,7 @@ import EmptyView from "../../generic/components/EmptyView";
 import ErrorOneMessageTwoAction from "../../generic/components/ErrorOneMessageTwoAction";
 import { loadDiscoverDestination } from "../../utils/loaders";
 import { showToast } from "../../toast/ToastOverlay";
+import { searchDiscoverDestinations } from "../../client/client.api";
 
 interface Props {
   close: () => void;
@@ -94,6 +96,28 @@ function DiscoverDestinationPicker({ close }: Props) {
     setIsPickerError(resourceStatus === "Error");
   }, [resourceStatus]);
 
+  const [destinationSearchResult, setDestinationSearchResult] = useState(
+    emptyDestinationSearchResult
+  );
+  const [isResultUpdated, setIsResultUpdated] = useState(false);
+  const onSearch = (searchText: string) => {
+    if (searchText === "") return;
+    searchDiscoverDestinations(searchText)
+      .then((result) => {
+        setDestinationSearchResult(result);
+        setIsResultUpdated(true); //As soon as we get new results, mark that no result is pending until the search text changes again.
+      })
+      .catch(() => {
+        setDestinationSearchResult(emptyDestinationSearchResult); //An error means we have no results
+        setIsResultUpdated(true);
+      });
+  };
+  const onSearchTextChanged = (text: string) => {
+    setIsSearching(text.length > 0);
+    setSearchText(text);
+    setIsResultUpdated(false); //As soon as the search text changes, mark that we are pending results.
+  };
+
   const onDestinationClick = useCallback(
     async (
       destination: DiscoverDestinationItem,
@@ -121,7 +145,7 @@ function DiscoverDestinationPicker({ close }: Props) {
     []
   );
 
-  const destinationItems = useMemo(
+  const localDestinationItems = useMemo(
     () =>
       discoverDestinationData.availableDestinations.map((destination) =>
         DiscoverDestinationToItem(destination)
@@ -134,10 +158,18 @@ function DiscoverDestinationPicker({ close }: Props) {
     [discoverDestinationData]
   );
 
-  const searchResults = useMemo(
-    () => SearchFilterItems(destinationItems, searchText),
-    [destinationItems, searchText]
-  );
+  const searchResults = useMemo(() => {
+    const allItems = [...localDestinationItems];
+    const localResultsMap: Set<string> = new Set();
+    localDestinationItems.forEach((result) => localResultsMap.add(result.id));
+    for (var i = 0; i < destinationSearchResult.playlists.length; i++) {
+      const remoteResult = destinationSearchResult.playlists[i];
+      if (!localResultsMap.has(remoteResult.id)) {
+        allItems.push(DiscoverDestinationToItem(remoteResult));
+      }
+    }
+    return SearchFilterItems(allItems, searchText);
+  }, [localDestinationItems, searchText, destinationSearchResult]);
 
   const retryDestinationPicker = () => {
     //Load here interacts with redux to update the resource state which this picker listens to stay fresh.
@@ -153,21 +185,16 @@ function DiscoverDestinationPicker({ close }: Props) {
           </div>
           <div className="search">
             <SearchArea
-              onSearch={(text) => {
-                setSearchText(text);
-              }}
-              onTextChanged={(text) => {
-                setIsSearching(text.length > 0);
-              }}
+              onSearch={onSearch}
+              onTextChanged={onSearchTextChanged}
               hint={"Search your playlists"}
-              millisToSettle={10}
-              isLoading={false} //The load time here is always too small to matter.
+              isLoading={isSearching && !isResultUpdated}
             />
           </div>
           <div className="bottom">
             {!isSearching && (
               <BalancedGrid
-                items={destinationItems}
+                items={localDestinationItems}
                 onClickItem={onDestinationClick}
                 selectedItem={selectedDestinationItem}
                 graphicType={"Image"}

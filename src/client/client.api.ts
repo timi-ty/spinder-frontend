@@ -6,6 +6,7 @@ import {
   DeckItem,
   DiscoverDestination,
   DiscoverDestinationData,
+  DiscoverDestinationSearchResult,
   DiscoverSource,
   DiscoverSourceData,
   DiscoverSourceSearchResult,
@@ -192,6 +193,33 @@ async function getDiscoverDestinations(
   }
 }
 
+async function searchDiscoverDestinations(
+  searchText: string
+): Promise<DiscoverDestinationSearchResult> {
+  try {
+    const url = `${backendUrl}/discover/destinations/search`;
+
+    const response = await fetch(
+      `${url}?q=${searchText}`,
+      fetchConfig(await getBearerToken())
+    );
+
+    if (response.ok) {
+      const discoverSourceSearchResult: DiscoverDestinationSearchResult =
+        await response.json();
+      return discoverSourceSearchResult;
+    } else {
+      const errorResponse: SpinderError = await response.json();
+      throw new Error(
+        `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
+      );
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to search Discover destinations.");
+  }
+}
+
 async function changeDiscoverDestination(
   destination: DiscoverDestination
 ): Promise<DiscoverDestination> {
@@ -350,6 +378,7 @@ export {
   searchDiscoverSources,
   changeDiscoverSource,
   getDiscoverDestinations,
+  searchDiscoverDestinations,
   changeDiscoverDestination,
   refillDiscoverSourceDeck,
   resetDiscoverDestinationDeck,

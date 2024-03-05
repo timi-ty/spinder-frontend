@@ -84,6 +84,15 @@ function ItemToDiscoverSource(item: DiscoverSourceItem): DiscoverSource {
   return discoverSource;
 }
 
+function SearchFilterItems(
+  items: DiscoverSourceItem[],
+  searchText: string
+): DiscoverSourceItem[] {
+  return items.filter((item) =>
+    item.title.toLowerCase().includes(searchText.toLowerCase())
+  );
+}
+
 function DiscoverSourcePicker({ close }: Props) {
   const dispatch = useDispatch();
   const resourceStatus = useDiscoverSourceResource();
@@ -99,6 +108,7 @@ function DiscoverSourcePicker({ close }: Props) {
   );
   const [isLoadingSourceChange, setIsLoadingSourceChange] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const [searchText, setSearchText] = useState("");
   const [isResultUpdated, setIsResultUpdated] = useState(false);
   const [sourceSearchResult, setSourceSearchResult] = useState(
     emptySourceSearchResult
@@ -112,6 +122,7 @@ function DiscoverSourcePicker({ close }: Props) {
 
   const onSearchTextChanged = (text: string) => {
     setIsSearching(text.length > 0);
+    setSearchText(text);
     setIsResultUpdated(false); //As soon as the search text changes, mark that we are pending results.
   };
 
@@ -161,12 +172,15 @@ function DiscoverSourcePicker({ close }: Props) {
   );
   const searchedSourcedItems = useMemo(
     () =>
-      [
-        ...sourceSearchResult.artists,
-        ...sourceSearchResult.playlists,
-        ...sourceSearchResult.spinderPeople,
-      ].map((source) => DiscoverSourceToItem(source)),
-    [sourceSearchResult]
+      SearchFilterItems(
+        [
+          ...sourceSearchResult.artists,
+          ...sourceSearchResult.playlists,
+          ...sourceSearchResult.spinderPeople,
+        ].map((source) => DiscoverSourceToItem(source)),
+        searchText
+      ),
+    [sourceSearchResult, searchText]
   );
   const selectedSourceItem = useMemo(
     () => DiscoverSourceToItem(discoverSourceData.selectedSource),

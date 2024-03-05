@@ -184,6 +184,16 @@ const emptyDiscoverDestinationData: DiscoverDestinationData = {
   availableDestinations: [],
 };
 
+interface DiscoverDestinationSearchResult {
+  searchText: string;
+  playlists: DiscoverDestination[];
+}
+
+const emptyDestinationSearchResult: DiscoverDestinationSearchResult = {
+  searchText: "",
+  playlists: [],
+};
+
 export {
   type DiscoverSource,
   type DiscoverSourceData,
@@ -193,6 +203,8 @@ export {
   type DiscoverDestination,
   type DiscoverDestinationData,
   emptyDiscoverDestinationData,
+  type DiscoverDestinationSearchResult,
+  emptyDestinationSearchResult,
 };
 /**********DISCOVER END**********/
 
