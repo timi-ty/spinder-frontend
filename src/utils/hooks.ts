@@ -38,7 +38,9 @@ function useAuthResource() {
       console.log(`Already using Auth Resource:: Status: ${authStatus}`);
       return;
     }
-    loadAuth();
+    const unloadAuth = loadAuth();
+    //It is important to do this because loading auth also starts renewing authentication. We have to unload and thus top renewing the authentication when the effect is disposed.
+    return () => unloadAuth();
   }, []);
 
   return authStatus;

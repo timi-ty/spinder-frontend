@@ -51,16 +51,14 @@ function DiscoverBottomRight() {
         <DiscoverLikeButton />
       </div>
       <div ref={rightBottomRef} className="bottom">
-        {profileResource === "Loaded" && (
-          <a href={`${profleUri}`}>
-            <SquareImage
-              image={profileImage}
-              containerRef={rightBottomRef}
-              circleCrop
-              forceIsWidthLimited
-            />
-          </a>
-        )}
+        <a href={`${profileResource === "Loaded" ? profleUri : ""}`}>
+          <SquareImage
+            image={profileImage}
+            containerRef={rightBottomRef}
+            circleCrop
+            forceIsWidthLimited
+          />
+        </a>
       </div>
     </div>
   );
