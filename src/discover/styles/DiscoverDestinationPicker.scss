@@ -30,8 +30,8 @@
   //Use rest of height less title, search and margins.
   height: calc(100% - 8rem);
   padding-left: 1rem;
-  padding-right: 1rem;
-  overflow-y: auto;
+  padding-right: 8px; //Scrollbar is always 8px wide. Balance out.
+  overflow-y: scroll;
 }
 
 .discover > .destination-picker .bottom > .loader-empty {

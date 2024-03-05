@@ -21,6 +21,20 @@
   user-select: none;
 }
 
+/* Style the scrollbar for WebKit browsers (Chrome, Safari) */
+*::-webkit-scrollbar {
+  // width: 16px; /* Fixed width for the scrollbar */
+  width: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: gray; /* Color of the thumb (scrollable area) */
+}
+
+*::-webkit-scrollbar-track {
+  background: none; /* Background color of the track (non-scrollable area) */
+}
+
 body {
   font: 100% base.$font-stack;
   color: base.$primary-color;
