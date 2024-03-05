@@ -222,11 +222,14 @@ function changeSource(
   onSourceChanged: (newSource: DiscoverSource) => void,
   onError: () => void
 ) {
-  clearSourceDeck(); //We need to cache the entire source deck here and restore it if we fail.
+  const cachedSourceDeck = [...sourceDeck]; //We cache the entire source deck here and restore it if we fail.
+  clearSourceDeck();
   changeDiscoverSource(source)
     .then((currentSource) => onSourceChanged(currentSource))
     .catch((error) => {
       console.error(error);
+      //Restore cached source deck here with the function that alerts UI
+      cachedSourceDeck.forEach((deckItem) => addSourceDeckItem(deckItem));
       onError();
     });
 }
@@ -236,11 +239,16 @@ function changeDestination(
   onDestinationChanged: (newDestination: DiscoverDestination) => void,
   onError: () => void
 ) {
-  clearDestinationDeck(); //We need to cache the entire destination deck here and restore it if we fail.
+  const cachedDestinationDeck = [...destinationDeck]; //We cache the entire destination deck here and restore it if we fail.
+  clearDestinationDeck();
   changeDiscoverDestination(destination)
     .then((currentDestination) => onDestinationChanged(currentDestination))
     .catch((error) => {
       console.error(error);
+      //Restore cached destination deck here with the function that alerts UI
+      cachedDestinationDeck.forEach((deckItem) =>
+        addDestinationDeckItem(deckItem)
+      );
       onError();
     });
 }
