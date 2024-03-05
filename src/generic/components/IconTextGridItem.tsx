@@ -49,7 +49,13 @@ function IconTextGridItem({
       }}
       onClick={onAction}
     >
-      <img className="icon" src={icon} />
+      <img
+        className="icon"
+        src={icon}
+        onError={(ev) =>
+          (ev.currentTarget.src = "src/assets/fallback_square.svg")
+        }
+      />
       <div className="text">{text}</div>
     </div>
   );

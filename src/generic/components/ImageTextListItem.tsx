@@ -19,16 +19,17 @@ function ImageTextListItem({
   isSelected,
   onClick,
 }: Props) {
-  const imageRef: React.LegacyRef<HTMLImageElement> = useRef(null);
+  const detailsContainerRef: React.LegacyRef<HTMLImageElement> = useRef(null);
   const [imageSize, setImageSize] = useState(0);
 
   useLayoutEffect(() => {
-    const domRect = imageRef.current?.getBoundingClientRect();
-    if (domRect) {
-      const sizeRem = pxToRem(domRect.height);
+    const continerDomRect =
+      detailsContainerRef.current?.getBoundingClientRect();
+    if (continerDomRect) {
+      const sizeRem = pxToRem(continerDomRect.height);
       setImageSize(sizeRem);
     } else {
-      console.warn("List item image failed to get its dom rect.");
+      console.warn("List item image failed to get its container dom rect.");
     }
   }, []);
 
@@ -36,15 +37,20 @@ function ImageTextListItem({
 
   return (
     <div className="image-text-list-item" onClick={onClick}>
-      <img
-        ref={imageRef}
-        className={`image ${clipClass}`}
-        src={image}
-        style={{
-          width: `${imageSize}rem`,
-        }}
-      />
-      <div className="text">{text}</div>
+      <div ref={detailsContainerRef} className="details-container">
+        <img
+          className={`image ${clipClass}`}
+          src={image}
+          onError={(ev) =>
+            (ev.currentTarget.src = "src/assets/fallback_square.svg")
+          }
+          style={{
+            width: `${imageSize}rem`,
+          }}
+        />
+        <div className="text">{text}</div>
+      </div>
+
       {isSelected && (
         <img className="checkmark" src="/src/assets/ic_checkmark.svg" />
       )}

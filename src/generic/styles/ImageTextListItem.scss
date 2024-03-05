@@ -15,13 +15,20 @@
   border-bottom: none;
 }
 
+.image-text-list-item .details-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
 .image-text-list-item .image {
   height: 100%;
+  object-fit: cover;
 }
 
 .image-text-list-item .text {
   font-size: 0.875rem;
-  width: 100%;
 }
 
 .image-text-list-item .image.circle {
