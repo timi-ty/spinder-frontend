@@ -79,4 +79,4 @@ function showToast(message: string, location: "Top" | "Bottom" = "Top") {
 
 export default ToastOverlay;
 
-export {};
+export { showToast };
