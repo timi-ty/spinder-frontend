@@ -130,8 +130,8 @@ function DiscoverDestinationPicker({ close }: Props) {
           ItemToDiscoverDestination(destination),
           (newDestination) => {
             dispatch(selectDiscoverDestination(newDestination));
-            close();
             setIsLoadingDestinationChange(false);
+            closePicker();
           },
           () => {
             showToast(
@@ -177,12 +177,20 @@ function DiscoverDestinationPicker({ close }: Props) {
     loadDiscoverDestination();
   };
 
+  const [opacity, setOpacity] = useState(0);
+  useEffect(() => setOpacity(1), []);
+
+  const closePicker = () => {
+    setOpacity(0);
+    setTimeout(() => close(), 250);
+  };
+
   return (
-    <div className="destination-picker">
+    <div className="destination-picker" style={{ opacity: `${opacity}` }}>
       {!isLoadingPicker && !isLoadingDestinationChange && !isPickerError && (
         <>
           <div className="title">
-            <TitleBar title={"Destination"} onClose={() => close()} />
+            <TitleBar title={"Destination"} onClose={() => closePicker()} />
           </div>
           <div className="search">
             <SearchArea
@@ -236,7 +244,7 @@ function DiscoverDestinationPicker({ close }: Props) {
             actionTwo={{
               name: "Close",
               action: () => {
-                close();
+                closePicker();
               },
             }}
           />

@@ -149,7 +149,7 @@ function DiscoverSourcePicker({ close }: Props) {
           (newSource) => {
             dispatch(selectDiscoverSource(newSource));
             setIsLoadingSourceChange(false);
-            close();
+            closePicker();
           },
           () => {
             showToast(
@@ -193,12 +193,20 @@ function DiscoverSourcePicker({ close }: Props) {
     loadDiscoverSource();
   };
 
+  const [opacity, setOpacity] = useState(0);
+  useEffect(() => setOpacity(1), []);
+
+  const closePicker = () => {
+    setOpacity(0);
+    setTimeout(() => close(), 250);
+  };
+
   return (
-    <div className="source-picker">
+    <div className="source-picker" style={{ opacity: `${opacity}` }}>
       {!isLoadingPicker && !isLoadingSourceChange && !isPickerError && (
         <>
           <div className="title">
-            <TitleBar title={"Source"} onClose={() => close()} />
+            <TitleBar title={"Source"} onClose={() => closePicker()} />
           </div>
           <div className="search">
             <SearchArea
@@ -312,7 +320,7 @@ function DiscoverSourcePicker({ close }: Props) {
             actionTwo={{
               name: "Close",
               action: () => {
-                close();
+                closePicker();
               },
             }}
           />
