@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   startDestinationDeckClient,
   startSourceDeckClient,
@@ -153,60 +153,61 @@ function useDeck(): boolean {
   return isDeckReady;
 }
 
+//Emits onClick if the drag threshold was not reached, else emits onDragFInish
 function useClickDrag(
   container: HTMLElement,
-  onFinish: (clickDragDelta: { dx: number; dy: number }) => void
+  dragThreshold: { absY: number; absX: number },
+  onDragFinish: (clickDragDelta: { dx: number; dy: number }) => void,
+  onClick: () => void
 ) {
+  const clickDragDeltaRef = useRef({ dx: 0, dy: 0 });
   const [clickDragDelta, setClickDragDelta] = useState({ dx: 0, dy: 0 });
-  const [endDelta, setEndDelta] = useState({ dx: 0, dy: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [mouseStartPos, setMouseStartPos] = useState({ x: 0, y: 0 });
   const [mouseCurrentPos, setMouseCurrentPos] = useState({ x: 0, y: 0 });
+
+  //Don't try to read state from any of these mouse callbacks. They closure the state and we don't want to repeatedly detach and attach the callbacks to keep the closure up to date.
   const onMouseDown = useCallback((ev: MouseEvent) => {
     setMouseStartPos({ x: ev.clientX, y: ev.clientY });
     setIsDragging(true);
   }, []);
   const onMouseUp = useCallback(() => {
     setIsDragging(false);
+    if (
+      Math.abs(clickDragDeltaRef.current.dx) > dragThreshold.absY ||
+      Math.abs(clickDragDeltaRef.current.dy) > dragThreshold.absX
+    ) {
+      onDragFinish(clickDragDeltaRef.current);
+    } else {
+      onClick();
+    }
     setClickDragDelta({ dx: 0, dy: 0 });
-  }, []);
+    clickDragDeltaRef.current = { dx: 0, dy: 0 };
+  }, [onDragFinish, onClick]);
   const onMouseMove = useCallback((ev: MouseEvent) => {
     setMouseCurrentPos({ x: ev.clientX, y: ev.clientY });
   }, []);
   useEffect(() => {
     container.addEventListener("mousedown", onMouseDown);
-    container.addEventListener("mouseup", onMouseUp);
-    container.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp); //We use window because no element should block finishing the click drag by releasing the mouse.
+    window.addEventListener("mousemove", onMouseMove); //We use window because no element should block dragging once it has started.
 
     return () => {
       container.removeEventListener("mousedown", onMouseDown);
-      container.removeEventListener("mouseup", onMouseUp);
-      container.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+      window.removeEventListener("mousemove", onMouseMove);
     };
-  }, []);
+  }, [onMouseDown, onMouseUp, onMouseMove]);
   useEffect(() => {
     if (!isDragging) return;
 
     const deltaX = mouseCurrentPos.x - mouseStartPos.x;
     const deltaY = mouseCurrentPos.y - mouseStartPos.y;
     setClickDragDelta({ dx: deltaX, dy: deltaY });
-    setEndDelta(clickDragDelta);
-
-    return () => {
-      setClickDragDelta({ dx: 0, dy: 0 });
-      setEndDelta({ dx: 0, dy: 0 });
-    };
+    clickDragDeltaRef.current = { dx: deltaX, dy: deltaY };
   }, [mouseStartPos, mouseCurrentPos, isDragging]);
 
-  //Last effect that is called after drag is finished. onFinish is guaranteed to be called last after a drag action.
-  useEffect(() => {
-    if (!isDragging) {
-      if (Math.abs(endDelta.dx) > 0 || Math.abs(endDelta.dy) > 0)
-        onFinish(endDelta);
-    }
-  }, [endDelta, isDragging]);
-
-  return [clickDragDelta, endDelta];
+  return clickDragDelta;
 }
 /**********REGULAR HOOKS END**********/
 
