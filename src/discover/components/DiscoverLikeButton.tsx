@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { DeckItem, DiscoverDestination } from "../../client/client.model";
 import { StoreState } from "../../state/store";
@@ -7,13 +7,14 @@ import {
   saveDeckItem,
   unsaveDeckItem,
 } from "../../client/client.deck";
-import { showToast } from "../../toast/ToastOverlay";
 import SquareImage from "../../generic/components/SquareImage";
 import { nullTimeoutHandle } from "../../utils/utils";
+import { ToastContext } from "../../utils/context";
 
 const settleTimeInMillis = 1000; //1 second time to settle.
 
 function DiscoverLikeButton() {
+  const showToast = useContext(ToastContext);
   const activeDeckItem = useSelector<StoreState, DeckItem>(
     (state) => state.deckState.activeDeckItem
   );

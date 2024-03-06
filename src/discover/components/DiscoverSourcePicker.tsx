@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreState } from "../../state/store";
 import { useDiscoverSourceResource } from "../../utils/hooks";
@@ -24,7 +24,7 @@ import { changeSource } from "../../client/client.deck";
 import EmptyView from "../../generic/components/EmptyView";
 import ErrorOneMessageTwoAction from "../../generic/components/ErrorOneMessageTwoAction";
 import { loadDiscoverSource } from "../../utils/loaders";
-import { showToast } from "../../toast/ToastOverlay";
+import { ToastContext } from "../../utils/context";
 
 interface Props {
   close: () => void;
@@ -94,6 +94,7 @@ function SearchFilterItems(
 }
 
 function DiscoverSourcePicker({ close }: Props) {
+  const showToast = useContext(ToastContext);
   const dispatch = useDispatch();
   const resourceStatus = useDiscoverSourceResource();
   const discoverSourceData = useSelector<StoreState, DiscoverSourceData>(

@@ -154,6 +154,7 @@ function useDeck(): boolean {
 }
 
 function useClickDrag(
+  container: HTMLElement,
   onFinish: (clickDragDelta: { dx: number; dy: number }) => void
 ) {
   const [clickDragDelta, setClickDragDelta] = useState({ dx: 0, dy: 0 });
@@ -173,14 +174,14 @@ function useClickDrag(
     setMouseCurrentPos({ x: ev.clientX, y: ev.clientY });
   }, []);
   useEffect(() => {
-    window.addEventListener("mousedown", onMouseDown);
-    window.addEventListener("mouseup", onMouseUp);
-    window.addEventListener("mousemove", onMouseMove);
+    container.addEventListener("mousedown", onMouseDown);
+    container.addEventListener("mouseup", onMouseUp);
+    container.addEventListener("mousemove", onMouseMove);
 
     return () => {
-      window.removeEventListener("mousedown", onMouseDown);
-      window.removeEventListener("mouseup", onMouseUp);
-      window.removeEventListener("mousemove", onMouseMove);
+      container.removeEventListener("mousedown", onMouseDown);
+      container.removeEventListener("mouseup", onMouseUp);
+      container.removeEventListener("mousemove", onMouseMove);
     };
   }, []);
   useEffect(() => {

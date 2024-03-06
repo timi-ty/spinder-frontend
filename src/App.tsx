@@ -5,7 +5,8 @@ import ErrorOneMessageTwoAction from "./generic/components/ErrorOneMessageTwoAct
 import { useDispatch } from "react-redux";
 import { logoutAuthResource } from "./state/slice.auth";
 import FullComponentLoader from "./generic/components/FullComponentLoader";
-import ToastOverlay from "./toast/ToastOverlay";
+import ToastOverlay, { showToast } from "./toast/ToastOverlay";
+import { ToastContext } from "./utils/context";
 
 function App() {
   const authStatus = useAuthResource();
@@ -18,7 +19,9 @@ function App() {
   return (
     <>
       {authStatus === "Loading" && <FullComponentLoader />}
-      {authStatus === "LoggedIn" && <Discover />}
+      <ToastContext.Provider value={showToast}>
+        {authStatus === "LoggedIn" && <Discover />}
+      </ToastContext.Provider>
       {authStatus === "Error" && (
         <ErrorOneMessageTwoAction
           message={

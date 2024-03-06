@@ -18,6 +18,7 @@
   width: 100%;
   height: 100%; //Stretch to share height evenly with like-button
   text-align: center;
+  pointer-events: all;
 }
 
 .discover .bottom-right .like-button {
@@ -25,6 +26,7 @@
   height: 100%; //Stretch to share height evenly with artist-image
   text-align: center;
   cursor: pointer;
+  pointer-events: all;
 }
 
 .discover .bottom-right .like-button.animate {
@@ -38,4 +40,5 @@
   justify-content: flex-end;
   padding: 0rem 0.5rem 0rem 0.5rem;
   text-align: center;
+  pointer-events: all;
 }

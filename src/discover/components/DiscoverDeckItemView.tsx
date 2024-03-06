@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
   onAudioElementTimeUpdate,
   registerAudioElement,
@@ -9,6 +9,7 @@ import { useClickDrag } from "../../utils/hooks";
 import { DeckItem } from "../../client/client.model";
 import { useDispatch } from "react-redux";
 import { changeActiveDeckItem } from "../../state/slice.deck";
+import { InteractionPanelContext } from "../../utils/context";
 
 const dragActionThreshold = 20; // Drag must be at least 20px in magnitude to dispatch the action.
 
@@ -72,7 +73,12 @@ function DiscoverDeckItemView({
     }
   };
 
-  const [clickDragDelta, endDelta] = useClickDrag(onDragFinish);
+  const interactionContainer = useContext(InteractionPanelContext);
+
+  const [clickDragDelta, endDelta] = useClickDrag(
+    interactionContainer,
+    onDragFinish
+  );
   const translationY = isActiveDeckItemView
     ? Math.min(clickDragDelta.dy, 0)
     : 0;

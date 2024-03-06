@@ -9,9 +9,11 @@
 .discover .bottom-left .spotify-icon {
   width: 2rem;
   height: 2rem;
+  pointer-events: all;
 }
 
 .discover .bottom-left .track-title {
+  width: fit-content;
   font-size: 1.5rem;
   font-weight: 500;
   padding-top: 1rem;
@@ -21,9 +23,11 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  pointer-events: all;
 }
 
 .discover .bottom-left .track-artists {
+  width: fit-content;
   font-size: 1rem;
   font-weight: 400;
   padding-top: 0.5rem;
@@ -31,6 +35,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  pointer-events: all;
 }
 
 .discover .bottom-left .related-sources {
@@ -54,6 +59,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  pointer-events: all;
 }
 
 .discover .bottom-left .top {

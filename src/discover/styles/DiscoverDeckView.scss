@@ -1,4 +1,5 @@
 .discover > .deck {
+  position: relative;
   width: 100%;
   height: calc(
     (100% - 5rem) / 2
@@ -6,6 +7,8 @@
   padding: 1rem;
   display: flex;
   justify-content: center;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .discover > .deck > .deck-items-container {

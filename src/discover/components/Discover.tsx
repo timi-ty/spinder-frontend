@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { LegacyRef, useEffect, useRef, useState } from "react";
 import DiscoverTop from "./DiscoverTop";
 import DiscoverDeckView from "./DiscoverDeckView";
 import DiscoverBottom from "./DiscoverBottom";
@@ -18,6 +18,8 @@ import { resetSourceDeck } from "../../client/client.deck";
 import { useSelector } from "react-redux";
 import { StoreState } from "../../state/store";
 import { DiscoverSource } from "../../client/client.model";
+import DiscoverInteractionPanel from "./DiscoverInteractionPanel";
+import { InteractionPanelContext } from "../../utils/context";
 
 const waitForDeckMillis = 15000; //We wait for up to 15 seconds for the deck to be ready.
 
@@ -63,13 +65,18 @@ function Discover() {
   useDiscoverSourceResource();
   useDiscoverDestinationResource();
 
+  const ineractionPanelRef: LegacyRef<HTMLDivElement> = useRef(null);
+
   return (
     <div className="discover">
+      <DiscoverInteractionPanel ref={ineractionPanelRef} />
       <DiscoverTop
         onClickDestinationPicker={() => setIsSelectingDestination(true)}
         onClickSourcePicker={() => setIsSelectingSource(true)}
       />
-      {isDeckReady && <DiscoverDeckView />}
+      <InteractionPanelContext.Provider value={ineractionPanelRef.current!}>
+        {isDeckReady && <DiscoverDeckView />}
+      </InteractionPanelContext.Provider>
       {isDeckReady && <DiscoverBottom />}
       {isDeckReady && <DiscoverSeeker />}
       {!isDeckReady && !isTimedOut && (

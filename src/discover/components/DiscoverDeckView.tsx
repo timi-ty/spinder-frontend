@@ -65,7 +65,7 @@ function DiscoverDeckView() {
     setActiveDeckItemCursor((c) => (c + 2) % 3);
   };
 
-  //In order not to reload the image and audio fed into DeckItemView, we only need to makesure that the value passed into mTrack does not change until we've used it.
+  //In order not to reload the image and audio fed into DeckItemView, we only need to makesure that the value passed into mDeckItem does not change until we've used it.
   return (
     <div className="deck">
       <div className="deck-items-container">
