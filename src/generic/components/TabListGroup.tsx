@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import "../styles/TabListGroup.scss";
 import ImageTextListItem from "./ImageTextListItem";
-import { pxToRem, remToPx } from "../../utils/utils";
+import { remToPx } from "../../utils/utils";
 
 interface TabListItem {
   id: string;
@@ -42,19 +42,17 @@ function TabListGroup<T extends TabListItem>({
     const selectedTabRect =
       tabRefs.current[selectedTab]?.getBoundingClientRect();
     if (selectedTabRect) {
-      const sizeRem = pxToRem(selectedTabRect.width);
-      setSelectorWidth(sizeRem);
+      setSelectorWidth(selectedTabRect.width);
     }
 
     var totalTranslation = 0;
     for (var i = 0; i < selectedTab; i++) {
       const tabRect = tabRefs.current[i]?.getBoundingClientRect();
       if (tabRect) {
-        totalTranslation += tabRect.width + remToPx(1);
+        totalTranslation += tabRect.width + remToPx(1); //+1rem gap
       }
     }
-    const translationRem = pxToRem(totalTranslation);
-    setSelectorTranslation(translationRem);
+    setSelectorTranslation(totalTranslation);
   }, [selectedTab, items]);
 
   useEffect(() => {
@@ -87,8 +85,8 @@ function TabListGroup<T extends TabListItem>({
       <div
         className="selector"
         style={{
-          width: `${selectorWidth}rem`,
-          translate: `${selectorTranslation}rem 0rem`,
+          width: `${selectorWidth}px`,
+          translate: `${selectorTranslation}px 0px`,
         }}
       ></div>
       <div className="list">

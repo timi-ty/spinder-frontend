@@ -5,7 +5,6 @@ import {
   useMemo,
   useEffect,
 } from "react";
-import { pxToRem } from "../../utils/utils";
 import "../styles/SquareImage.scss";
 
 interface Props {
@@ -54,13 +53,11 @@ function SquareImage({
     if (contanerWidth > contanerHeight && !forceIsWidthLimited) {
       setIsHeightLimited(true);
       setIsWidthLimited(false);
-      const sizeRem = pxToRem(contanerHeight);
-      setSize(sizeRem);
+      setSize(contanerHeight);
     } else {
       setIsHeightLimited(false);
       setIsWidthLimited(true);
-      const sizeRem = pxToRem(contanerWidth);
-      setSize(sizeRem);
+      setSize(contanerWidth);
     }
   }, [contanerWidth, contanerHeight]);
 
@@ -72,8 +69,8 @@ function SquareImage({
         (ev.currentTarget.src = "src/assets/fallback_square.svg")
       }
       style={{
-        height: `${isHeightLimited ? "100%" : `${size}rem`}`,
-        width: `${isWidthLimited ? "100%" : `${size}rem`}`,
+        height: `${isHeightLimited ? "100%" : `${size}px`}`,
+        width: `${isWidthLimited ? "100%" : `${size}px`}`,
         clipPath: `${circleCrop ? "circle()" : ""}`,
       }}
     />

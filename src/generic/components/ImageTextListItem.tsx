@@ -1,5 +1,4 @@
 import { useRef, useLayoutEffect, useState } from "react";
-import { pxToRem } from "../../utils/utils";
 import "../styles/ImageTextListItem.scss";
 
 type ImageType = "Circle" | "Rounded";
@@ -26,8 +25,7 @@ function ImageTextListItem({
     const continerDomRect =
       detailsContainerRef.current?.getBoundingClientRect();
     if (continerDomRect) {
-      const sizeRem = pxToRem(continerDomRect.height);
-      setImageSize(sizeRem);
+      setImageSize(continerDomRect.height);
     } else {
       console.warn("List item image failed to get its container dom rect.");
     }
@@ -45,7 +43,7 @@ function ImageTextListItem({
             (ev.currentTarget.src = "src/assets/fallback_square.svg")
           }
           style={{
-            width: `${imageSize}rem`,
+            width: `${imageSize}px`,
           }}
         />
         <div className="text">{text}</div>

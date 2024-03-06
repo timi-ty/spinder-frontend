@@ -19,6 +19,10 @@ function shuffleArrayInPlace<T>(array: T[]) {
   }
 }
 
+function lerp(a: number, b: number, t: number) {
+  return a + (b - a) * t;
+}
+
 const nullTimeoutHandle: NodeJS.Timeout | null = null;
 
-export { pxToRem, remToPx, nullTimeoutHandle, shuffleArrayInPlace };
+export { pxToRem, remToPx, nullTimeoutHandle, shuffleArrayInPlace, lerp };

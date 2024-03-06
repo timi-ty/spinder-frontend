@@ -157,6 +157,7 @@ function useDeck(): boolean {
 function useClickDrag(
   container: HTMLElement,
   dragThreshold: { absY: number; absX: number },
+  onStartGesture: () => void,
   onDragFinish: (clickDragDelta: { dx: number; dy: number }) => void,
   onClick: () => void
 ) {
@@ -170,6 +171,7 @@ function useClickDrag(
   const onMouseDown = useCallback((ev: MouseEvent) => {
     setMouseStartPos({ x: ev.clientX, y: ev.clientY });
     setIsDragging(true);
+    onStartGesture();
   }, []);
   const onMouseUp = useCallback(() => {
     setIsDragging(false);

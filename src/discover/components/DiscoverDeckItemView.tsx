@@ -9,20 +9,18 @@ import { DeckItem } from "../../client/client.model";
 
 interface Props {
   deckItemViewIndex: number;
-  isActiveDeckItemView: boolean;
   mDeckItem: DeckItem;
-  zIndex: number;
-  clickDragDelta: { dx: number; dy: number };
+  verticalTranslation: number;
   isPlaying: boolean;
+  transitionTranslate: boolean;
 }
 
 function DiscoverDeckItemView({
   deckItemViewIndex,
-  isActiveDeckItemView,
   mDeckItem,
-  zIndex,
-  clickDragDelta,
+  verticalTranslation,
   isPlaying,
+  transitionTranslate,
 }: Props) {
   const audioRef: React.LegacyRef<HTMLAudioElement> = useRef(null);
 
@@ -44,20 +42,12 @@ function DiscoverDeckItemView({
     isPlaying ? audioRef.current?.play() : audioRef.current?.pause();
   }, [isPlaying]);
 
-  const translationY = isActiveDeckItemView
-    ? Math.min(clickDragDelta.dy, 0)
-    : 0;
-  const positiveNormYDelta =
-    Math.max(Math.min(clickDragDelta.dy, 100), 0) / 100; //Clamp between 0-100 then normalize;
-  const scale = isActiveDeckItemView ? 1 - 0.2 * positiveNormYDelta : 1;
-
   return (
     <div
       className="deck-item"
       style={{
-        zIndex: zIndex,
-        translate: `0px ${translationY}px`,
-        scale: `${scale}`,
+        translate: `0px ${verticalTranslation}px`,
+        transition: `${transitionTranslate ? "translate 0.5s ease" : ""}`,
       }}
     >
       {mDeckItem === null ? (
