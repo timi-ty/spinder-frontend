@@ -70,7 +70,10 @@ function startSourceDeckClient(
         }
       });
       shuffleArrayInPlace(bufferForShuffle); //Non persistent front-end shuffling only.
-      bufferForShuffle.forEach((deckItem) => addSourceDeckItem(deckItem));
+      bufferForShuffle.forEach((deckItem) => {
+        addSourceDeckItem(deckItem);
+        console.log(`Adding source track: ${deckItem.trackName}`);
+      });
     }
   );
 }
@@ -152,8 +155,11 @@ function getDeckItem(index: number): DeckItem {
     //Attempt a refill if we have fewer than 20 fresh items ahead of us.
     refillSourceDeckManaged();
   }
-  index %= sourceDeck.length; //Go round and round. Never let the user know that the deck is stale.
-  const deckItem = sourceDeck[index];
+  const safeIndex = index % sourceDeck.length; //Go round and round. Never let the user know that the deck is stale.
+  const deckItem = sourceDeck[safeIndex];
+  console.log(
+    `Getting source track: ${deckItem.trackName}, at index: ${index}, safe: ${safeIndex}`
+  );
   return deckItem;
 }
 

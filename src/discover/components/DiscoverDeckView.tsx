@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -29,23 +30,33 @@ function DiscoverDeckView() {
   //The jumping item is the item that will have to change it's absolute position behind the scenes without a transition.
   const [jumpingItemCursor, setJumpingItemCursor] = useState(-1);
 
-  const getActiveDeckItem = () => {
-    return getDeckItem(
-      activeDeckItemCursor === 0
-        ? cursor0
-        : activeDeckItemCursor === 1
-        ? cursor1
-        : cursor2
-    );
-  };
+  const deckItem0 = useMemo(() => {
+    return getDeckItem(cursor0);
+  }, [cursor0]);
+
+  const deckItem1 = useMemo(() => {
+    return getDeckItem(cursor1);
+  }, [cursor1]);
+
+  const deckItem2 = useMemo(() => {
+    return getDeckItem(cursor2);
+  }, [cursor2]);
+
+  const activeDeckItem = useMemo(() => {
+    return activeDeckItemCursor === 0
+      ? deckItem0
+      : activeDeckItemCursor === 1
+      ? deckItem1
+      : deckItem2;
+  }, [activeDeckItemCursor]);
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(changeActiveDeckItem(getActiveDeckItem()));
+    dispatch(changeActiveDeckItem(activeDeckItem));
   }, [activeDeckItemCursor]);
 
   const nextDeckItemView = useCallback(() => {
-    markVisitedDeckItem(getActiveDeckItem()); //Marks the currently displaying deck item as visited before going to the next one.
+    markVisitedDeckItem(activeDeckItem); //Marks the currently displaying deck item as visited before going to the next one.
     switch (activeDeckItemCursor) {
       case 0:
         if (cursor2 < cursor0) setCursor2((i) => i + 3); //Only move cursor2 when it is behind cursor1.
@@ -194,7 +205,7 @@ function DiscoverDeckView() {
       <div ref={containerRef} className="deck-items-container">
         <DiscoverDeckItemView
           deckItemViewIndex={0}
-          mDeckItem={getDeckItem(cursor0)}
+          mDeckItem={deckItem0}
           isPlaying={isPlaying && activeDeckItemCursor === 0}
           verticalTranslation={getItemTop(0) + verticalTranslation}
           transitionTranslate={transitionTranslate && jumpingItemCursor !== 0}
@@ -202,7 +213,7 @@ function DiscoverDeckView() {
 
         <DiscoverDeckItemView
           deckItemViewIndex={1}
-          mDeckItem={getDeckItem(cursor1)}
+          mDeckItem={deckItem1}
           isPlaying={isPlaying && activeDeckItemCursor === 1}
           verticalTranslation={getItemTop(1) + verticalTranslation}
           transitionTranslate={transitionTranslate && jumpingItemCursor !== 1}
@@ -210,7 +221,7 @@ function DiscoverDeckView() {
 
         <DiscoverDeckItemView
           deckItemViewIndex={2}
-          mDeckItem={getDeckItem(cursor2)}
+          mDeckItem={deckItem2}
           isPlaying={isPlaying && activeDeckItemCursor === 2}
           verticalTranslation={getItemTop(2) + verticalTranslation}
           transitionTranslate={transitionTranslate && jumpingItemCursor !== 2}
