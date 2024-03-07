@@ -23,7 +23,18 @@ const DiscoverBackgroundPanel = forwardRef(function DiscoverInteractionPanel(
 
   return (
     <div ref={ref} className="background-panel">
-      <img></img>
+      <img
+        className={`swap-item ${activeDeckItemCursor === 0 ? "active" : ""}`}
+        src={`${deckItem0.image}`}
+      />
+      <img
+        className={`swap-item ${activeDeckItemCursor === 1 ? "active" : ""}`}
+        src={`${deckItem1.image}`}
+      />
+      <img
+        className={`swap-item ${activeDeckItemCursor === 2 ? "active" : ""}`}
+        src={`${deckItem2.image}`}
+      />
     </div>
   );
 });
