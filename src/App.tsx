@@ -2,19 +2,13 @@ import { Navigate } from "react-router-dom";
 import Discover from "./discover/components/Discover";
 import { useAuthResource } from "./utils/hooks";
 import ErrorOneMessageTwoAction from "./generic/components/ErrorOneMessageTwoAction";
-import { useDispatch } from "react-redux";
-import { logoutAuthResource } from "./state/slice.auth";
 import FullComponentLoader from "./generic/components/FullComponentLoader";
 import ToastOverlay, { showToast } from "./overlays/components/ToastOverlay";
 import { ToastContext } from "./utils/context";
+import { logout } from "./client/client";
 
 function App() {
   const authStatus = useAuthResource();
-  const dispatch = useDispatch();
-
-  const logout = () => {
-    dispatch(logoutAuthResource());
-  };
 
   return (
     <>

@@ -1,4 +1,5 @@
 .discover .bottom-right {
+  position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -58,4 +59,21 @@
   padding: 0rem 0.5rem 0rem 0.5rem;
   text-align: center;
   pointer-events: all;
+  cursor: pointer;
+}
+
+.discover .bottom-right .account-actions {
+  position: absolute;
+  background-color: white;
+  border-radius: 0.75rem;
+  pointer-events: all;
+}
+
+.discover .bottom-right .account-action {
+  font-size: 0.875rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+.discover .bottom-right .account-action:first-child {
+  border-bottom: 1px solid black;
 }

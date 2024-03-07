@@ -1,3 +1,5 @@
+import { logoutAuthResource } from "../state/slice.auth";
+import { dispatch } from "../state/store";
 import { renewAuthentication } from "./client.api";
 import { startFirebaseClient } from "./client.firebase";
 
@@ -66,4 +68,9 @@ async function renewAutheticationCallback() {
     });
 }
 
-export { startRenewingAuthentication, stopRenewingAuthentication };
+function logout() {
+  //Make logout API request here.
+  dispatch(logoutAuthResource());
+}
+
+export { startRenewingAuthentication, stopRenewingAuthentication, logout };

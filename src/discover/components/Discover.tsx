@@ -76,8 +76,8 @@ function Discover() {
       />
       <InteractionPanelContext.Provider value={ineractionPanelRef.current!}>
         {isDeckReady && <DiscoverDeckView />}
+        {isDeckReady && <DiscoverBottom />}
       </InteractionPanelContext.Provider>
-      {isDeckReady && <DiscoverBottom />}
       {isDeckReady && <DiscoverSeeker />}
       {!isDeckReady && !isTimedOut && (
         <div className="deck-loader-error">

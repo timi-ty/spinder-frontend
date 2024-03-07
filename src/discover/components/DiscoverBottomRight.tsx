@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { LegacyRef, useContext, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { DeckItem } from "../../client/client.model";
 import SquareImage from "../../generic/components/SquareImage";
@@ -6,6 +6,8 @@ import { StoreState } from "../../state/store";
 import "../styles/DiscoverBottomRight.scss";
 import DiscoverLikeButton from "./DiscoverLikeButton";
 import { useSpotifyProfileResource } from "../../utils/hooks";
+import { logout } from "../../client/client";
+import { InteractionPanelContext } from "../../utils/context";
 
 function DiscoverBottomRight() {
   const activeDeckItemCursor = useSelector<StoreState, number>(
@@ -21,7 +23,9 @@ function DiscoverBottomRight() {
     (state) => state.deckState.deckItem2
   );
 
-  const profileResource = useSpotifyProfileResource();
+  const [isShowingAccountActions, setIsShowingAccountActions] = useState(false);
+
+  useSpotifyProfileResource();
   const profileImage = useSelector<StoreState, string>((state) =>
     state.userProfileState.data.images.length > 0
       ? state.userProfileState.data.images[0].url
@@ -32,7 +36,19 @@ function DiscoverBottomRight() {
   );
 
   const artistImageContainerRef = useRef(null);
-  const rightBottomRef = useRef(null);
+  const rightBottomRef: LegacyRef<HTMLDivElement> = useRef(null);
+
+  const interactionContainer = useContext(InteractionPanelContext);
+  useEffect(() => {
+    interactionContainer.addEventListener("click", () => {
+      if (isShowingAccountActions) setIsShowingAccountActions(false);
+    });
+    return () => {
+      interactionContainer.removeEventListener("click", () => {
+        if (isShowingAccountActions) setIsShowingAccountActions(false);
+      });
+    };
+  }, [isShowingAccountActions]);
 
   return (
     <div className="bottom-right">
@@ -99,16 +115,31 @@ function DiscoverBottomRight() {
         </div>
         <DiscoverLikeButton />
       </div>
-      <div ref={rightBottomRef} className="bottom">
-        <a href={`${profileResource === "Loaded" ? profleUri : ""}`}>
-          <SquareImage
-            image={profileImage}
-            containerRef={rightBottomRef}
-            circleCrop
-            forceIsWidthLimited
-          />
-        </a>
+      <div
+        ref={rightBottomRef}
+        className="bottom"
+        onClick={() => setIsShowingAccountActions((a) => !a)}
+      >
+        <SquareImage
+          image={profileImage}
+          containerRef={rightBottomRef}
+          circleCrop
+          forceIsWidthLimited
+        />
       </div>
+      {isShowingAccountActions && (
+        <div
+          className="account-actions"
+          style={{ top: `${(rightBottomRef.current?.offsetTop ?? 0) - 80}px` }}
+        >
+          <a href={profleUri}>
+            <div className="account-action">My Profile</div>
+          </a>
+          <div className="account-action" onClick={() => logout()}>
+            Logout
+          </div>
+        </div>
+      )}
     </div>
   );
 }
