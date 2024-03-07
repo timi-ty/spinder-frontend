@@ -12,6 +12,7 @@ interface Props {
   containerRef: MutableRefObject<HTMLDivElement | null>;
   circleCrop?: boolean;
   forceIsWidthLimited?: boolean;
+  extraClassName?: string;
 }
 
 //A tight circle crop image with no space at the edges.
@@ -20,9 +21,10 @@ function SquareImage({
   containerRef,
   circleCrop = false,
   forceIsWidthLimited = false,
+  extraClassName = "",
 }: Props) {
-  const [contanerHeight, setContainerHeight] = useState(0);
-  const [contanerWidth, setContainerWidth] = useState(0);
+  const [containerHeight, setContainerHeight] = useState(0);
+  const [containerWidth, setContainerWidth] = useState(0);
   const [size, setSize] = useState(0);
   const [isHeightLimited, setIsHeightLimited] = useState(true);
   const [isWidthLimited, setIsWidthLimited] = useState(true);
@@ -50,27 +52,27 @@ function SquareImage({
   });
 
   useLayoutEffect(() => {
-    if (contanerWidth > contanerHeight && !forceIsWidthLimited) {
+    if (containerWidth > containerHeight && !forceIsWidthLimited) {
       setIsHeightLimited(true);
       setIsWidthLimited(false);
-      setSize(contanerHeight);
+      setSize(containerHeight);
     } else {
       setIsHeightLimited(false);
       setIsWidthLimited(true);
-      setSize(contanerWidth);
+      setSize(containerWidth);
     }
-  }, [contanerWidth, contanerHeight]);
+  }, [containerWidth, containerHeight]);
 
   return (
     <img
-      className="circle-image"
+      className={`circle-image ${extraClassName}`}
       src={image}
       onError={(ev) =>
         (ev.currentTarget.src = "src/assets/fallback_square.svg")
       }
       style={{
-        height: `${isHeightLimited ? "100%" : `${size}px`}`,
-        width: `${isWidthLimited ? "100%" : `${size}px`}`,
+        height: `${isHeightLimited ? `${containerHeight}px` : `${size}px`}`,
+        width: `${isWidthLimited ? `${containerWidth}px` : `${size}px`}`,
         clipPath: `${circleCrop ? "circle()" : ""}`,
       }}
     />

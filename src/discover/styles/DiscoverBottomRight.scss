@@ -15,10 +15,27 @@
 }
 
 .discover .bottom-right .artist-image {
+  position: relative;
   width: 100%;
   height: 100%; //Stretch to share height evenly with like-button
   text-align: center;
   pointer-events: all;
+  z-index: 0; //Create a new stacking context just for the swap chain items
+}
+
+.discover .bottom-right .artist-image .swap-item {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  opacity: 0;
+  z-index: 0;
+  transition: opacity 0.5s ease;
+}
+
+.discover .bottom-right .artist-image .swap-item.active {
+  position: relative;
+  opacity: 1;
+  z-index: 1;
 }
 
 .discover .bottom-right .like-button {

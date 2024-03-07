@@ -15,12 +15,18 @@ import { playAudioElement } from "../../client/client.audio";
 import { InteractionPanelContext } from "../../utils/context";
 import { useClickDrag } from "../../utils/hooks";
 import { useDispatch } from "react-redux";
-import { changeActiveDeckItem } from "../../state/slice.deck";
+import {
+  changeActiveDeckItem,
+  setDeckItem0,
+  setDeckItem1,
+  setDeckItem2,
+} from "../../state/slice.deck";
 import { lerp, nullTimeoutHandle, remToPx } from "../../utils/utils";
 
 const dragActionThreshold = 20;
 
 function DiscoverDeckView() {
+  const dispatch = useDispatch();
   //The Deck is a three item swap chain. We do this so that there's always a loaded item in front and behind the current one.
   const [activeDeckItemCursor, setActiveDeckItemCursor] = useState(0);
   const [cursor0, setCursor0] = useState(0);
@@ -31,15 +37,21 @@ function DiscoverDeckView() {
   const [jumpingItemCursor, setJumpingItemCursor] = useState(-1);
 
   const deckItem0 = useMemo(() => {
-    return getDeckItem(cursor0);
+    const deckItem = getDeckItem(cursor0);
+    dispatch(setDeckItem0(deckItem));
+    return deckItem;
   }, [cursor0]);
 
   const deckItem1 = useMemo(() => {
-    return getDeckItem(cursor1);
+    const deckItem = getDeckItem(cursor1);
+    dispatch(setDeckItem1(deckItem));
+    return deckItem;
   }, [cursor1]);
 
   const deckItem2 = useMemo(() => {
-    return getDeckItem(cursor2);
+    const deckItem = getDeckItem(cursor2);
+    dispatch(setDeckItem2(deckItem));
+    return deckItem;
   }, [cursor2]);
 
   const activeDeckItem = useMemo(() => {
@@ -50,9 +62,8 @@ function DiscoverDeckView() {
       : deckItem2;
   }, [activeDeckItemCursor]);
 
-  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(changeActiveDeckItem(activeDeckItem));
+    dispatch(changeActiveDeckItem(activeDeckItemCursor));
   }, [activeDeckItemCursor]);
 
   const nextDeckItemView = useCallback(() => {

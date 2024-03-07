@@ -8,8 +8,17 @@ import DiscoverLikeButton from "./DiscoverLikeButton";
 import { useSpotifyProfileResource } from "../../utils/hooks";
 
 function DiscoverBottomRight() {
-  const activeDeckItem = useSelector<StoreState, DeckItem>(
-    (state) => state.deckState.activeDeckItem
+  const activeDeckItemCursor = useSelector<StoreState, number>(
+    (state) => state.deckState.activeDeckItemCursor
+  );
+  const deckItem0 = useSelector<StoreState, DeckItem>(
+    (state) => state.deckState.deckItem0
+  );
+  const deckItem1 = useSelector<StoreState, DeckItem>(
+    (state) => state.deckState.deckItem1
+  );
+  const deckItem2 = useSelector<StoreState, DeckItem>(
+    (state) => state.deckState.deckItem2
   );
 
   const profileResource = useSpotifyProfileResource();
@@ -22,27 +31,67 @@ function DiscoverBottomRight() {
     (state) => state.userProfileState.data.uri
   );
 
-  const artistImageRef = useRef(null);
+  const artistImageContainerRef = useRef(null);
   const rightBottomRef = useRef(null);
 
   return (
     <div className="bottom-right">
       <div className="top">
-        <div ref={artistImageRef} className="artist-image">
+        <div ref={artistImageContainerRef} className="artist-image">
+          {/* Swap chain here to optimize loading artist images */}
           <a
+            className={`swap-item ${
+              activeDeckItemCursor === 0 ? "active" : ""
+            }`}
             href={`${
-              activeDeckItem.artists.length > 0
-                ? activeDeckItem.artists[0].artistUri
-                : ""
+              deckItem0.artists.length > 0 ? deckItem0.artists[0].artistUri : ""
             }`}
           >
             <SquareImage
               image={
-                activeDeckItem.artists.length > 0
-                  ? activeDeckItem.artists[0].artistImage
+                deckItem0.artists.length > 0
+                  ? deckItem0.artists[0].artistImage
                   : ""
               }
-              containerRef={artistImageRef}
+              containerRef={artistImageContainerRef}
+              circleCrop
+              forceIsWidthLimited
+            />
+          </a>
+          <a
+            className={`swap-item ${
+              activeDeckItemCursor === 1 ? "active" : ""
+            }`}
+            href={`${
+              deckItem1.artists.length > 0 ? deckItem1.artists[0].artistUri : ""
+            }`}
+          >
+            <SquareImage
+              image={
+                deckItem1.artists.length > 0
+                  ? deckItem1.artists[0].artistImage
+                  : ""
+              }
+              containerRef={artistImageContainerRef}
+              circleCrop
+              forceIsWidthLimited
+            />
+          </a>
+          <a
+            className={`swap-item ${
+              activeDeckItemCursor === 2 ? "active" : ""
+            }`}
+            href={`${
+              deckItem2.artists.length > 0 ? deckItem2.artists[0].artistUri : ""
+            }`}
+          >
+            <SquareImage
+              image={
+                deckItem2.artists.length > 0
+                  ? deckItem2.artists[0].artistImage
+                  : ""
+              }
+              containerRef={artistImageContainerRef}
               circleCrop
               forceIsWidthLimited
             />
