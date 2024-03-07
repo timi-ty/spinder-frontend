@@ -18,7 +18,7 @@ import { resetSourceDeck } from "../../client/client.deck";
 import { useSelector } from "react-redux";
 import { StoreState } from "../../state/store";
 import { DiscoverSource } from "../../client/client.model";
-import DiscoverInteractionPanel from "./DiscoverInteractionPanel";
+import DiscoverBackgroundPanel from "./DiscoverBackgroundPanel";
 import { InteractionPanelContext } from "../../utils/context";
 
 const waitForDeckMillis = 15000; //We wait for up to 15 seconds for the deck to be ready.
@@ -69,7 +69,7 @@ function Discover() {
 
   return (
     <div className="discover">
-      <DiscoverInteractionPanel ref={ineractionPanelRef} />
+      <DiscoverBackgroundPanel ref={ineractionPanelRef} />
       <DiscoverTop
         onClickDestinationPicker={() => setIsSelectingDestination(true)}
         onClickSourcePicker={() => setIsSelectingSource(true)}

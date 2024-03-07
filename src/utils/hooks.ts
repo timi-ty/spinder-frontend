@@ -173,33 +173,43 @@ function useClickDrag(
     setIsDragging(true);
     onStartGesture();
   }, []);
-  const onMouseUp = useCallback(() => {
+  const onMouseUpWindow = useCallback(() => {
     setIsDragging(false);
     if (
       Math.abs(clickDragDeltaRef.current.dx) > dragThreshold.absY ||
       Math.abs(clickDragDeltaRef.current.dy) > dragThreshold.absX
     ) {
       onDragFinish(clickDragDeltaRef.current);
-    } else {
-      onClick();
+      setClickDragDelta({ dx: 0, dy: 0 }); //Only reset if you handled the gesture.
+      clickDragDeltaRef.current = { dx: 0, dy: 0 };
     }
-    setClickDragDelta({ dx: 0, dy: 0 });
-    clickDragDeltaRef.current = { dx: 0, dy: 0 };
+  }, [onDragFinish, onClick]);
+  const onMouseUpContainer = useCallback(() => {
+    if (
+      Math.abs(clickDragDeltaRef.current.dx) < dragThreshold.absY &&
+      Math.abs(clickDragDeltaRef.current.dy) < dragThreshold.absX
+    ) {
+      onClick();
+      setClickDragDelta({ dx: 0, dy: 0 }); //Only reset if you handled the gesture.
+      clickDragDeltaRef.current = { dx: 0, dy: 0 };
+    }
   }, [onDragFinish, onClick]);
   const onMouseMove = useCallback((ev: MouseEvent) => {
     setMouseCurrentPos({ x: ev.clientX, y: ev.clientY });
   }, []);
   useEffect(() => {
-    container.addEventListener("mousedown", onMouseDown);
-    window.addEventListener("mouseup", onMouseUp); //We use window because no element should block finishing the click drag by releasing the mouse.
+    container.addEventListener("mousedown", onMouseDown); //Action can only start from the container
+    container.addEventListener("mouseup", onMouseUpContainer); //The click action is only dispatched when it is executed from within the container.
+    window.addEventListener("mouseup", onMouseUpWindow); //We use window because no element should block finishing the click drag by releasing the mouse.
     window.addEventListener("mousemove", onMouseMove); //We use window because no element should block dragging once it has started.
 
     return () => {
       container.removeEventListener("mousedown", onMouseDown);
-      window.removeEventListener("mouseup", onMouseUp);
+      container.removeEventListener("mouseup", onMouseUpContainer);
+      window.removeEventListener("mouseup", onMouseUpWindow);
       window.removeEventListener("mousemove", onMouseMove);
     };
-  }, [onMouseDown, onMouseUp, onMouseMove]);
+  }, [onMouseDown, onMouseUpWindow, onMouseMove]);
   useEffect(() => {
     if (!isDragging) return;
 
