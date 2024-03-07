@@ -4,11 +4,11 @@ import {
   hideTopToast,
   showBottomToast,
   showTopToast,
-} from "../state/slice.toast";
-import { StoreState, dispatch } from "../state/store";
-import "./ToastOverlay.scss";
+} from "../../state/slice.toast";
+import { StoreState, dispatch } from "../../state/store";
 import { useEffect, useRef } from "react";
-import { nullTimeoutHandle } from "../utils/utils";
+import { nullTimeoutHandle } from "../../utils/utils";
+import "../styles/ToastOverlay.scss";
 
 const toastDurationMillis = 2000; //Show toast messages for 2 seconds.
 

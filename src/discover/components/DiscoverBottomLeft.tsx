@@ -1,13 +1,15 @@
 import { useSelector } from "react-redux";
 import { DeckItem, DiscoverSource } from "../../client/client.model";
 import { StoreState, dispatch } from "../../state/store";
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 import { changeSource } from "../../client/client.deck";
 import { selectDiscoverSource } from "../../state/slice.discoversource";
-import { showToast } from "../../toast/ToastOverlay";
 import "../styles/DiscoverBottomLeft.scss";
+import { ToastContext } from "../../utils/context";
 
 function DiscoverBottomLeft() {
+  const showToast = useContext(ToastContext);
+
   const activeDeckItem = useSelector<StoreState, DeckItem>(
     (state) => state.deckState.activeDeckItem
   );
