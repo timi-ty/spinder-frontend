@@ -45,11 +45,12 @@ function SearchArea({
     >
       <div className="search-box">
         <img
-          title="search"
+          title="Search"
           className="icon"
           src={"/src/assets/ic_search.svg"}
         />
         <input
+          name="search"
           title="search"
           className="search"
           value={searchText}
@@ -62,7 +63,7 @@ function SearchArea({
         />
         {isLoading && (
           <img
-            title="loader"
+            title="Loader"
             className="loader"
             src={"/src/assets/ic_loader.svg"}
           />

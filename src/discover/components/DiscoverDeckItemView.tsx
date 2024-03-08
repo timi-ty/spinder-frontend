@@ -59,7 +59,11 @@ function DiscoverDeckItemView({
             id={`audio${deckItemViewIndex}`}
             src={mDeckItem.previewUrl}
           />
-          <img className="image" src={mDeckItem.image} />
+          <img
+            title={mDeckItem.trackName}
+            className="image"
+            src={mDeckItem.image}
+          />
         </>
       )}
     </div>

@@ -117,6 +117,7 @@ function DiscoverLikeButton() {
           }
           containerRef={containerRef}
           forceIsWidthLimited
+          title={`${isLiked ? "Unlike" : "Like"}`}
         />
       }
     </div>

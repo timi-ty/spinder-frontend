@@ -223,6 +223,7 @@ function DiscoverSourcePicker({ close }: Props) {
                 onClick={() => onSourceClick(selectedSourceItem, true)}
               >
                 <img
+                  title={selectedSourceItem.name}
                   className="icon"
                   src={selectedSourceItem.image}
                   style={{

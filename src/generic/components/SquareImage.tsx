@@ -9,6 +9,7 @@ import "../styles/SquareImage.scss";
 
 interface Props {
   image: string;
+  title: string;
   containerRef: MutableRefObject<HTMLDivElement | null>;
   circleCrop?: boolean;
   forceIsWidthLimited?: boolean;
@@ -18,6 +19,7 @@ interface Props {
 //A tight circle crop image with no space at the edges.
 function SquareImage({
   image,
+  title,
   containerRef,
   circleCrop = false,
   forceIsWidthLimited = false,
@@ -65,6 +67,7 @@ function SquareImage({
 
   return (
     <img
+      title={title}
       className={`circle-image ${extraClassName}`}
       src={image}
       onError={(ev) =>

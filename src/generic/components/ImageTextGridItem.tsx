@@ -50,6 +50,7 @@ function ImageTextGridItem({
       onClick={onAction}
     >
       <img
+        title={text}
         className="image"
         src={image}
         onError={(ev) =>

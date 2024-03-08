@@ -36,7 +36,11 @@ function DiscoverBottomLeft() {
     <div className="bottom-left">
       <div className="top">
         <a href={`${activeDeckItem.trackUri}`}>
-          <img className="spotify-icon" src="src/assets/ic_spotify_black.png" />
+          <img
+            title="Spotify"
+            className="spotify-icon"
+            src="src/assets/ic_spotify_black.png"
+          />
         </a>
         <div className="track-title">
           <a href={`${activeDeckItem.trackUri}`}>

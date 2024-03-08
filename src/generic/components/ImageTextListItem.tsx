@@ -37,6 +37,7 @@ function ImageTextListItem({
     <div className="image-text-list-item" onClick={onClick}>
       <div ref={detailsContainerRef} className="details-container">
         <img
+          title={text}
           className={`image ${clipClass}`}
           src={image}
           onError={(ev) =>
@@ -50,7 +51,11 @@ function ImageTextListItem({
       </div>
 
       {isSelected && (
-        <img className="checkmark" src="/src/assets/ic_checkmark.svg" />
+        <img
+          title="Selected"
+          className="checkmark"
+          src="/src/assets/ic_checkmark.svg"
+        />
       )}
     </div>
   );

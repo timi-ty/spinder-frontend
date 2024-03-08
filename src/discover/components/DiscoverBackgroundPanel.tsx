@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { DeckItem } from "../../client/client.model";
 import { StoreState } from "../../state/store";
 
-const DiscoverBackgroundPanel = forwardRef(function DiscoverInteractionPanel(
+const DiscoverBackgroundPanel = forwardRef(function DiscoverBackgroundPanel(
   _props,
   ref: LegacyRef<HTMLDivElement>
 ) {

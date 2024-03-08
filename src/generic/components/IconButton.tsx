@@ -39,7 +39,7 @@ function IconButton({
   return (
     <button
       type="button"
-      title={`${title}`}
+      title={title}
       ref={ref}
       className="icon-button"
       onClick={onAction}
@@ -49,7 +49,7 @@ function IconButton({
         background: `${showBackground ? "" : "none"}`,
       }}
     >
-      <img title={`${title}`} className="icon" src={icon} />
+      <img title={title} className="icon" src={icon} />
     </button>
   );
 }

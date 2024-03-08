@@ -72,6 +72,7 @@ function DiscoverBottomRight() {
               containerRef={artistImageContainerRef}
               circleCrop
               forceIsWidthLimited
+              title={"Artist"}
             />
           </a>
           <a
@@ -91,6 +92,7 @@ function DiscoverBottomRight() {
               containerRef={artistImageContainerRef}
               circleCrop
               forceIsWidthLimited
+              title={"Artist"}
             />
           </a>
           <a
@@ -110,6 +112,7 @@ function DiscoverBottomRight() {
               containerRef={artistImageContainerRef}
               circleCrop
               forceIsWidthLimited
+              title={"Artist"}
             />
           </a>
         </div>
@@ -125,6 +128,7 @@ function DiscoverBottomRight() {
           containerRef={rightBottomRef}
           circleCrop
           forceIsWidthLimited
+          title={"Account"}
         />
       </div>
       {isShowingAccountActions && (
