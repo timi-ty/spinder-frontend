@@ -7,16 +7,19 @@ import App from "./App";
 import ComponentViewer, { isViewingComponent } from "./dev/ComponentViewer";
 import { Provider } from "react-redux";
 import { store } from "./state/store";
+import ErrorBoundary from "./ErrorBoundary";
 
 //TODO: Create error page to handle error boundary.
 const browserRouter = createBrowserRouter([
   {
     path: "/",
     element: <App />, //The single page Web App is rendered under the root page of the frontend.
+    errorElement: <ErrorBoundary />,
   },
   {
     path: "/home",
     element: <Home />, //Renders only if the user is not logged in or if the user goes to the home URL directly.
+    errorElement: <ErrorBoundary />,
   },
 ]);
 
