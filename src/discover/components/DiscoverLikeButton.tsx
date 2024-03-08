@@ -112,8 +112,8 @@ function DiscoverLikeButton() {
         <SquareImage
           image={
             isLiked
-              ? "/src/assets/ic_like_filled.svg"
-              : "/src/assets/ic_like_empty.svg"
+              ? "/resources/ic_like_filled.svg"
+              : "/resources/ic_like_empty.svg"
           }
           containerRef={containerRef}
           forceIsWidthLimited

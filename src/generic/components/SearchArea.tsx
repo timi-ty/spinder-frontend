@@ -44,11 +44,7 @@ function SearchArea({
       }}
     >
       <div className="search-box">
-        <img
-          title="Search"
-          className="icon"
-          src={"/src/assets/ic_search.svg"}
-        />
+        <img title="Search" className="icon" src={"/resources/ic_search.svg"} />
         <input
           name="search"
           title="search"
@@ -65,14 +61,14 @@ function SearchArea({
           <img
             title="Loader"
             className="loader"
-            src={"/src/assets/ic_loader.svg"}
+            src={"/resources/ic_loader.svg"}
           />
         )}
       </div>
       {searchText.length > 0 && (
         <div className="cancel">
           <IconButton
-            icon={"/src/assets/ic_close.png"}
+            icon={"/resources/ic_close.png"}
             onAction={() => {
               setSearchText("");
               onTextChanged("");

@@ -41,7 +41,7 @@ function ImageTextListItem({
           className={`image ${clipClass}`}
           src={image}
           onError={(ev) =>
-            (ev.currentTarget.src = "src/assets/fallback_square.svg")
+            (ev.currentTarget.src = "/resources/fallback_square.svg")
           }
           style={{
             width: `${imageSize}px`,
@@ -54,7 +54,7 @@ function ImageTextListItem({
         <img
           title="Selected"
           className="checkmark"
-          src="/src/assets/ic_checkmark.svg"
+          src="/resources/ic_checkmark.svg"
         />
       )}
     </div>

@@ -19,7 +19,7 @@ function TitleBar({ title, onClose, matchParentHeight = false }: Props) {
     >
       <div className="close">
         <IconButton
-          icon={"/src/assets/ic_close.png"}
+          icon={"/resources/ic_close.png"}
           onAction={onClose}
           matchParentHeight
           showBackground={false}

@@ -48,16 +48,16 @@ function DiscoverSourceToItem(item: DiscoverSource): DiscoverSourceItem {
   var graphic = item.image;
   switch (item.type) {
     case "Anything Me":
-      graphic = "/src/assets/ic_anything_me_stars.svg";
+      graphic = "/resources/ic_anything_me_stars.svg";
       break;
     case "Spinder People":
-      graphic = "/src/assets/ic_spinder_people_friends.svg";
+      graphic = "/resources/ic_spinder_people_friends.svg";
       break;
     case "My Artists":
-      graphic = "/src/assets/ic_my_artists_mic.svg";
+      graphic = "/resources/ic_my_artists_mic.svg";
       break;
     case "My Playlists":
-      graphic = "/src/assets/ic_my_playlists_vinyl.svg";
+      graphic = "/resources/ic_my_playlists_vinyl.svg";
       break;
   }
 
@@ -269,7 +269,7 @@ function DiscoverSourcePicker({ close }: Props) {
                       type: "Vibe",
                       id: `${sourceSearchResult.searchText}`,
                       name: `${sourceSearchResult.searchText}`,
-                      image: "/src/assets/ic_vibe_hashtag.png",
+                      image: "/resources/ic_vibe_hashtag.png",
                       title: `${sourceSearchResult.searchText}`,
                       group: "Vibe",
                     },

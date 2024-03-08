@@ -126,7 +126,7 @@ const defaultDiscoverSource: DiscoverSource = {
   type: "Anything Me",
   id: "anythingme",
   name: "Anything Me",
-  image: "src/assets/ic_anything_me_stars.svg",
+  image: "/resources/ic_anything_me_stars.svg",
 };
 
 interface DiscoverSourceData {
@@ -165,7 +165,7 @@ interface DiscoverDestination {
 
 const defaultDiscoverDestination: DiscoverDestination = {
   name: "Favourites",
-  image: "src/assets/ic_favourites_heart.svg",
+  image: "/resources/ic_favourites_heart.svg",
   id: "favourites",
   isFavourites: true,
 };
