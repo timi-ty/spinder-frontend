@@ -16,7 +16,7 @@ import {
   SpotifyUserProfileData,
 } from "./client.model";
 
-const backendUrl = "http://localhost:3000/api";
+const backendUrl = process.env.API_ROOT;
 
 /**********LOGIN START**********/
 const loginWithSpotifyUrl = `${backendUrl}/login`;
