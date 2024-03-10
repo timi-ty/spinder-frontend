@@ -170,30 +170,32 @@ function useClickDrag(
   //Don't try to read state from any of these mouse callbacks. They closure the state and we don't want to repeatedly detach and attach the callbacks to keep the closure up to date.
   const onMouseDown = useCallback((ev: MouseEvent) => {
     setMouseStartPos({ x: ev.clientX, y: ev.clientY });
+    setMouseCurrentPos({ x: ev.clientX, y: ev.clientY });
     setIsDragging(true);
     onStartGesture();
   }, []);
   const onMouseUpWindow = useCallback(() => {
     setIsDragging(false);
     if (
-      Math.abs(clickDragDeltaRef.current.dx) > dragThreshold.absY ||
-      Math.abs(clickDragDeltaRef.current.dy) > dragThreshold.absX
+      Math.abs(clickDragDeltaRef.current.dx) >= dragThreshold.absX ||
+      Math.abs(clickDragDeltaRef.current.dy) >= dragThreshold.absY
     ) {
       onDragFinish(clickDragDeltaRef.current);
       setClickDragDelta({ dx: 0, dy: 0 }); //Only reset if you handled the gesture.
       clickDragDeltaRef.current = { dx: 0, dy: 0 };
     }
-  }, [onDragFinish, onClick]);
+  }, [onDragFinish]);
   const onMouseUpContainer = useCallback(() => {
+    setIsDragging(false);
     if (
-      Math.abs(clickDragDeltaRef.current.dx) < dragThreshold.absY &&
-      Math.abs(clickDragDeltaRef.current.dy) < dragThreshold.absX
+      Math.abs(clickDragDeltaRef.current.dx) < dragThreshold.absX &&
+      Math.abs(clickDragDeltaRef.current.dy) < dragThreshold.absY
     ) {
       onClick();
       setClickDragDelta({ dx: 0, dy: 0 }); //Only reset if you handled the gesture.
       clickDragDeltaRef.current = { dx: 0, dy: 0 };
     }
-  }, [onDragFinish, onClick]);
+  }, [onClick]);
   const onMouseMove = useCallback((ev: MouseEvent) => {
     setMouseCurrentPos({ x: ev.clientX, y: ev.clientY });
   }, []);
@@ -209,7 +211,7 @@ function useClickDrag(
       window.removeEventListener("mouseup", onMouseUpWindow);
       window.removeEventListener("mousemove", onMouseMove);
     };
-  }, [onMouseDown, onMouseUpWindow, onMouseMove]);
+  }, [onMouseDown, onMouseUpWindow, onMouseMove, onMouseUpContainer]);
   useEffect(() => {
     if (!isDragging) return;
 
@@ -218,6 +220,90 @@ function useClickDrag(
     setClickDragDelta({ dx: deltaX, dy: deltaY });
     clickDragDeltaRef.current = { dx: deltaX, dy: deltaY };
   }, [mouseStartPos, mouseCurrentPos, isDragging]);
+
+  return clickDragDelta;
+}
+
+function useTouchDrag(
+  container: HTMLElement,
+  dragThreshold: { absY: number; absX: number },
+  onStartGesture: () => void,
+  onDragFinish: (clickDragDelta: { dx: number; dy: number }) => void,
+  onClick: () => void
+) {
+  const [isDragging, setIsDragging] = useState(false);
+  const clickDragDeltaRef = useRef({ dx: 0, dy: 0 });
+  const [clickDragDelta, setClickDragDelta] = useState({ dx: 0, dy: 0 });
+  const [touchStartPos, setTouchStartPos] = useState({ x: 0, y: 0 });
+  const [touchCurrentPos, setTouchCurrentPos] = useState({ x: 0, y: 0 });
+
+  const onTouchStart = useCallback((ev: TouchEvent) => {
+    setIsDragging(true);
+    const touch = ev.touches[0];
+    setTouchStartPos({ x: touch.clientX, y: touch.clientY });
+    setTouchCurrentPos({ x: touch.clientX, y: touch.clientY });
+    onStartGesture();
+    console.log(`Started Touch - x:${touch.clientX}, y:${touch.clientY}`);
+  }, []);
+
+  const onTouchMove = useCallback((ev: TouchEvent) => {
+    const touch = ev.touches[0];
+    setTouchCurrentPos({ x: touch.clientX, y: touch.clientY });
+  }, []);
+
+  const onTouchEndWindow = useCallback(() => {
+    setIsDragging(false);
+    if (
+      Math.abs(clickDragDeltaRef.current.dx) >= dragThreshold.absX ||
+      Math.abs(clickDragDeltaRef.current.dy) >= dragThreshold.absY
+    ) {
+      onDragFinish(clickDragDeltaRef.current);
+      console.log(
+        `Ending Touch Window - x:${clickDragDeltaRef.current.dx}, y:${clickDragDeltaRef.current.dy}, thresh:${dragThreshold.absY}`
+      );
+      setClickDragDelta({ dx: 0, dy: 0 }); //Only reset if you handled the gesture.
+      clickDragDeltaRef.current = { dx: 0, dy: 0 };
+    }
+  }, [onDragFinish]);
+
+  const onTouchEndContainer = useCallback(() => {
+    setIsDragging(false);
+    if (
+      Math.abs(clickDragDeltaRef.current.dx) < dragThreshold.absX &&
+      Math.abs(clickDragDeltaRef.current.dy) < dragThreshold.absY
+    ) {
+      onClick();
+      console.log(
+        `Ending Touch Container - x:${clickDragDeltaRef.current.dx}, y:${clickDragDeltaRef.current.dy}, thresh:${dragThreshold.absY}`
+      );
+      setClickDragDelta({ dx: 0, dy: 0 }); //Only reset if you handled the gesture.
+      clickDragDeltaRef.current = { dx: 0, dy: 0 };
+    }
+  }, [onClick]);
+
+  useEffect(() => {
+    container.addEventListener("touchstart", onTouchStart);
+    container.addEventListener("touchmove", onTouchMove);
+    container.addEventListener("touchend", onTouchEndContainer);
+    window.addEventListener("touchend", onTouchEndWindow);
+    console.log("added listener");
+
+    return () => {
+      container.removeEventListener("touchstart", onTouchStart);
+      container.removeEventListener("touchmove", onTouchMove);
+      container.removeEventListener("touchend", onTouchEndContainer);
+      window.removeEventListener("touchend", onTouchEndWindow);
+      console.log("removed listener");
+    };
+  }, [onTouchStart, onTouchMove, onTouchEndWindow, onTouchEndContainer]);
+
+  useEffect(() => {
+    if (!isDragging) return;
+    const deltaX = touchCurrentPos.x - touchStartPos.x;
+    const deltaY = touchCurrentPos.y - touchStartPos.y;
+    setClickDragDelta({ dx: deltaX, dy: deltaY });
+    clickDragDeltaRef.current = { dx: deltaX, dy: deltaY };
+  }, [touchStartPos, touchCurrentPos]);
 
   return clickDragDelta;
 }
@@ -230,4 +316,5 @@ export {
   useDiscoverDestinationResource,
   useDeck,
   useClickDrag,
+  useTouchDrag,
 };

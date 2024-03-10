@@ -23,6 +23,22 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
+function isMobileTouchDevice() {
+  return (
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    ) &&
+    ("ontouchstart" in window || navigator.maxTouchPoints > 0)
+  );
+}
+
 const nullTimeoutHandle: NodeJS.Timeout | null = null;
 
-export { pxToRem, remToPx, nullTimeoutHandle, shuffleArrayInPlace, lerp };
+export {
+  pxToRem,
+  remToPx,
+  nullTimeoutHandle,
+  shuffleArrayInPlace,
+  lerp,
+  isMobileTouchDevice,
+};

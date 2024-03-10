@@ -3,7 +3,6 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -13,7 +12,7 @@ import "../styles/DiscoverDeckView.scss";
 import { getDeckItem, markVisitedDeckItem } from "../../client/client.deck";
 import { playAudioElement } from "../../client/client.audio";
 import { InteractionPanelContext } from "../../utils/context";
-import { useClickDrag } from "../../utils/hooks";
+import { useClickDrag, useTouchDrag } from "../../utils/hooks";
 import { useDispatch } from "react-redux";
 import {
   changeActiveDeckItem,
@@ -21,9 +20,18 @@ import {
   setDeckItem1,
   setDeckItem2,
 } from "../../state/slice.deck";
-import { lerp, nullTimeoutHandle, remToPx } from "../../utils/utils";
+import {
+  isMobileTouchDevice,
+  lerp,
+  nullTimeoutHandle,
+  remToPx,
+} from "../../utils/utils";
 
 const dragActionThreshold = 20;
+// Math.max(
+//   window.document.documentElement.clientHeight * 0.04,
+//   40
+// );
 
 function DiscoverDeckView() {
   const dispatch = useDispatch();
@@ -140,19 +148,27 @@ function DiscoverDeckView() {
     },
     [nextDeckItemView, previousDeckItemView]
   );
-  const onClickPlayPause = () => {
+  const onClickPlayPause = useCallback(() => {
     setIsPlaying((p) => !p);
-  };
+  }, []);
 
   const interactionContainer = useContext(InteractionPanelContext);
 
-  const clickDragDelta = useClickDrag(
-    interactionContainer,
-    { absY: 1, absX: 1 },
-    () => setTransitionTranslate(false),
-    onDragFinish,
-    onClickPlayPause
-  );
+  const clickDragDelta = isMobileTouchDevice()
+    ? useTouchDrag(
+        interactionContainer,
+        { absY: 20, absX: 20 },
+        () => setTransitionTranslate(false),
+        onDragFinish,
+        onClickPlayPause
+      )
+    : useClickDrag(
+        interactionContainer,
+        { absY: 5, absX: 5 },
+        () => setTransitionTranslate(false),
+        onDragFinish,
+        onClickPlayPause
+      );
 
   const clickDragDeltaRef = useRef(clickDragDelta);
   clickDragDeltaRef.current = clickDragDelta; //Ref to break away from closure.
@@ -176,14 +192,27 @@ function DiscoverDeckView() {
 
   const containerRef: LegacyRef<HTMLDivElement> = useRef(null);
   const [viewHeight, setViewHeight] = useState(0);
-  useLayoutEffect(() => {
-    const domRect = containerRef.current?.getBoundingClientRect();
-    if (domRect) {
-      setViewHeight(domRect.height);
-    } else {
-      console.warn("Deck View failed to get its dom rect.");
-    }
-  }, []);
+
+  const containerSizeObserver = useMemo(
+    () =>
+      new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.contentRect) {
+            setViewHeight(entry.contentRect.height);
+          }
+        }
+      }),
+    []
+  );
+
+  useEffect(() => {
+    if (containerRef.current)
+      containerSizeObserver.observe(containerRef.current);
+    return () => {
+      if (containerRef.current)
+        containerSizeObserver.unobserve(containerRef.current);
+    };
+  });
 
   const getItemTop = (itemCursor: number) => {
     switch (activeDeckItemCursor) {
@@ -242,12 +271,17 @@ function DiscoverDeckView() {
   );
 }
 
+// const smoothingConstant = Math.max(
+//   window.document.documentElement.clientHeight * 0.012,
+//   12
+// );
+
 function smoothValue(
   from: number,
   to: number,
   deltaTimeMillis: number
 ): number {
-  return lerp(from, to, (6 * deltaTimeMillis) / 1000); //Using lerp with feedback makes it non-linear and nice.
+  return lerp(from, to, (12 * deltaTimeMillis) / 1000); //Using lerp with feedback makes it non-linear and nice.
 }
 
 export default DiscoverDeckView;
