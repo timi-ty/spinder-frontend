@@ -1,0 +1,18 @@
+.request-full-screen {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  background-color: #232323eb;
+  z-index: 11; //Very large. This is an overlay.
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.request-full-screen .message {
+  color: white;
+  animation: pulse-opacity 2s ease infinite;
+}

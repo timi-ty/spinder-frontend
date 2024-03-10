@@ -6,9 +6,24 @@ import FullComponentLoader from "./generic/components/FullComponentLoader";
 import ToastOverlay, { showToast } from "./overlays/components/ToastOverlay";
 import { ToastContext } from "./utils/context";
 import { logout } from "./client/client";
+import RequestFullScreenOverlay from "./overlays/components/RequestFullScreenOverlay";
+import { isMobileTouchDevice } from "./utils/utils";
+import { useCallback, useEffect, useState } from "react";
 
 function App() {
   const authStatus = useAuthResource();
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const onFullScreenChange = useCallback(() => {
+    setIsFullScreen(document.fullscreenElement !== null);
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("fullscreenchange", onFullScreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", onFullScreenChange);
+    };
+  }, []);
 
   return (
     <>
@@ -27,6 +42,7 @@ function App() {
       )}
       {authStatus === "LoggedOut" && <Navigate to="/home" />}
       <ToastOverlay />
+      {isMobileTouchDevice() && !isFullScreen && <RequestFullScreenOverlay />}
     </>
   );
 }

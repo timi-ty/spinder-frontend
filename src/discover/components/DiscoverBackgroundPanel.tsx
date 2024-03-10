@@ -3,16 +3,6 @@ import "../styles/DiscoverBackgroundPanel.scss";
 import { useSelector } from "react-redux";
 import { DeckItem } from "../../client/client.model";
 import { StoreState } from "../../state/store";
-// import { isMobileTouchDevice } from "../../utils/utils";
-
-// function swithToFullScreen() {
-//   if (isMobileTouchDevice() && !document.fullscreenElement) {
-//     // current working methods
-//     if (document.documentElement.requestFullscreen) {
-//       document.documentElement.requestFullscreen();
-//     }
-//   }
-// }
 
 const DiscoverBackgroundPanel = forwardRef(function DiscoverBackgroundPanel(
   _props,
