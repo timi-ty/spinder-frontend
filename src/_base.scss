@@ -40,7 +40,15 @@ $max-width: 40rem;
   }
 }
 
-//If screen width is greater than max-width, always use the max-width.
+//If the screen height is less than the height which matches the min-aspect-ratio, use the entire screen height and adjust the width to match.
+@media screen and (max-height: calc($min-aspect-ratio * 100vw)) {
+  %root-area {
+    height: 100vh;
+    width: calc(100vh / $min-aspect-ratio);
+  }
+}
+
+//If screen width is greater than max-width, first use the max-width.
 //Set the height to match the min-aspect-ratio by default.
 @media screen and (min-width: $max-width) {
   %root-area {
@@ -59,6 +67,14 @@ $max-width: 40rem;
   @media screen and (min-height: calc($max-aspect-ratio * $max-width)) {
     %root-area {
       height: calc($max-aspect-ratio * $max-width);
+    }
+  }
+
+  //If the screen height is less than the height which matches the min-aspect-ratio, use the entire screen height and adjust the width to match.
+  @media screen and (max-height: calc($min-aspect-ratio * $max-width)) {
+    %root-area {
+      height: 100vh;
+      width: calc(100vh / $min-aspect-ratio);
     }
   }
 }

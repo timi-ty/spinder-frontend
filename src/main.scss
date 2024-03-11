@@ -46,6 +46,7 @@ body {
 
 #root {
   position: relative;
+  overflow: hidden;
   @extend %root-area;
 }
 
