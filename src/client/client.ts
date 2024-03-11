@@ -74,12 +74,21 @@ function logout() {
 }
 
 //Block all window level listeners (the app should not be interactive while waiting for full screen mode).
+//This is a hacky way to control the interaction on the deck view. We should use a non-window level listener to avoid this.
 const blockAllMouse = (ev: MouseEvent) => {
-  const block = store.getState().globalUIState.isAwaitingFullScreen;
+  const uiState = store.getState().globalUIState;
+  const block =
+    uiState.isAwaitingFullScreen ||
+    uiState.isSourcePickerOpen ||
+    uiState.isDestinationPickerOpen;
   if (block) ev.stopImmediatePropagation();
 };
 const blockAllTouch = (ev: TouchEvent) => {
-  const block = store.getState().globalUIState.isAwaitingFullScreen;
+  const uiState = store.getState().globalUIState;
+  const block =
+    uiState.isAwaitingFullScreen ||
+    uiState.isSourcePickerOpen ||
+    uiState.isDestinationPickerOpen;
   if (block) ev.stopImmediatePropagation();
 };
 

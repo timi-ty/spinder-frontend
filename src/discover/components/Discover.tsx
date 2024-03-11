@@ -15,18 +15,27 @@ import FullComponentLoader from "../../generic/components/FullComponentLoader";
 import { nullTimeoutHandle } from "../../utils/utils";
 import ErrorOneMessageTwoAction from "../../generic/components/ErrorOneMessageTwoAction";
 import { resetSourceDeck } from "../../client/client.deck";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { StoreState } from "../../state/store";
 import { DiscoverSource } from "../../client/client.model";
 import DiscoverBackgroundPanel from "./DiscoverBackgroundPanel";
 import { InteractionPanelContext } from "../../utils/context";
+import {
+  setIsDestinationPickerOpen,
+  setIsSourcePickerOpen,
+} from "../../state/slice.globalui";
 
 const waitForDeckMillis = 15000; //We wait for up to 15 seconds for the deck to be ready.
 
 function Discover() {
+  const dispatch = useDispatch();
   const isDeckReady = useDeck(); //Add a loader until deck get ready.
-  const [isSelectingDestination, setIsSelectingDestination] = useState(false);
-  const [isSelectingSource, setIsSelectingSource] = useState(false);
+  const isSelectingSource = useSelector<StoreState, boolean>(
+    (state) => state.globalUIState.isSourcePickerOpen
+  );
+  const isSelectingDestination = useSelector<StoreState, boolean>(
+    (state) => state.globalUIState.isDestinationPickerOpen
+  );
 
   const timoutHandle = useRef(nullTimeoutHandle);
   const [isTimedOut, setIsTimedOut] = useState(false);
@@ -71,8 +80,10 @@ function Discover() {
     <div className="discover">
       <DiscoverBackgroundPanel ref={ineractionPanelRef} />
       <DiscoverTop
-        onClickDestinationPicker={() => setIsSelectingDestination(true)}
-        onClickSourcePicker={() => setIsSelectingSource(true)}
+        onClickDestinationPicker={() =>
+          dispatch(setIsDestinationPickerOpen(true))
+        }
+        onClickSourcePicker={() => dispatch(setIsSourcePickerOpen(true))}
       />
       <InteractionPanelContext.Provider value={ineractionPanelRef.current!}>
         {isDeckReady && <DiscoverDeckView />}
@@ -99,7 +110,7 @@ function Discover() {
             actionTwo={{
               name: "Change Source",
               action: () => {
-                setIsSelectingSource(true);
+                dispatch(setIsSourcePickerOpen(true));
               },
             }}
           />
@@ -107,11 +118,13 @@ function Discover() {
       )}
       {isSelectingDestination && (
         <DiscoverDestinationPicker
-          close={() => setIsSelectingDestination(false)}
+          close={() => dispatch(setIsDestinationPickerOpen(false))}
         />
       )}
       {isSelectingSource && (
-        <DiscoverSourcePicker close={() => setIsSelectingSource(false)} />
+        <DiscoverSourcePicker
+          close={() => dispatch(setIsSourcePickerOpen(false))}
+        />
       )}
     </div>
   );

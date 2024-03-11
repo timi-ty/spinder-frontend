@@ -12,7 +12,7 @@ import "../styles/DiscoverDeckView.scss";
 import { getDeckItem, markVisitedDeckItem } from "../../client/client.deck";
 import { InteractionPanelContext } from "../../utils/context";
 import { useMouseFlick, useTouchFlick } from "../../utils/hooks";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   changeActiveDeckItem,
   setDeckItem0,
@@ -25,6 +25,7 @@ import {
   nullTimeoutHandle,
   remToPx,
 } from "../../utils/utils";
+import { StoreState } from "../../state/store";
 
 const dragActionThreshold = 20;
 
@@ -151,6 +152,17 @@ function DiscoverDeckView() {
       interactionContainer.removeEventListener("click", onClickPlayPause);
     };
   }, []);
+
+  //Pause when picking source or destination.
+  const isSourcePickerOpen = useSelector<StoreState, boolean>(
+    (state) => state.globalUIState.isSourcePickerOpen
+  );
+  const isDestinationPickerOpen = useSelector<StoreState, boolean>(
+    (state) => state.globalUIState.isDestinationPickerOpen
+  );
+  useEffect(() => {
+    if (isSourcePickerOpen || isDestinationPickerOpen) setIsPlaying(false);
+  }, [isSourcePickerOpen, isDestinationPickerOpen]);
 
   const containerRef: LegacyRef<HTMLDivElement> = useRef(null);
   const [viewHeight, setViewHeight] = useState(0);
