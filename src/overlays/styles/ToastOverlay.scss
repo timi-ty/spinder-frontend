@@ -1,3 +1,5 @@
+@use "../../base";
+
 .toast-overlay {
   position: absolute;
   top: 0px;
@@ -13,7 +15,8 @@
 }
 
 .toast-overlay .message {
-  background-color: white;
+  background-color: base.$toast-bg-color;
+  color: base.$toast-text-color;
   border-radius: 0.75rem;
   padding: 0.5rem;
   text-align: center;

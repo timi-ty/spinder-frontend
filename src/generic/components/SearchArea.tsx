@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { LegacyRef, useCallback, useEffect, useRef, useState } from "react";
 import IconButton from "./IconButton";
 import "../styles/SearchArea.scss";
 import { nullTimeoutHandle } from "../../utils/utils";
@@ -36,16 +36,32 @@ function SearchArea({
     );
   };
 
+  const inputRef: LegacyRef<HTMLInputElement> = useRef(null);
+  const onKeyDown = useCallback((event: KeyboardEvent) => {
+    if (event.key.toLowerCase() === "enter") {
+      inputRef.current?.blur();
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  });
+
+  const isSearching = searchText.length > 0;
+
   return (
     <div
       className="search-area"
       style={{
         height: `${matchParentHeight ? "100%" : `${defaultHeight}rem`}`,
+        paddingRight: `${isSearching ? "" : "1rem"}`, //When we're searching the cancel button handles our right padding
       }}
     >
       <div className="search-box">
         <img title="Search" className="icon" src={"/resources/ic_search.svg"} />
         <input
+          ref={inputRef}
           name="search"
           title="search"
           className="search"
@@ -65,7 +81,7 @@ function SearchArea({
           />
         )}
       </div>
-      {searchText.length > 0 && (
+      {isSearching && (
         <div className="cancel">
           <IconButton
             icon={"/resources/ic_close.svg"}

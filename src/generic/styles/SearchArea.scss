@@ -5,6 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-left: 1rem; //right padding is done by cancel button if searching and set dynamically if not searching
 }
 
 .search-area > .search-box {
@@ -38,6 +39,9 @@
 }
 
 .search-area > .cancel {
-  height: 50%;
+  height: 100%;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  padding-right: 1rem;
   padding-left: 1rem;
 }

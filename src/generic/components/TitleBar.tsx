@@ -17,7 +17,8 @@ function TitleBar({ title, onClose, matchParentHeight = false }: Props) {
         height: `${matchParentHeight ? "100%" : `${defaultHeight}rem`}`,
       }}
     >
-      <div className="close">
+      {/* We're using onClick on the outer div as well to increase the hitbox area */}
+      <div className="close" onClick={onClose}>
         <IconButton
           icon={"/resources/ic_close.svg"}
           onAction={onClose}
