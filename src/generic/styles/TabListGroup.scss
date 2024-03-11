@@ -18,12 +18,12 @@
 .tab-list-group .divider {
   margin-left: -0.5rem;
   margin-right: -0.5rem;
-  border-bottom: 1px solid base.$divider2-color;
+  border-bottom: 1px solid base.$divider-color;
 }
 
 .tab-list-group .selector {
   height: 0.3rem;
-  background-color: base.$selector-color;
+  background-color: base.$primary-color;
 }
 
 .tab-list-group .list {

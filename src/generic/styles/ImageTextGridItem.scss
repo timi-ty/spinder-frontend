@@ -6,13 +6,13 @@
   align-items: flex-end;
   justify-content: center;
   z-index: 0; //Create a stacking context just for this item.
-  background-color: base.$card-bg;
+  background-color: base.$card-bg-color;
   border-radius: 0.75rem;
   cursor: pointer;
 }
 
 .image-text-grid-item.selected {
-  border: 2px solid base.$selected-color;
+  border: 2px solid base.$selected-outline-color;
   border-radius: 0.75rem;
 }
 
@@ -40,7 +40,7 @@
 
 .image-text-grid-item > .text {
   position: relative;
-  color: base.$secondary-color;
+  color: base.$secondary-text-color;
   font-size: 1rem;
   font-weight: 400;
   padding-bottom: 1rem;

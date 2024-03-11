@@ -5,13 +5,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: base.$card-bg;
+  background: base.$card-bg-color;
   border-radius: 0.75rem;
   cursor: pointer;
 }
 
 .icon-text-grid-item.selected {
-  border: 2px solid base.$selected-color;
+  border: 2px solid base.$selected-outline-color;
   border-radius: 0.75rem;
 }
 
@@ -22,7 +22,7 @@
 }
 
 .icon-text-grid-item > .text {
-  color: base.$secondary-color;
+  color: base.$primary-text-color;
   font-size: 1rem;
   font-weight: 400;
   padding-top: 1rem;

@@ -68,7 +68,7 @@ function SearchArea({
       {searchText.length > 0 && (
         <div className="cancel">
           <IconButton
-            icon={"/resources/ic_close.png"}
+            icon={"/resources/ic_close.svg"}
             onAction={() => {
               setSearchText("");
               onTextChanged("");
