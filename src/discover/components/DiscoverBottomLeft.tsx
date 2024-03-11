@@ -39,7 +39,7 @@ function DiscoverBottomLeft() {
           <img
             title="Spotify"
             className="spotify-icon"
-            src="/resources/ic_spotify_black.png"
+            src="/resources/ic_spotify_white.png"
           />
         </a>
         <div className="track-title">

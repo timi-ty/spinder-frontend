@@ -37,7 +37,7 @@
 
 body {
   font: 100% base.$font-stack;
-  color: base.$primary-color;
+  color: base.$primary-text-color;
   background: base.$empty-area-bg-color;
   width: 100%;
   display: flex;
@@ -51,7 +51,7 @@ body {
 }
 
 a {
-  color: base.$primary-color;
+  color: base.$primary-text-color;
   text-decoration: none;
 }
 a:hover {
