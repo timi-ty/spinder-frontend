@@ -152,6 +152,30 @@ function DiscoverDeckView() {
     };
   }, []);
 
+  const containerRef: LegacyRef<HTMLDivElement> = useRef(null);
+  const [viewHeight, setViewHeight] = useState(0);
+
+  const containerSizeObserver = useMemo(
+    () =>
+      new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.contentRect) {
+            setViewHeight(entry.contentRect.height);
+          }
+        }
+      }),
+    []
+  );
+
+  useEffect(() => {
+    if (containerRef.current)
+      containerSizeObserver.observe(containerRef.current);
+    return () => {
+      if (containerRef.current)
+        containerSizeObserver.unobserve(containerRef.current);
+    };
+  });
+
   const clickDragDelta = isMobileTouchDevice()
     ? useTouchFlick(() => setTransitionTranslate(false), onFlickFinish)
     : useMouseFlick(() => setTransitionTranslate(false), onFlickFinish);
@@ -177,31 +201,7 @@ function DiscoverDeckView() {
     return () => {
       if (intervalHandle.current) clearInterval(intervalHandle.current);
     };
-  }, []);
-
-  const containerRef: LegacyRef<HTMLDivElement> = useRef(null);
-  const [viewHeight, setViewHeight] = useState(0);
-
-  const containerSizeObserver = useMemo(
-    () =>
-      new ResizeObserver((entries) => {
-        for (const entry of entries) {
-          if (entry.contentRect) {
-            setViewHeight(entry.contentRect.height);
-          }
-        }
-      }),
-    []
-  );
-
-  useEffect(() => {
-    if (containerRef.current)
-      containerSizeObserver.observe(containerRef.current);
-    return () => {
-      if (containerRef.current)
-        containerSizeObserver.unobserve(containerRef.current);
-    };
-  });
+  }, [viewHeight]);
 
   const getItemTop = (itemCursor: number) => {
     switch (activeDeckItemCursor) {
