@@ -37,13 +37,17 @@ async function finalizeLogin(): Promise<string> {
     } else {
       const errorResponse: SpinderError = await response.json();
 
-      throw new Error(
-        `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
-      );
+      throw errorResponse.status === 401 //We check for unauthorized in case we need to handle it differently.
+        ? errorResponse
+        : new Error(
+            `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
+          );
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    throw new Error("Failed to finalize login.");
+    throw error.status === 401 //We check for unauthorized in case we need to handle it differently.
+      ? error
+      : new Error("Failed to finalize login.");
   }
 }
 /**********LOGIN END**********/

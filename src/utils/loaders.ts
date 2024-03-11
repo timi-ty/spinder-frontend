@@ -19,6 +19,7 @@ import {
   errorAuthResource,
   loadAuthResource,
   loginAuthResource,
+  logoutAuthResource,
 } from "../state/slice.auth";
 import {
   errorDiscoverDestinationResource,
@@ -57,9 +58,15 @@ function loadAuth(): () => void {
       console.log(`Using Authentication for User:: ${userId}`);
     })
     .catch((error) => {
-      console.error(error);
-      dispatch(errorAuthResource());
-      console.error("Failed to use Authentication:: Logged out.");
+      if (error.status === 401) {
+        //Unauthorized is a special error we handle as a logout.
+        dispatch(logoutAuthResource());
+        console.error("Failed to use Authentication:: Logged out.");
+      } else {
+        console.error(error);
+        dispatch(errorAuthResource());
+        console.error("Failed to use Authentication:: Error.");
+      }
     });
 
   // We start here instead of after being logged in to couple this start call to the next stop call.
