@@ -169,7 +169,10 @@ function DiscoverDeckView() {
         clickDragDeltaRef.current.dy,
         frameTimeMillis
       );
-      setVerticalTranslation(verticalTranslationRef.current);
+      const sign = verticalTranslationRef.current < 0 ? -1 : 1;
+      const clampedTranslation =
+        sign * Math.min(Math.abs(verticalTranslationRef.current), viewHeight); //Don't allow translation more than 1 height up or down
+      setVerticalTranslation(clampedTranslation);
     }, frameTimeMillis);
     return () => {
       if (intervalHandle.current) clearInterval(intervalHandle.current);
