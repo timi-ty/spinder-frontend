@@ -32,9 +32,9 @@ function DiscoverDeckView() {
   const dispatch = useDispatch();
   //The Deck is a three item swap chain. We do this so that there's always a loaded item in front and behind the current one.
   const [activeDeckItemCursor, setActiveDeckItemCursor] = useState(0);
-  const [cursor0, setCursor0] = useState(0);
-  const [cursor1, setCursor1] = useState(1);
-  const [cursor2, setCursor2] = useState(2);
+  const [cursor2, setCursor2] = useState(-1); //Starts behind the active
+  const [cursor0, setCursor0] = useState(0); //Starts as the active
+  const [cursor1, setCursor1] = useState(1); //Starts in front of the active
 
   //The jumping item is the item that will have to change it's absolute position behind the scenes without a transition.
   const [jumpingItemCursor, setJumpingItemCursor] = useState(-1);
@@ -73,12 +73,12 @@ function DiscoverDeckView() {
     markVisitedDeckItem(activeDeckItem); //Marks the currently displaying deck item as visited before going to the next one.
     switch (activeDeckItemCursor) {
       case 0:
-        if (cursor2 < cursor0) setCursor2((i) => i + 3); //Only move cursor2 when it is behind cursor1.
+        setCursor2((i) => i + 3); //We're moving cursors here to progress through the source deck in a swap chain manner.
         setActiveDeckItemCursor(1);
         setJumpingItemCursor(2); //If we go from 0 to 1, then 2 has to jump.
         break;
       case 1:
-        setCursor0((i) => i + 3); //We're moving cursors here to progress through the source deck in a swap chain manner.
+        setCursor0((i) => i + 3);
         setActiveDeckItemCursor(2);
         setJumpingItemCursor(0); //If we go from 1 to 2, then 0 has to jump.
         break;
@@ -94,16 +94,12 @@ function DiscoverDeckView() {
   const previousDeckItemView = useCallback(() => {
     switch (activeDeckItemCursor) {
       case 0:
-        if (cursor0 < 3) {
-          console.warn("Already at the top. Can't go previous.");
-          return;
-        } //Reject previous when at the top. We use 3 because cursors increase in 3s.
         setCursor1((i) => i - 3);
         setActiveDeckItemCursor(2);
         setJumpingItemCursor(1); //If we go from 0 to 2, then 1 has to jump.
         break;
       case 1:
-        if (cursor1 >= 4) setCursor2((i) => i - 3); //If there is only one place up to go to, leave the 2 index alone.
+        setCursor2((i) => i - 3);
         setActiveDeckItemCursor(0);
         setJumpingItemCursor(2); //If we go from 1 to 0, then 2 has to jump.
         break;

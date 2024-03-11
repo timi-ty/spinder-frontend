@@ -150,12 +150,18 @@ function clearDestinationDeck() {
   onClearDestinationDeck();
 }
 
+//Accepts negative indexing
 function getDeckItem(index: number): DeckItem {
-  if (index > sourceDeck.length - 20) {
-    //Attempt a refill if we have fewer than 20 fresh items ahead of us.
+  const tryRefill = Math.abs(index) > sourceDeck.length - 10;
+  if (tryRefill) {
+    //Attempt a refill if we have fewer than 10 fresh items ahead of us.
     refillSourceDeckManaged();
   }
-  const safeIndex = index % sourceDeck.length; //Go round and round. Never let the user know that the deck is stale.
+  var safeIndex = index;
+  if (safeIndex < 0) {
+    safeIndex = sourceDeck.length + (safeIndex % sourceDeck.length); //A negative index is interpreted as counting from the end of the deck.
+  }
+  safeIndex = safeIndex % sourceDeck.length; //Go round and round. Never let the user know that the deck is stale.
   const deckItem = sourceDeck[safeIndex];
   console.log(
     `Getting source track: ${deckItem.trackName}, at index: ${index}, safe: ${safeIndex}`
