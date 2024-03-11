@@ -1,5 +1,5 @@
 import { logoutAuthResource } from "../state/slice.auth";
-import { dispatch } from "../state/store";
+import { dispatch, store } from "../state/store";
 import { renewAuthentication } from "./client.api";
 import { startFirebaseClient } from "./client.firebase";
 
@@ -72,5 +72,24 @@ function logout() {
   //Make logout API request here.
   dispatch(logoutAuthResource());
 }
+
+//Block all window level listeners (the app should not be interactive while waiting for full screen mode).
+const blockAllMouse = (ev: MouseEvent) => {
+  const block = store.getState().globalUIState.isAwaitingFullScreen;
+  if (block) ev.stopImmediatePropagation();
+};
+const blockAllTouch = (ev: TouchEvent) => {
+  const block = store.getState().globalUIState.isAwaitingFullScreen;
+  if (block) ev.stopImmediatePropagation();
+};
+
+//The blocking listeneres must be the first attached listeners and should not be detachd through the lifetime of the app.
+window.addEventListener("mousedown", blockAllMouse);
+window.addEventListener("mouseup", blockAllMouse);
+window.addEventListener("mousemove", blockAllMouse);
+
+window.addEventListener("touchstart", blockAllTouch);
+window.addEventListener("touchmove", blockAllTouch);
+window.addEventListener("touchend", blockAllTouch);
 
 export { startRenewingAuthentication, stopRenewingAuthentication, logout };

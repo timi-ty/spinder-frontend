@@ -1,13 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-interface ToastState {
+interface GlobalUIState {
+  isAwaitingFullScreen: boolean;
   isTopToastVisible: boolean;
   isBottomToastVisible: boolean;
   topToastMessage: string;
   bottomToastMessage: string;
 }
 
-const defaultToastState: ToastState = {
+const defaultGlobalUIState: GlobalUIState = {
+  isAwaitingFullScreen: false,
   isTopToastVisible: false,
   isBottomToastVisible: false,
   topToastMessage: "",
@@ -19,10 +21,18 @@ interface ToastAction {
   payload: string;
 }
 
-const toastSlice = createSlice({
-  name: "toastState",
-  initialState: defaultToastState,
+interface FullScreenAction {
+  type: string;
+  payload: boolean;
+}
+
+const globalUISlice = createSlice({
+  name: "globalUIState",
+  initialState: defaultGlobalUIState,
   reducers: {
+    setIsAwaitingFullScreen(state, action: FullScreenAction) {
+      state.isAwaitingFullScreen = action.payload;
+    },
     showTopToast: (state, action: ToastAction) => {
       state.isTopToastVisible = true;
       state.topToastMessage = action.payload;
@@ -40,11 +50,16 @@ const toastSlice = createSlice({
   },
 });
 
-export const { showBottomToast, showTopToast, hideBottomToast, hideTopToast } =
-  toastSlice.actions;
+export const {
+  showBottomToast,
+  showTopToast,
+  hideBottomToast,
+  hideTopToast,
+  setIsAwaitingFullScreen,
+} = globalUISlice.actions;
 
-export { type ToastState };
+export { type GlobalUIState };
 
-const toastStateReducer = toastSlice.reducer;
+const globalUIStateReducer = globalUISlice.reducer;
 
-export { toastStateReducer };
+export { globalUIStateReducer };

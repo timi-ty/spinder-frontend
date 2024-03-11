@@ -10,7 +10,7 @@ import {
   discoverDestinationStateReducer,
 } from "./slice.discoverdestination";
 import { DeckState, deckStateReducer } from "./slice.deck";
-import { ToastState, toastStateReducer } from "./slice.toast";
+import { GlobalUIState, globalUIStateReducer } from "./slice.globalui";
 
 type ResourceStatus =
   | "Empty"
@@ -26,7 +26,7 @@ interface StoreState {
   discoverSourceState: DiscoverSourceState;
   discoverDestinationState: DiscoverDestinationState;
   deckState: DeckState;
-  toastState: ToastState;
+  globalUIState: GlobalUIState;
 }
 
 const store = configureStore({
@@ -36,7 +36,7 @@ const store = configureStore({
     discoverSourceState: discoverSourceStateReducer,
     discoverDestinationState: discoverDestinationStateReducer,
     deckState: deckStateReducer,
-    toastState: toastStateReducer,
+    globalUIState: globalUIStateReducer,
   },
 });
 

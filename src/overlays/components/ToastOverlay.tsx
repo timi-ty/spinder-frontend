@@ -4,7 +4,7 @@ import {
   hideTopToast,
   showBottomToast,
   showTopToast,
-} from "../../state/slice.toast";
+} from "../../state/slice.globalui";
 import { StoreState, dispatch } from "../../state/store";
 import { useEffect, useRef } from "react";
 import { nullTimeoutHandle } from "../../utils/utils";
@@ -14,17 +14,17 @@ const toastDurationMillis = 2000; //Show toast messages for 2 seconds.
 
 function ToastOverlay() {
   const isTopToastShowing = useSelector<StoreState, boolean>(
-    (state) => state.toastState.isTopToastVisible
+    (state) => state.globalUIState.isTopToastVisible
   );
   const isBottomToastShowing = useSelector<StoreState, boolean>(
-    (state) => state.toastState.isBottomToastVisible
+    (state) => state.globalUIState.isBottomToastVisible
   );
 
   const topToastMessage = useSelector<StoreState, string>(
-    (state) => state.toastState.topToastMessage
+    (state) => state.globalUIState.topToastMessage
   );
   const bottomToastMessage = useSelector<StoreState, string>(
-    (state) => state.toastState.bottomToastMessage
+    (state) => state.globalUIState.bottomToastMessage
   );
 
   const topTimeoutHandle = useRef(nullTimeoutHandle);

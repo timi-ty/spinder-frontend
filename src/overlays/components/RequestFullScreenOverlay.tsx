@@ -1,5 +1,7 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import "../styles/RequestFullScreenOverlay.scss";
+import { useDispatch } from "react-redux";
+import { setIsAwaitingFullScreen } from "../../state/slice.globalui";
 
 function swithToFullScreen() {
   if (!document.fullscreenElement) {
@@ -10,35 +12,12 @@ function swithToFullScreen() {
 }
 
 function RequestFullScreenOverlay() {
-  //Block all window level listeners (the app should not be interactive while waiting for full screen mode). This works because we assume this component is always mounted before other interactive components.
-  const blockAllMouse = useCallback((ev: MouseEvent) => {
-    ev.stopImmediatePropagation();
-  }, []);
-  const blockAllTouch = useCallback((ev: TouchEvent) => {
-    ev.stopImmediatePropagation();
-  }, []);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    window.addEventListener("mousedown", blockAllMouse);
-    window.addEventListener("mouseup", blockAllMouse);
-    window.addEventListener("mousemove", blockAllMouse);
-
+    dispatch(setIsAwaitingFullScreen(true));
     return () => {
-      window.removeEventListener("mousedown", blockAllMouse);
-      window.removeEventListener("mouseup", blockAllMouse);
-      window.removeEventListener("mousemove", blockAllMouse);
-    };
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("touchstart", blockAllTouch);
-    window.addEventListener("touchmove", blockAllTouch);
-    window.addEventListener("touchend", blockAllTouch);
-
-    return () => {
-      window.removeEventListener("touchstart", blockAllTouch);
-      window.removeEventListener("touchmove", blockAllTouch);
-      window.removeEventListener("touchend", blockAllTouch);
+      dispatch(setIsAwaitingFullScreen(false));
     };
   }, []);
 
