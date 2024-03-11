@@ -34,9 +34,13 @@
   //Use rest of height less title, search and top-level margins.
   height: calc(100% - 9rem);
   padding-left: 1rem;
-  padding-right: 8px; //Scrollbar is always 8px wide. Balance out.
+  padding-right: 12px; //Scrollbar is always 4px wide. Balance out.
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+.discover > .source-picker > .bottom > .tab-list-group {
+  padding-top: 1rem;
 }
 
 .discover > .source-picker .selected-source-item {
@@ -58,7 +62,6 @@
 }
 
 .discover > .source-picker .selected-source-item .text {
-  color: base.$secondary-text-color;
   padding-top: 0.25rem;
   font-size: 1rem;
 }

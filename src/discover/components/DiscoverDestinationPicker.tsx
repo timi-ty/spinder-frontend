@@ -189,9 +189,11 @@ function DiscoverDestinationPicker({ close }: Props) {
     <div className="destination-picker" style={{ opacity: `${opacity}` }}>
       {!isLoadingPicker && !isLoadingDestinationChange && !isPickerError && (
         <>
-          <div className="title">
-            <TitleBar title={"Destination"} onClose={() => closePicker()} />
-          </div>
+          {!isSearching && (
+            <div className="title">
+              {<TitleBar title={"Destination"} onClose={() => closePicker()} />}
+            </div>
+          )}
           <div className="search">
             <SearchArea
               onSearch={onSearch}
@@ -200,7 +202,11 @@ function DiscoverDestinationPicker({ close }: Props) {
               isLoading={isSearching && !isResultUpdated}
             />
           </div>
-          <div className="bottom">
+          {/* When searching, the title bar goes away which allows the bottom to occupy more space. */}
+          <div
+            className="bottom"
+            style={{ height: `${isSearching ? "calc(100% - 5rem)" : ""}` }}
+          >
             {!isSearching && (
               <BalancedGrid
                 items={localDestinationItems}

@@ -205,9 +205,11 @@ function DiscoverSourcePicker({ close }: Props) {
     <div className="source-picker" style={{ opacity: `${opacity}` }}>
       {!isLoadingPicker && !isLoadingSourceChange && !isPickerError && (
         <>
-          <div className="title">
-            <TitleBar title={"Source"} onClose={() => closePicker()} />
-          </div>
+          {!isSearching && (
+            <div className="title">
+              <TitleBar title={"Source"} onClose={() => closePicker()} />
+            </div>
+          )}
           <div className="search">
             <SearchArea
               onSearch={onSearch}
@@ -216,7 +218,11 @@ function DiscoverSourcePicker({ close }: Props) {
               isLoading={isSearching && !isResultUpdated}
             />
           </div>
-          <div className="bottom">
+          {/* When searching, the title bar goes away which allows the bottom to occupy more space. */}
+          <div
+            className="bottom"
+            style={{ height: `${isSearching ? "calc(100% - 5rem)" : ""}` }}
+          >
             {!isSearching && !isCompositeSource(selectedSourceItem) && (
               <div
                 className={`selected-source-item`}

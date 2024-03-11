@@ -24,11 +24,11 @@
 /* Style the scrollbar for WebKit browsers (Chrome, Safari) */
 *::-webkit-scrollbar {
   // width: 16px; /* Fixed width for the scrollbar */
-  width: 8px;
+  width: 4px;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: gray; /* Color of the thumb (scrollable area) */
+  background-color: base.$divider-color; /* Color of the thumb (scrollable area) */
 }
 
 *::-webkit-scrollbar-track {

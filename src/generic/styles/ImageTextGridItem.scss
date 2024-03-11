@@ -40,9 +40,10 @@
 
 .image-text-grid-item > .text {
   position: relative;
-  color: base.$secondary-text-color;
+  color: base.$primary-text-color;
   font-size: 1rem;
   font-weight: 400;
   padding-bottom: 1rem;
   z-index: 1; //Show the text ontop of the gradient.
+  text-align: center;
 }
