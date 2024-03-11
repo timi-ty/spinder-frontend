@@ -1,26 +1,6 @@
-const audioElementMap: Map<number, HTMLAudioElement> = new Map();
 const timeUpdateListeners: Map<number, (element: HTMLAudioElement) => void> =
   new Map();
 var listenerCounter = 0;
-
-function registerAudioElement(element: HTMLAudioElement, position: number) {
-  audioElementMap.set(position, element);
-}
-
-function unregisterAudioElement(position: number) {
-  audioElementMap.delete(position);
-}
-
-function playAudioElement(audioElementIndex: number) {
-  const audioElement = audioElementMap.get(audioElementIndex);
-  if (!audioElement) {
-    console.error(
-      `Audio element at index ${audioElementIndex} is not registered.`
-    );
-    return;
-  }
-  audioElement.play();
-}
 
 //Returns a number handle that can be used to remove the added listener.
 function addAudioElementTimeUpdateListener(
@@ -41,9 +21,6 @@ function onAudioElementTimeUpdate(element: HTMLAudioElement) {
 }
 
 export {
-  registerAudioElement,
-  unregisterAudioElement,
-  playAudioElement,
   addAudioElementTimeUpdateListener,
   removeAudioElementTimeUpdateListener,
   onAudioElementTimeUpdate,

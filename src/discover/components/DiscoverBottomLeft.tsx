@@ -43,13 +43,17 @@ function DiscoverBottomLeft() {
           />
         </a>
         <div className="track-title">
-          <a href={`${activeDeckItem.trackUri}`}>
+          <a className="link" href={`${activeDeckItem.trackUri}`}>
             <span>{activeDeckItem.trackName}</span>
           </a>
         </div>
         <div className="track-artists">
           {activeDeckItem.artists.map((artist, index) => (
-            <a key={artist.artistUri} href={`${artist.artistUri}`}>
+            <a
+              key={artist.artistUri}
+              className="link"
+              href={`${artist.artistUri}`}
+            >
               <span>{`${artist.artistName}${
                 activeDeckItem.artists.length > 0 &&
                 index < activeDeckItem.artists.length - 1

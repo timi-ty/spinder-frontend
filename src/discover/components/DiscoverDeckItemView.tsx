@@ -1,9 +1,5 @@
 import { useEffect, useRef } from "react";
-import {
-  onAudioElementTimeUpdate,
-  registerAudioElement,
-  unregisterAudioElement,
-} from "../../client/client.audio";
+import { onAudioElementTimeUpdate } from "../../client/client.audio";
 import "../styles/DiscoverDeckItemView.scss";
 import { DeckItem } from "../../client/client.model";
 
@@ -30,9 +26,7 @@ function DiscoverDeckItemView({
     if (audioRef.current) {
       audioRef.current.loop = true;
       audioRef.current.addEventListener("timeupdate", onTimeUpdate);
-      registerAudioElement(audioRef.current, deckItemViewIndex);
       return () => {
-        unregisterAudioElement(deckItemViewIndex);
         audioRef.current?.removeEventListener("timeupdate", onTimeUpdate);
       };
     }

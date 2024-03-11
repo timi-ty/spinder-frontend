@@ -10,9 +10,8 @@ import {
 import DiscoverDeckItemView from "./DiscoverDeckItemView";
 import "../styles/DiscoverDeckView.scss";
 import { getDeckItem, markVisitedDeckItem } from "../../client/client.deck";
-import { playAudioElement } from "../../client/client.audio";
 import { InteractionPanelContext } from "../../utils/context";
-import { useClickDrag, useTouchDrag } from "../../utils/hooks";
+import { useMouseFlick, useTouchFlick } from "../../utils/hooks";
 import { useDispatch } from "react-redux";
 import {
   changeActiveDeckItem,
@@ -28,10 +27,6 @@ import {
 } from "../../utils/utils";
 
 const dragActionThreshold = 20;
-// Math.max(
-//   window.document.documentElement.clientHeight * 0.04,
-//   40
-// );
 
 function DiscoverDeckView() {
   const dispatch = useDispatch();
@@ -80,19 +75,16 @@ function DiscoverDeckView() {
       case 0:
         if (cursor2 < cursor0) setCursor2((i) => i + 3); //Only move cursor2 when it is behind cursor1.
         setActiveDeckItemCursor(1);
-        playAudioElement(1);
         setJumpingItemCursor(2); //If we go from 0 to 1, then 2 has to jump.
         break;
       case 1:
         setCursor0((i) => i + 3); //We're moving cursors here to progress through the source deck in a swap chain manner.
         setActiveDeckItemCursor(2);
-        playAudioElement(2);
         setJumpingItemCursor(0); //If we go from 1 to 2, then 0 has to jump.
         break;
       case 2:
         setCursor1((i) => i + 3);
         setActiveDeckItemCursor(0);
-        playAudioElement(0);
         setJumpingItemCursor(1); //If we go from 2 to 0, then 1 has to jump.
         break;
     }
@@ -108,19 +100,16 @@ function DiscoverDeckView() {
         } //Reject previous when at the top. We use 3 because cursors increase in 3s.
         setCursor1((i) => i - 3);
         setActiveDeckItemCursor(2);
-        playAudioElement(2);
         setJumpingItemCursor(1); //If we go from 0 to 2, then 1 has to jump.
         break;
       case 1:
         if (cursor1 >= 4) setCursor2((i) => i - 3); //If there is only one place up to go to, leave the 2 index alone.
         setActiveDeckItemCursor(0);
-        playAudioElement(0);
         setJumpingItemCursor(2); //If we go from 1 to 0, then 2 has to jump.
         break;
       case 2:
         setCursor0((i) => i - 3);
         setActiveDeckItemCursor(1);
-        playAudioElement(1);
         setJumpingItemCursor(0); //If we go from 2 to 1, then 0 has to jump.
         break;
     }
@@ -128,47 +117,48 @@ function DiscoverDeckView() {
   }, [activeDeckItemCursor, cursor0]);
 
   const [isPlaying, setIsPlaying] = useState(false);
+  const doPlayPauseClick = useRef(true); //Used to block pausing when changing tracks.
 
   const verticalTranslationRef = useRef(0);
   const [verticalTranslation, setVerticalTranslation] = useState(0);
 
   const [transitionTranslate, setTransitionTranslate] = useState(false);
 
-  const onDragFinish = useCallback(
+  const onFlickFinish = useCallback(
     (dragDelta: { dx: number; dy: number }) => {
       setJumpingItemCursor(-1); //Before calling next or previous, we assume that no item needs to jump since it's possible for a drag to be cosmetic.
       verticalTranslationRef.current = 0; //As soon as drag finishes, reset the progressive vertical translation.
       setVerticalTranslation(0);
       setTransitionTranslate(true);
       if (dragDelta.dy < -dragActionThreshold) {
+        doPlayPauseClick.current = false; //Any click action dispatched immediately after this flick should be ignored as the gesture was handled as a flick.
+        setTimeout(() => (doPlayPauseClick.current = true), 200); //We assume that any click action 200ms after the click is independent of the flick gesture.
         nextDeckItemView();
       } else if (dragDelta.dy > dragActionThreshold) {
+        doPlayPauseClick.current = false;
+        setTimeout(() => (doPlayPauseClick.current = true), 200);
         previousDeckItemView();
       }
     },
     [nextDeckItemView, previousDeckItemView]
   );
+
   const onClickPlayPause = useCallback(() => {
-    setIsPlaying((p) => !p);
+    if (doPlayPauseClick.current) setIsPlaying((p) => !p);
+    doPlayPauseClick.current = true;
   }, []);
 
   const interactionContainer = useContext(InteractionPanelContext);
+  useEffect(() => {
+    interactionContainer.addEventListener("click", onClickPlayPause);
+    return () => {
+      interactionContainer.removeEventListener("click", onClickPlayPause);
+    };
+  }, []);
 
   const clickDragDelta = isMobileTouchDevice()
-    ? useTouchDrag(
-        interactionContainer,
-        { absY: 20, absX: 20 },
-        () => setTransitionTranslate(false),
-        onDragFinish,
-        onClickPlayPause
-      )
-    : useClickDrag(
-        interactionContainer,
-        { absY: 5, absX: 5 },
-        () => setTransitionTranslate(false),
-        onDragFinish,
-        onClickPlayPause
-      );
+    ? useTouchFlick(() => setTransitionTranslate(false), onFlickFinish)
+    : useMouseFlick(() => setTransitionTranslate(false), onFlickFinish);
 
   const clickDragDeltaRef = useRef(clickDragDelta);
   clickDragDeltaRef.current = clickDragDelta; //Ref to break away from closure.
@@ -271,17 +261,14 @@ function DiscoverDeckView() {
   );
 }
 
-// const smoothingConstant = Math.max(
-//   window.document.documentElement.clientHeight * 0.012,
-//   12
-// );
+const smoothingConstant = 12;
 
 function smoothValue(
   from: number,
   to: number,
   deltaTimeMillis: number
 ): number {
-  return lerp(from, to, (12 * deltaTimeMillis) / 1000); //Using lerp with feedback makes it non-linear and nice.
+  return lerp(from, to, (smoothingConstant * deltaTimeMillis) / 1000); //Using lerp with feedback makes it non-linear and nice.
 }
 
 export default DiscoverDeckView;

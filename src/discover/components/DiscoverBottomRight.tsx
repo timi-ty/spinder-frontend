@@ -1,4 +1,11 @@
-import { LegacyRef, useContext, useEffect, useRef, useState } from "react";
+import {
+  LegacyRef,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useSelector } from "react-redux";
 import { DeckItem } from "../../client/client.model";
 import SquareImage from "../../generic/components/SquareImage";
@@ -38,15 +45,15 @@ function DiscoverBottomRight() {
   const artistImageContainerRef = useRef(null);
   const rightBottomRef: LegacyRef<HTMLDivElement> = useRef(null);
 
+  const onClickOutside = useCallback(() => {
+    setIsShowingAccountActions(false);
+  }, []);
+
   const interactionContainer = useContext(InteractionPanelContext);
   useEffect(() => {
-    interactionContainer.addEventListener("click", () => {
-      if (isShowingAccountActions) setIsShowingAccountActions(false);
-    });
+    interactionContainer.addEventListener("click", onClickOutside);
     return () => {
-      interactionContainer.removeEventListener("click", () => {
-        if (isShowingAccountActions) setIsShowingAccountActions(false);
-      });
+      interactionContainer.removeEventListener("click", onClickOutside);
     };
   }, [isShowingAccountActions]);
 
