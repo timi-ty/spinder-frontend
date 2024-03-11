@@ -88,7 +88,7 @@ function Discover() {
         <div className="deck-loader-error">
           <ErrorOneMessageTwoAction
             message={
-              "We encountered a problem while curating your deck. If this error persists, please try a different source."
+              "We encountered a problem while curating your deck. If this error persists, please try a different source or reload the page."
             }
             actionOne={{
               name: "Retry",

@@ -5,8 +5,12 @@
 }
 
 .discover > .deck-loader-error {
-  height: calc(100% - 5rem); //Full minus top
+  position: absolute;
+  top: 0px;
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  z-index: 2;
 }
