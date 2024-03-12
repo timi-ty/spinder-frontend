@@ -16,8 +16,6 @@ import {
   SpotifyUserProfileData,
 } from "./client.model";
 
-console.log(`Meta Dev:: ${import.meta.env.DEV}`);
-
 const backendUrl = import.meta.env.DEV
   ? "http://localhost:3001/api"
   : "https://spinderapp-9f889b1324ab.herokuapp.com/api";
