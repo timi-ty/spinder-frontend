@@ -5,15 +5,29 @@
   height: 100%;
 }
 
+.home > form {
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .home > div {
   width: 100%;
   padding: 1rem;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
-.home > div * {
-  width: -moz-fit-content;
-  width: fit-content;
-  padding: 1rem;
+.home .email-input {
+  padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+}
+
+.home .request-access {
+  margin-top: 1rem;
+  padding: 0.5rem;
 }

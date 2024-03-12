@@ -23,6 +23,7 @@ const backendUrl = import.meta.env.DEV
   : "https://spinderapp-9f889b1324ab.herokuapp.com/api";
 
 /**********LOGIN START**********/
+const requestLoginAccessUrl = `${backendUrl}/login/request_access`;
 const loginWithSpotifyUrl = `${backendUrl}/login`;
 
 async function finalizeLogin(): Promise<string> {
@@ -378,6 +379,7 @@ function safeStringify(data: any) {
 }
 
 export {
+  requestLoginAccessUrl as requestAccessUrl,
   loginWithSpotifyUrl,
   finalizeLogin,
   renewAuthentication,
