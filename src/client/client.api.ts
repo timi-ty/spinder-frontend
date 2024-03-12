@@ -18,7 +18,7 @@ import {
 
 const backendUrl = import.meta.env.DEV
   ? "http://localhost:3001/api"
-  : "https://spinderapp-9f889b1324ab.herokuapp.com/api";
+  : "https://spindr.pro/api";
 
 /**********LOGIN START**********/
 const requestLoginAccessUrl = `${backendUrl}/login/request_access`;
