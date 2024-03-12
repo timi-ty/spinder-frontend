@@ -38,7 +38,7 @@ interface DiscoverSourceItem
 function isCompositeSource(item: DiscoverSource): boolean {
   return (
     item.type == "Anything Me" ||
-    item.type == "Spinder People" ||
+    item.type == "Spindr People" ||
     item.type == "My Artists" ||
     item.type == "My Playlists"
   );
@@ -50,7 +50,7 @@ function DiscoverSourceToItem(item: DiscoverSource): DiscoverSourceItem {
     case "Anything Me":
       graphic = "/resources/ic_anything_me_stars.svg";
       break;
-    case "Spinder People":
+    case "Spindr People":
       graphic = "/resources/ic_spinder_people_friends.svg";
       break;
     case "My Artists":
