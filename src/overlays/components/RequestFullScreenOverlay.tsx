@@ -2,14 +2,7 @@ import { useEffect } from "react";
 import "../styles/RequestFullScreenOverlay.scss";
 import { useDispatch } from "react-redux";
 import { setIsAwaitingFullScreen } from "../../state/slice.globalui";
-
-function swithToFullScreen() {
-  if (!document.fullscreenElement) {
-    if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen();
-    }
-  }
-}
+import { swithToFullScreen } from "../../client/client";
 
 function RequestFullScreenOverlay() {
   const dispatch = useDispatch();

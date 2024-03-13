@@ -9,13 +9,14 @@ import { logout } from "./client/client";
 import RequestFullScreenOverlay from "./overlays/components/RequestFullScreenOverlay";
 import { isMobileTouchDevice } from "./utils/utils";
 import { useCallback, useEffect, useState } from "react";
+import { isFullScreen as getIsFullScreen } from "./client/client";
 
 function App() {
   const authStatus = useAuthResource();
-  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(getIsFullScreen());
 
   const onFullScreenChange = useCallback(() => {
-    setIsFullScreen(document.fullscreenElement !== null);
+    setIsFullScreen(getIsFullScreen());
   }, []);
 
   useEffect(() => {

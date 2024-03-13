@@ -101,4 +101,33 @@ window.addEventListener("touchstart", blockAllTouch);
 window.addEventListener("touchmove", blockAllTouch);
 window.addEventListener("touchend", blockAllTouch);
 
-export { startRenewingAuthentication, stopRenewingAuthentication, logout };
+function isFullScreen() {
+  const untypedDocument: any = document;
+  return (
+    untypedDocument.fullscreenElement ||
+    untypedDocument.mozFullScreenElement ||
+    untypedDocument.webkitFullscreenElement ||
+    untypedDocument.msFullscreenElement
+  );
+}
+
+function swithToFullScreen() {
+  const untypedDocument: any = document;
+  if (untypedDocument.documentElement.requestFullscreen) {
+    untypedDocument.documentElement.requestFullscreen();
+  } else if (untypedDocument.documentElement.mozRequestFullScreen) {
+    untypedDocument.documentElement.mozRequestFullScreen();
+  } else if (untypedDocument.documentElement.webkitRequestFullscreen) {
+    untypedDocument.documentElement.webkitRequestFullscreen(true);
+  } else if (untypedDocument.documentElement.msRequestFullscreen) {
+    untypedDocument.documentElement.msRequestFullscreen();
+  }
+}
+
+export {
+  startRenewingAuthentication,
+  stopRenewingAuthentication,
+  logout,
+  isFullScreen,
+  swithToFullScreen,
+};
