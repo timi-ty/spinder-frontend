@@ -17,7 +17,7 @@ function Home() {
           id="email"
           name="email"
           type="email"
-          placeholder="Your email address"
+          placeholder="Your Spotify email address"
         />
         <input
           disabled={disableSubmit}
