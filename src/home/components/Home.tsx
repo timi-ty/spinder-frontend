@@ -10,6 +10,9 @@ function Home() {
       <div>
         <h1>Spindr</h1>
       </div>
+      <div>
+        <div>Find music you love.</div>
+      </div>
       <form action={requestAccessUrl} onSubmit={() => setDisableSubmit(true)}>
         <input
           required
