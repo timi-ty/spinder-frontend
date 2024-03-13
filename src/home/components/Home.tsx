@@ -13,7 +13,11 @@ function Home() {
       <div>
         <div>Find music you love.</div>
       </div>
-      <form action={requestAccessUrl} onSubmit={() => setDisableSubmit(true)}>
+      <form
+        action={requestAccessUrl}
+        onSubmit={() => setDisableSubmit(true)}
+        method="POST"
+      >
         <input
           required
           className="email-input"
