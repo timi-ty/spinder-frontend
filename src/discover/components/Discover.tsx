@@ -10,6 +10,8 @@ import {
   useDeck,
   useDiscoverDestinationResource,
   useDiscoverSourceResource,
+  useNoDocumentScroll,
+  useWindowSize,
 } from "../../utils/hooks";
 import FullComponentLoader from "../../generic/components/FullComponentLoader";
 import { nullTimeoutHandle } from "../../utils/utils";
@@ -29,6 +31,9 @@ const waitForDeckMillis = 15000; //We wait for up to 15 seconds for the deck to 
 
 function Discover() {
   const dispatch = useDispatch();
+  useNoDocumentScroll();
+  const [, windowHeight] = useWindowSize();
+
   const isDeckReady = useDeck(); //Add a loader until deck get ready.
   const isSelectingSource = useSelector<StoreState, boolean>(
     (state) => state.globalUIState.isSourcePickerOpen
@@ -77,7 +82,7 @@ function Discover() {
   const ineractionPanelRef: LegacyRef<HTMLDivElement> = useRef(null);
 
   return (
-    <div className="discover">
+    <div className="discover" style={{ maxHeight: `${windowHeight}px` }}>
       <DiscoverBackgroundPanel ref={ineractionPanelRef} />
       <DiscoverTop
         onClickDestinationPicker={() =>

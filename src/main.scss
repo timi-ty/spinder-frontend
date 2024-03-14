@@ -43,12 +43,10 @@ body {
   height: 100%;
   display: flex;
   justify-content: center;
-  overflow: hidden;
 }
 
 #root {
   position: relative;
-  overflow: hidden;
   @extend %root-area;
 }
 

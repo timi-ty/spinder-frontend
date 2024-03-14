@@ -1,11 +1,21 @@
 import { useSelector } from "react-redux";
 import { DeckItem, DiscoverSource } from "../../client/client.model";
 import { StoreState, dispatch } from "../../state/store";
-import { useCallback, useContext } from "react";
+import {
+  LegacyRef,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { changeSource } from "../../client/client.deck";
 import { selectDiscoverSource } from "../../state/slice.discoversource";
 import "../styles/DiscoverBottomLeft.scss";
 import { ToastContext } from "../../utils/context";
+
+const gap = 1; //rem
 
 function DiscoverBottomLeft() {
   const showToast = useContext(ToastContext);
@@ -32,9 +42,33 @@ function DiscoverBottomLeft() {
     );
   }, []);
 
+  const topContainerRef: LegacyRef<HTMLDivElement> = useRef(null);
+  const [topContainerHeight, setTopContainerHeight] = useState(0);
+
+  const topContainerSizeObserver = useMemo(
+    () =>
+      new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.contentRect) {
+            setTopContainerHeight(entry.contentRect.height);
+          }
+        }
+      }),
+    []
+  );
+
+  useEffect(() => {
+    if (topContainerRef.current)
+      topContainerSizeObserver.observe(topContainerRef.current);
+    return () => {
+      if (topContainerRef.current)
+        topContainerSizeObserver.unobserve(topContainerRef.current);
+    };
+  }, [topContainerSizeObserver]);
+
   return (
     <div className="bottom-left">
-      <div className="top">
+      <div ref={topContainerRef} className="top">
         <a href={`${activeDeckItem.trackUri}`}>
           <img
             title="Spotify"
@@ -64,7 +98,10 @@ function DiscoverBottomLeft() {
           ))}
         </div>
       </div>
-      <div className="bottom">
+      <div
+        className="bottom"
+        style={{ height: `calc(100% - ${topContainerHeight}px - ${gap}rem)` }}
+      >
         <div className="related-sources">
           {relatedSources.map((source) => (
             <div

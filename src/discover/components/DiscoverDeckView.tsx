@@ -186,7 +186,7 @@ function DiscoverDeckView() {
       if (containerRef.current)
         containerSizeObserver.unobserve(containerRef.current);
     };
-  });
+  }, [containerSizeObserver]);
 
   const clickDragDelta = isMobileTouchDevice()
     ? useTouchFlick(() => setTransitionTranslate(false), onFlickFinish)

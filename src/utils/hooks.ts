@@ -108,6 +108,44 @@ function useDiscoverDestinationResource() {
 /**********RESOURCE HOOKS END**********/
 
 /**********REGULAR HOOKS START**********/
+function useNoDocumentScroll() {
+  const root = document.getElementById("root")!;
+
+  const preventScroll = useCallback((event: TouchEvent) => {
+    event.preventDefault();
+  }, []);
+
+  useEffect(() => {
+    document.body.addEventListener("touchmove", preventScroll, {
+      passive: false,
+    });
+    root.style.overflow = "hidden";
+    return () => {
+      document.body.removeEventListener("touchmove", preventScroll);
+      root.style.overflow = "";
+    };
+  }, []);
+}
+
+function useWindowSize(): number[] {
+  const [width, setWidth] = useState(window.innerWidth);
+  const [height, setHeight] = useState(window.innerHeight);
+
+  const onResize = () => {
+    setWidth(window.innerWidth);
+    setHeight(window.innerHeight);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
+
+  return [width, height];
+}
+
 function useDeck(): boolean {
   const dispatch = useDispatch();
   const userId = useSelector<StoreState, string>(
@@ -270,4 +308,6 @@ export {
   useDeck,
   useMouseFlick,
   useTouchFlick,
+  useNoDocumentScroll,
+  useWindowSize,
 };

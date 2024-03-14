@@ -1,9 +1,6 @@
 .discover .bottom-left {
+  position: relative;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 1rem;
 }
 
 .discover .bottom-left .spotify-icon {
@@ -39,6 +36,8 @@
 }
 
 .discover .bottom-left .related-sources {
+  position: absolute;
+  bottom: 0px;
   width: 100%;
   height: 100%;
   display: flex;
@@ -64,12 +63,16 @@
 
 .discover .bottom-left .top {
   width: 100%;
-  height: 100%; //Share space evenly with bottom
+  max-height: 50%;
 }
 
 .discover .bottom-left .bottom {
+  position: absolute;
+  bottom: 0px;
   width: 100%;
-  height: 100%; //Share space evenly with top
+  height: calc(
+    50% - 1rem
+  ); //leave 1rem gap at the top (shouldn't be needed because the height of this container is set dynamically)
   overflow-y: hidden;
   padding-bottom: 4px; //Makeup for the a link space on teh profile image to align them at the bottom
 }
