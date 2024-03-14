@@ -118,7 +118,7 @@ function swithToFullScreen() {
   } else if (untypedDocument.documentElement.mozRequestFullScreen) {
     untypedDocument.documentElement.mozRequestFullScreen();
   } else if (untypedDocument.documentElement.webkitRequestFullscreen) {
-    untypedDocument.documentElement.webkitRequestFullscreen(true);
+    untypedDocument.documentElement.webkitRequestFullscreen();
   } else if (untypedDocument.documentElement.msRequestFullscreen) {
     untypedDocument.documentElement.msRequestFullscreen();
   }

@@ -32,6 +32,15 @@ function isMobileTouchDevice() {
   );
 }
 
+function useFullscreenDevice() {
+  return (
+    /Android|webOS|iPad|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    ) &&
+    ("ontouchstart" in window || navigator.maxTouchPoints > 0)
+  );
+}
+
 const nullTimeoutHandle: NodeJS.Timeout | null = null;
 
 export {
@@ -41,4 +50,5 @@ export {
   shuffleArrayInPlace,
   lerp,
   isMobileTouchDevice,
+  useFullscreenDevice,
 };
