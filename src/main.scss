@@ -40,8 +40,10 @@ body {
   color: base.$primary-text-color;
   background: base.$empty-area-bg-color;
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
+  overflow: hidden;
 }
 
 #root {
