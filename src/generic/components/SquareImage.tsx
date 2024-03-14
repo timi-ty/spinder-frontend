@@ -71,7 +71,7 @@ function SquareImage({
       className={`circle-image ${extraClassName}`}
       src={image}
       onError={(ev) =>
-        (ev.currentTarget.src = "public/resources/fallback_square.svg")
+        (ev.currentTarget.src = "/resources/fallback_square.svg")
       }
       style={{
         height: `${isHeightLimited ? `${containerHeight}px` : `${size}px`}`,
