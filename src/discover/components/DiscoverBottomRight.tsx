@@ -32,7 +32,7 @@ function DiscoverBottomRight() {
 
   const [isShowingAccountActions, setIsShowingAccountActions] = useState(false);
 
-  useSpotifyProfileResource();
+  const profileResourceStatus = useSpotifyProfileResource();
   const profileImage = useSelector<StoreState, string>((state) =>
     state.userProfileState.data.images.length > 0
       ? state.userProfileState.data.images[0].url
@@ -131,7 +131,11 @@ function DiscoverBottomRight() {
         onClick={() => setIsShowingAccountActions((a) => !a)}
       >
         <SquareImage
-          image={profileImage}
+          image={
+            profileResourceStatus === "Loaded"
+              ? profileImage
+              : "public/resources/fallback_square.svg"
+          }
           containerRef={rightBottomRef}
           circleCrop
           forceIsWidthLimited
