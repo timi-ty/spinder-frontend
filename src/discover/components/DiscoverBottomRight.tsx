@@ -134,7 +134,7 @@ function DiscoverBottomRight() {
           image={
             profileResourceStatus === "Loaded"
               ? profileImage
-              : "public/resources/fallback_square.svg"
+              : "/resources/fallback_square.svg"
           }
           containerRef={rightBottomRef}
           circleCrop
