@@ -54,7 +54,7 @@ function IconTextGridItem({
         className="icon"
         src={icon}
         onError={(ev) =>
-          (ev.currentTarget.src = "src/assets/fallback_square.svg")
+          (ev.currentTarget.src = "/resources/fallback_square.svg")
         }
       />
       <div className="text">{text}</div>

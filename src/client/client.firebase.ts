@@ -14,6 +14,7 @@ import {
   deleteDoc,
   doc,
   Firestore,
+  getDoc,
   getFirestore,
   onSnapshot,
   QuerySnapshot,
@@ -132,13 +133,19 @@ function listenToFirestoreCollection(
 }
 
 async function setFireStoreDoc(docPath: string, data: any): Promise<void> {
-  const document = doc(firestore, docPath);
-  await setDoc(document, data);
+  const docRef = doc(firestore, docPath);
+  await setDoc(docRef, data);
 }
 
 async function deleteFireStoreDoc(docPath: string): Promise<void> {
-  const document = doc(firestore, docPath);
-  await deleteDoc(document);
+  const docRef = doc(firestore, docPath);
+  await deleteDoc(docRef);
+}
+
+async function isExistingFirestoreDoc(docPath: string): Promise<boolean> {
+  const docRef = doc(firestore, docPath);
+  const document = await getDoc(docRef);
+  return document.exists();
 }
 
 export {
@@ -148,4 +155,5 @@ export {
   listenToFirestoreCollection,
   setFireStoreDoc,
   deleteFireStoreDoc,
+  isExistingFirestoreDoc,
 };

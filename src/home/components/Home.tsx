@@ -1,9 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { requestAccessUrl } from "../../client/client.api";
 import "../styles/Home.scss";
+import { isExistingFirestoreDoc } from "../../client/client.firebase";
+import FullComponentLoader from "../../generic/components/FullComponentLoader";
 
 function Home() {
   const [disableSubmit, setDisableSubmit] = useState(false);
+  const [emailField, setEmailField] = useState("");
+  const [isAllowedUser, setIsAllowedUser] = useState(false);
+  const [isPendingResult, setIsPendingResult] = useState(true);
+
+  useEffect(() => {
+    setDisableSubmit(false);
+    setIsPendingResult(true);
+    isExistingFirestoreDoc(`allowedUsers/${emailField}`)
+      .then((allowed) => {
+        setIsAllowedUser(allowed);
+        setIsPendingResult(false);
+      })
+      .catch(() => {
+        setIsAllowedUser(false);
+        setIsPendingResult(false);
+      });
+  }, [emailField]);
 
   return (
     <div className="home">
@@ -24,14 +43,21 @@ function Home() {
           id="email"
           name="email"
           type="email"
+          value={emailField}
+          onChange={(ev) => setEmailField(ev.target.value)}
           placeholder="Your Spotify email address"
         />
-        <input
-          disabled={disableSubmit}
-          className="request-access"
-          type="submit"
-          value={"Request access"}
-        />
+        <div className="submit-container">
+          {isPendingResult && <FullComponentLoader />}
+          {!isPendingResult && (
+            <input
+              disabled={disableSubmit}
+              className="submit"
+              type="submit"
+              value={`${isAllowedUser ? "Let's Go!" : "Request Access"}`}
+            />
+          )}
+        </div>
       </form>
     </div>
   );

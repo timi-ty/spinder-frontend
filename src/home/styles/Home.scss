@@ -27,7 +27,11 @@
   padding: 0.25rem 0.5rem 0.25rem 0.5rem;
 }
 
-.home .request-access {
-  margin-top: 1rem;
+.home .submit {
   padding: 0.5rem;
+}
+
+.home .submit-container {
+  margin-top: 1rem;
+  max-height: 2rem;
 }
