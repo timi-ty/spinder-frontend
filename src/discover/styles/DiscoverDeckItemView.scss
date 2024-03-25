@@ -10,7 +10,7 @@
   height: 100%;
   width: 100%;
   object-fit: cover;
-  border-radius: 1rem;
+  // border-radius: 1rem; //Spotify does not allow rounded corners
   background-color: base.$card-bg-color;
 }
 
