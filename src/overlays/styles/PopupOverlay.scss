@@ -17,7 +17,7 @@
 
 .popup {
   background-color: base.$card-bg-color;
-  width: 60%;
+  min-width: 60%;
   padding: 2rem;
   text-align: center;
   border-radius: 1rem;

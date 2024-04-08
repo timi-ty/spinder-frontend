@@ -12,6 +12,7 @@ import {
   DiscoverSourceSearchResult,
   FinalizeLoginData,
   RenewedAuthData,
+  RequestAccessResult,
   SpinderError,
   SpotifyUserProfileData,
 } from "./client.model";
@@ -21,7 +22,6 @@ const backendUrl = import.meta.env.DEV
   : "https://spindr.pro/api";
 
 /**********LOGIN START**********/
-const requestLoginAccessUrl = `${backendUrl}/login/request_access`;
 const loginWithSpotifyUrl = `${backendUrl}/login`;
 
 async function finalizeLogin(): Promise<string> {
@@ -66,6 +66,28 @@ async function logout(): Promise<void> {
   } catch (error: any) {
     console.error(error);
     throw new Error("Failed to logout.");
+  }
+}
+
+async function requestAccess(email: string): Promise<RequestAccessResult> {
+  try {
+    const url = `${backendUrl}/login/request_access?email=${email}`;
+
+    const response = await fetch(url, fetchConfig("", "POST"));
+
+    if (response.ok) {
+      const result = await response.json();
+      const accessResult: RequestAccessResult = result as RequestAccessResult;
+      return accessResult;
+    } else {
+      const errorResponse: SpinderError = await response.json();
+      throw new Error(
+        `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
+      );
+    }
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to request access.");
   }
 }
 /**********LOGIN END**********/
@@ -396,9 +418,9 @@ function safeStringify(data: any) {
 }
 
 export {
-  requestLoginAccessUrl as requestAccessUrl,
   loginWithSpotifyUrl,
   finalizeLogin,
+  requestAccess,
   logout,
   renewAuthentication,
   getSpotifyProfile,

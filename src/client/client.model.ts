@@ -17,7 +17,9 @@ interface FinalizeLoginData {
   firebaseCustomToken: string;
 }
 
-export { type FinalizeLoginData };
+type RequestAccessResult = "Allow" | "Pend";
+
+export { type FinalizeLoginData, type RequestAccessResult };
 /**********LOGIN END**********/
 
 /**********AUTH START**********/
