@@ -49,6 +49,25 @@ async function finalizeLogin(): Promise<string> {
       : new Error("Failed to finalize login.");
   }
 }
+
+async function logout(): Promise<void> {
+  try {
+    const url = `${backendUrl}/login/logout`;
+
+    const response = await fetch(url, fetchConfig("", "POST"));
+
+    if (!response.ok) {
+      const errorResponse: SpinderError = await response.json();
+
+      throw new Error(
+        `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
+      );
+    }
+  } catch (error: any) {
+    console.error(error);
+    throw new Error("Failed to logout.");
+  }
+}
 /**********LOGIN END**********/
 
 /**********AUTH START**********/
@@ -380,6 +399,7 @@ export {
   requestLoginAccessUrl as requestAccessUrl,
   loginWithSpotifyUrl,
   finalizeLogin,
+  logout,
   renewAuthentication,
   getSpotifyProfile,
   getDiscoverSources,

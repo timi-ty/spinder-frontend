@@ -1,6 +1,10 @@
-import { logoutAuthResource } from "../state/slice.auth";
+import {
+  errorAuthResource,
+  loadAuthResource,
+  logoutAuthResource,
+} from "../state/slice.auth";
 import { dispatch, store } from "../state/store";
-import { renewAuthentication } from "./client.api";
+import { renewAuthentication, logout as doLogout } from "./client.api";
 import { startFirebaseClient } from "./client.firebase";
 
 startFirebaseClient();
@@ -68,9 +72,16 @@ async function renewAutheticationCallback() {
     });
 }
 
-function logout() {
+async function logout(): Promise<void> {
   //Make logout API request here.
-  dispatch(logoutAuthResource());
+  dispatch(loadAuthResource());
+  try {
+    await doLogout();
+    dispatch(logoutAuthResource());
+  } catch (error) {
+    console.error(error);
+    dispatch(errorAuthResource());
+  }
 }
 
 //Block all window level listeners (the app should not be interactive while waiting for full screen mode).

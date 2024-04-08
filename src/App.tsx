@@ -1,19 +1,27 @@
 import { Navigate } from "react-router-dom";
 import Discover from "./discover/components/Discover";
-import { useAuthResource } from "./utils/hooks";
+import { useAuthResource, usePopup, useToast } from "./utils/hooks";
 import ErrorOneMessageTwoAction from "./generic/components/ErrorOneMessageTwoAction";
 import FullComponentLoader from "./generic/components/FullComponentLoader";
-import ToastOverlay, { showToast } from "./overlays/components/ToastOverlay";
 import { ToastContext } from "./utils/context";
 import { logout } from "./client/client";
 import RequestFullScreenOverlay from "./overlays/components/RequestFullScreenOverlay";
 import { useFullscreenDevice } from "./utils/utils";
 import { useCallback, useEffect, useState } from "react";
 import { isFullScreen as getIsFullScreen } from "./client/client";
+import { useDispatch } from "react-redux";
 
 function App() {
-  const authStatus = useAuthResource();
+  const { authStatus, authMode } = useAuthResource();
+  const { hydratedToastOverlay: ToastOverlay, showToast } = useToast();
+  const {
+    hydratedPopupOverlay: PopupOverlay,
+    pushPopup,
+    clearPopup,
+  } = usePopup();
+
   const [isFullScreen, setIsFullScreen] = useState(getIsFullScreen());
+  const dispatch = useDispatch();
 
   const onFullScreenChange = useCallback(() => {
     setIsFullScreen(getIsFullScreen());
@@ -43,7 +51,9 @@ function App() {
       )}
       {authStatus === "LoggedOut" && <Navigate to="/home" />}
       <ToastOverlay />
-      {useFullscreenDevice() && !isFullScreen && <RequestFullScreenOverlay />}
+      <PopupOverlay />
+      {/* Remove fullscreen overlay */}
+      {/* {useFullscreenDevice() && !isFullScreen && <RequestFullScreenOverlay />} */}
     </>
   );
 }

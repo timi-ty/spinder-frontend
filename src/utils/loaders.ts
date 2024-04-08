@@ -19,7 +19,7 @@ import {
   errorAuthResource,
   loadAuthResource,
   loginAuthResource,
-  logoutAuthResource,
+  setAuthMode,
 } from "../state/slice.auth";
 import {
   errorDiscoverDestinationResource,
@@ -59,9 +59,13 @@ function loadAuth(): () => void {
     })
     .catch((error) => {
       if (error.status === 401) {
-        //Unauthorized is a special error we handle as a logout.
-        dispatch(logoutAuthResource());
-        console.error("Failed to use Authentication:: Logged out.");
+        //Unauthorized is a special error we handle in a way to allow anonymous users.
+        dispatch(loadAuthResource());
+        dispatch(setAuthMode("UnacceptedAnon"));
+        //Call API that can do a partial login. If it succeeds, set auth resource to logged in.
+        console.warn(
+          "Failed to use full authentication:: Trying anonymous user mode..."
+        );
       } else {
         console.error(error);
         dispatch(errorAuthResource());

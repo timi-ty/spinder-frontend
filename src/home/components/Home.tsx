@@ -4,6 +4,10 @@ import "../styles/Home.scss";
 import { isExistingFirestoreDoc } from "../../client/client.firebase";
 import FullComponentLoader from "../../generic/components/FullComponentLoader";
 
+const appUrl = import.meta.env.DEV
+  ? "http://localhost:5173/"
+  : "https://spindr.pro/";
+
 function Home() {
   const [disableSubmit, setDisableSubmit] = useState(false);
   const [emailField, setEmailField] = useState("");
@@ -32,7 +36,13 @@ function Home() {
       <div>
         <div>Find music you love.</div>
       </div>
-      <form
+      {/* This should change app state rather than unecessarilly loading the app again */}
+      <a href={appUrl} className="submit-container">
+        <button className="submit" type="submit">
+          Launch Spindr
+        </button>
+      </a>
+      {/* <form
         action={requestAccessUrl}
         onSubmit={() => setDisableSubmit(true)}
         method="POST"
@@ -58,7 +68,7 @@ function Home() {
             />
           )}
         </div>
-      </form>
+      </form> */}
     </div>
   );
 }

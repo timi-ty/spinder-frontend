@@ -1,13 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 type AuthStatus = "Empty" | "Loading" | "LoggedIn" | "LoggedOut" | "Error";
+type AuthMode = "Full" | "UnacceptedAnon" | "AcceptedAnon";
 
 interface AuthState {
+  mode: AuthMode;
   status: AuthStatus;
   userId: string;
 }
 
 const defaultAuthState: AuthState = {
+  mode: "Full",
   status: "Empty",
   userId: "",
 };
@@ -17,10 +20,18 @@ interface LoginAction {
   type: string;
 }
 
+interface AuthModeAction {
+  payload: AuthMode;
+  type: string;
+}
+
 const authSlice = createSlice({
   name: "authState",
   initialState: defaultAuthState,
   reducers: {
+    setAuthMode: (state, action: AuthModeAction) => {
+      state.mode = action.payload;
+    },
     loadAuthResource: (state) => {
       state.status = "Loading";
       state.userId = "";
@@ -45,6 +56,7 @@ const authSlice = createSlice({
 });
 
 export const {
+  setAuthMode,
   loadAuthResource,
   loginAuthResource,
   logoutAuthResource,
@@ -52,7 +64,7 @@ export const {
   emptyAuthResource,
 } = authSlice.actions;
 
-export { type AuthState, type AuthStatus };
+export { type AuthState, type AuthStatus, type AuthMode };
 
 const authStateReducer = authSlice.reducer;
 
