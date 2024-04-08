@@ -1,0 +1,27 @@
+.popup-verify-auth {
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-verify-auth .email-input {
+  margin-top: 1rem;
+  padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+}
+
+.popup-verify-auth .submit {
+  padding: 0.5rem;
+}
+
+.popup-verify-auth .submit-container {
+  margin-top: 1rem;
+  max-height: 2rem;
+}
+
+.popup-verify-auth .link {
+  margin-top: 1.5rem;
+  text-decoration: underline;
+}

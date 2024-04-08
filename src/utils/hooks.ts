@@ -389,13 +389,17 @@ function usePopup() {
   const [currentPopup, setCurrentPopup] = useState(popups.get(""));
 
   function pushPopup(owner: string, popup: PopupProps | ReactNode) {
-    popups.set(owner, popup); //You shouldn't do this. Fix.
-    setPopups(popups);
+    const newPopups = new Map();
+    popups.forEach((value, key) => newPopups.set(key, value));
+    newPopups.set(owner, popup);
+    setPopups(newPopups);
   }
 
   function clearPopup(owner: string) {
-    popups.delete(owner);
-    setPopups(popups);
+    const newPopups = new Map();
+    popups.forEach((value, key) => newPopups.set(key, value));
+    newPopups.delete(owner);
+    setPopups(newPopups);
   }
 
   useEffect(() => {

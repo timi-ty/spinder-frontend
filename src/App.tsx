@@ -5,11 +5,11 @@ import ErrorOneMessageTwoAction from "./generic/components/ErrorOneMessageTwoAct
 import FullComponentLoader from "./generic/components/FullComponentLoader";
 import { ToastContext } from "./utils/context";
 import { logout } from "./client/client";
-import RequestFullScreenOverlay from "./overlays/components/RequestFullScreenOverlay";
-import { useFullscreenDevice } from "./utils/utils";
 import { useCallback, useEffect, useState } from "react";
 import { isFullScreen as getIsFullScreen } from "./client/client";
 import { useDispatch } from "react-redux";
+import SandboxVerifyAuth from "./sandbox-components/components/SandboxVerifyAuth";
+import React from "react";
 
 function App() {
   const { authStatus, authMode } = useAuthResource();
@@ -19,6 +19,16 @@ function App() {
     pushPopup,
     clearPopup,
   } = usePopup();
+
+  useEffect(() => {
+    if (authMode === "UnacceptedAnon") {
+      pushPopup("AuthMode", <SandboxVerifyAuth />);
+    } else {
+      clearPopup("AuthMode");
+    }
+
+    return () => clearPopup("AuthMode");
+  }, [authMode]);
 
   const [isFullScreen, setIsFullScreen] = useState(getIsFullScreen());
   const dispatch = useDispatch();
