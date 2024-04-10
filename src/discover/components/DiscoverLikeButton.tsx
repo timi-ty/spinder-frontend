@@ -105,7 +105,21 @@ function DiscoverLikeButton() {
     const actionTimestamp = Date.now(); //We intentionally closure this so it always represents the click time of this particular action.
     lastActionTimestamp.current = actionTimestamp; //The ref here will be closured by reference and so will always return it's most up-to-date value.
     dispatchLikeOnSettle(actionTimestamp);
-    setIsLiked((liked) => !liked);
+    setIsLiked((liked) => {
+      //Show immediate feedback toast when like is toggled.
+      if (liked) {
+        showToast(
+          `Removing ${activeDeckItem.trackName} from ${destination.name}`,
+          "Bottom"
+        );
+      } else {
+        showToast(
+          `Saving ${activeDeckItem.trackName} to ${destination.name}`,
+          "Bottom"
+        );
+      }
+      return !liked;
+    });
   }
 
   const authMode = useSelector<StoreState, AuthMode>(
