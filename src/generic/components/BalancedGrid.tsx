@@ -16,6 +16,7 @@ interface Props<T> {
   selectedItem: T;
   showSelectedItem: boolean;
   graphicType: GraphicType;
+  className?: (item: T) => string;
 }
 
 function BalancedGrid<T extends BalancedGridItem>({
@@ -24,6 +25,7 @@ function BalancedGrid<T extends BalancedGridItem>({
   selectedItem,
   showSelectedItem,
   graphicType,
+  className,
 }: Props<T>) {
   return (
     <div className="balanced-grid">
@@ -35,6 +37,7 @@ function BalancedGrid<T extends BalancedGridItem>({
           isSelected={true}
           onAction={() => onClickItem(selectedItem, true)}
           useAvailableWidth={true}
+          className={className ? className(selectedItem) : ""}
         />
       )}
       {showSelectedItem && graphicType === "Icon" && (
@@ -45,6 +48,7 @@ function BalancedGrid<T extends BalancedGridItem>({
           isSelected={true}
           onAction={() => onClickItem(selectedItem, false)}
           useAvailableWidth={true}
+          className={className ? className(selectedItem) : ""}
         />
       )}
       {items.map((item) => {
@@ -59,6 +63,7 @@ function BalancedGrid<T extends BalancedGridItem>({
                   isSelected={false}
                   onAction={() => onClickItem(item, false)}
                   useAvailableWidth={true}
+                  className={className ? className(item) : ""}
                 />
               )}
               {graphicType === "Icon" && (
@@ -68,6 +73,7 @@ function BalancedGrid<T extends BalancedGridItem>({
                   isSelected={false}
                   onAction={() => onClickItem(item, false)}
                   useAvailableWidth={true}
+                  className={className ? className(item) : ""}
                 />
               )}
             </div>

@@ -15,6 +15,7 @@ import DiscoverLikeButton from "./DiscoverLikeButton";
 import { logout } from "../../client/client";
 import { DiscoverBackgroundContext } from "./DiscoverBackgroundPanel";
 import useSpotifyProfileResource from "../../resource-hooks/useSpotifyProfileResource";
+import { AuthMode } from "../../state/slice.auth";
 
 function DiscoverBottomRight() {
   const activeDeckItemCursor = useSelector<StoreState, number>(
@@ -56,6 +57,10 @@ function DiscoverBottomRight() {
       backgroundPanel?.removeEventListener("click", onClickOutside);
     };
   }, [isShowingAccountActions]);
+
+  const authMode = useSelector<StoreState, AuthMode>(
+    (state) => state.authState.mode
+  );
 
   return (
     <div className="bottom-right">
@@ -147,9 +152,14 @@ function DiscoverBottomRight() {
           className="account-actions"
           style={{ top: `${(rightBottomRef.current?.offsetTop ?? 0) - 80}px` }}
         >
-          <a href={profleUri}>
-            <div className="account-action">My Profile</div>
-          </a>
+          <div
+            className={`account-action ${
+              authMode === "Full" ? "" : "unauth-action"
+            }`}
+          >
+            {authMode === "Full" && <a href={profleUri}>My Profile</a>}
+            {authMode !== "Full" && "No Profile"}
+          </div>
           <div className="account-action" onClick={() => logout()}>
             Logout
           </div>

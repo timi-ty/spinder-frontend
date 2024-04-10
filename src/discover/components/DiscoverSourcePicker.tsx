@@ -24,6 +24,8 @@ import EmptyView from "../../generic/components/EmptyView";
 import ErrorOneMessageTwoAction from "../../generic/components/ErrorOneMessageTwoAction";
 import { ToastContext } from "../../overlays/components/ToastProvider";
 import useDiscoverSourceResource from "../../resource-hooks/useDiscoverSourceResource";
+import { AuthMode } from "../../state/slice.auth";
+import useAction from "../../utility-hooks/useAction";
 
 interface Props {
   close: () => void;
@@ -201,6 +203,31 @@ function DiscoverSourcePicker({ close }: Props) {
     setTimeout(() => close(), 250);
   };
 
+  const doAction = useAction();
+
+  const authMode = useSelector<StoreState, AuthMode>(
+    (state) => state.authState.mode
+  );
+
+  function getGridSourceItemClass(item: DiscoverSourceItem) {
+    const requiresFullAuth =
+      item.type === "Anything Me" ||
+      item.type === "My Artists" ||
+      item.type === "My Playlists";
+    return requiresFullAuth && authMode !== "Full" ? "unauth-action" : "";
+  }
+
+  function gridSourceItemAction(item: DiscoverSourceItem, isSelected: boolean) {
+    const requiresFullAuth =
+      item.type === "Anything Me" ||
+      item.type === "My Artists" ||
+      item.type === "My Playlists";
+    doAction(() => onSourceClick(item, isSelected), {
+      requiresFullAuth: requiresFullAuth,
+      actionDescription: `get recommendations from "${item.name}"`,
+    });
+  }
+
   return (
     <div className="source-picker" style={{ opacity: `${opacity}` }}>
       {!isLoadingPicker && !isLoadingSourceChange && !isPickerError && (
@@ -253,10 +280,11 @@ function DiscoverSourcePicker({ close }: Props) {
             {!isSearching && (
               <BalancedGrid
                 items={availableSourceItems}
-                onClickItem={onSourceClick}
+                onClickItem={gridSourceItemAction}
                 selectedItem={selectedSourceItem}
                 graphicType={"Icon"}
                 showSelectedItem={isCompositeSource(selectedSourceItem)}
+                className={getGridSourceItemClass}
               />
             )}
             {isSearching && (

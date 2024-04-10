@@ -10,6 +10,7 @@ interface Props {
   isSelected: boolean;
   onAction: () => void;
   useAvailableWidth: boolean;
+  className?: string;
 }
 
 function IconTextGridItem({
@@ -18,6 +19,7 @@ function IconTextGridItem({
   isSelected,
   onAction,
   useAvailableWidth = false,
+  className = "",
 }: Props) {
   const ref: React.LegacyRef<HTMLDivElement> = useRef(null);
   const [size, setSize] = useState(defaultSize);
@@ -42,7 +44,7 @@ function IconTextGridItem({
   return (
     <div
       ref={ref}
-      className={`icon-text-grid-item ${selected}`}
+      className={`icon-text-grid-item ${selected} ${className}`}
       style={{
         height: `${size}rem`,
         width: `${useAvailableWidth ? "" : `${size}rem`}`,

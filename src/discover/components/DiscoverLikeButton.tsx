@@ -10,6 +10,8 @@ import {
 import SquareImage from "../../generic/components/SquareImage";
 import { nullTimeoutHandle } from "../../utils";
 import { ToastContext } from "../../overlays/components/ToastProvider";
+import useAction from "../../utility-hooks/useAction";
+import { AuthMode } from "../../state/slice.auth";
 
 const settleTimeInMillis = 1000; //1 second time to settle.
 
@@ -96,16 +98,31 @@ function DiscoverLikeButton() {
     }, settleTimeInMillis);
   };
 
+  const doAction = useAction();
+
+  function onClickLike() {
+    setIsLocallyControlled(true); //Any time the user interacts with the like button, switch to local control.
+    const actionTimestamp = Date.now(); //We intentionally closure this so it always represents the click time of this particular action.
+    lastActionTimestamp.current = actionTimestamp; //The ref here will be closured by reference and so will always return it's most up-to-date value.
+    dispatchLikeOnSettle(actionTimestamp);
+    setIsLiked((liked) => !liked);
+  }
+
+  const authMode = useSelector<StoreState, AuthMode>(
+    (state) => state.authState.mode
+  );
+
   return (
     <div
       ref={containerRef}
-      className={`like-button ${isAnimating ? "animate" : ""}`}
+      className={`like-button ${isAnimating ? "animate" : ""} ${
+        authMode === "Full" ? "" : "unauth-action"
+      }`}
       onClick={() => {
-        setIsLocallyControlled(true); //Any time the user interacts with the like button, switch to local control.
-        const actionTimestamp = Date.now(); //We intentionally closure this so it always represents the click time of this particular action.
-        lastActionTimestamp.current = actionTimestamp; //The ref here will be closured by reference and so will always return it's most up-to-date value.
-        dispatchLikeOnSettle(actionTimestamp);
-        setIsLiked((liked) => !liked);
+        doAction(onClickLike, {
+          requiresFullAuth: true,
+          actionDescription: "save items (add songs to your playlists)",
+        });
       }}
     >
       {
