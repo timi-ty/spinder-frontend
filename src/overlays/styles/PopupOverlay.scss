@@ -13,6 +13,8 @@
   pointer-events: all;
   padding: 1rem;
   z-index: 10; //Very large. This is an overlay.
+  background-color: rgba(26, 26, 26, 0.742);
+  backdrop-filter: blur(10px);
 }
 
 .generic-popup {
