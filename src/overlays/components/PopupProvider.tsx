@@ -1,5 +1,7 @@
 import { ReactNode, createContext, useEffect, useMemo, useState } from "react";
 import "../styles/PopupOverlay.scss";
+import { useDispatch } from "react-redux";
+import { setIsPopupShowing } from "../../state/slice.globalui";
 
 interface PopupAction {
   text: string;
@@ -73,6 +75,7 @@ interface ProviderProps {
 }
 
 function PopupProvider({ children }: ProviderProps) {
+  const dispatch = useDispatch();
   const [popups, setPopups] = useState(
     new Map<string, GenericPopupProps | ReactNode>()
   );
@@ -98,9 +101,11 @@ function PopupProvider({ children }: ProviderProps) {
 
   useEffect(() => {
     if (popups.size > 0) {
+      dispatch(setIsPopupShowing(true));
       const firstKey = popups.keys().next().value;
       setCurrentPopup(popups.get(firstKey));
     } else {
+      dispatch(setIsPopupShowing(false));
       setCurrentPopup(undefined);
     }
   }, [popups]);
