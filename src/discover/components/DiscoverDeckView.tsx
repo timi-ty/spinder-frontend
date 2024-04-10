@@ -161,16 +161,20 @@ function DiscoverDeckView() {
     };
   }, []);
 
-  //Pause when picking source or destination.
+  //Pause when picking source or destination or showing a popup.
   const isSourcePickerOpen = useSelector<StoreState, boolean>(
     (state) => state.globalUIState.isSourcePickerOpen
   );
   const isDestinationPickerOpen = useSelector<StoreState, boolean>(
     (state) => state.globalUIState.isDestinationPickerOpen
   );
+  const isPopupShowing = useSelector<StoreState, boolean>(
+    (state) => state.globalUIState.isPopupShowing
+  );
   useEffect(() => {
-    if (isSourcePickerOpen || isDestinationPickerOpen) setIsPlaying(false);
-  }, [isSourcePickerOpen, isDestinationPickerOpen]);
+    if (isSourcePickerOpen || isDestinationPickerOpen || isPopupShowing)
+      setIsPlaying(false);
+  }, [isSourcePickerOpen, isDestinationPickerOpen, isPopupShowing]);
 
   const containerRef: LegacyRef<HTMLDivElement> = useRef(null);
   const [viewHeight, setViewHeight] = useState(0);

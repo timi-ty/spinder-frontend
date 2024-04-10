@@ -100,7 +100,7 @@ function SandboxSignIn() {
             limited version of Spindr in anonymous mode.
           </div>
           <input
-            className="buttons submit"
+            className="submit-container button"
             type="submit"
             value="Continue anonymously"
           />
