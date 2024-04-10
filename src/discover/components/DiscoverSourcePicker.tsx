@@ -24,7 +24,7 @@ import { changeSource } from "../../client/client.deck";
 import EmptyView from "../../generic/components/EmptyView";
 import ErrorOneMessageTwoAction from "../../generic/components/ErrorOneMessageTwoAction";
 import { loadDiscoverSource } from "../../utils/loaders";
-import { ToastContext } from "../../utils/context";
+import { ToastContext } from "../../overlays/components/ToastProvider";
 
 interface Props {
   close: () => void;

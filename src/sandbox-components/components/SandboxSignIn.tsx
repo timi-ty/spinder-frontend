@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { isExistingFirestoreDoc } from "../../client/client.firebase";
 import FullComponentLoader from "../../generic/components/FullComponentLoader";
-import "../styles/SandboxVerifyAuth.scss";
+import "../styles/SandboxSignIn.scss";
 import React from "react";
 import { loginWithSpotifyUrl, requestAccess } from "../../client/client.api";
 import { useDispatch } from "react-redux";
@@ -58,7 +58,7 @@ function SandboxVerifyAuth() {
   }
 
   return (
-    <form className="popup-verify-auth" onSubmit={onSubmit} method="POST">
+    <form className="popup-sign-in" onSubmit={onSubmit} method="POST">
       {!requestedAccess && (
         <>
           <div className="title">Sign In</div>

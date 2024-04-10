@@ -1,4 +1,4 @@
-.popup-verify-auth {
+.popup-sign-in {
   width: 100%;
   padding: 1rem;
   display: flex;
@@ -7,22 +7,21 @@
   align-items: center;
 }
 
-.popup-verify-auth .email-input {
+.popup-sign-in .email-input {
   margin-top: 1rem;
   padding: 0.25rem 0.5rem 0.25rem 0.5rem;
 }
 
-.popup-verify-auth .submit {
+.popup-sign-in .submit {
   padding: 0.5rem;
   cursor: pointer;
 }
 
-.popup-verify-auth .submit-container {
+.popup-sign-in .submit-container {
   margin-top: 1rem;
   max-height: 2rem;
 }
-
-.popup-verify-auth .link {
+.popup-sign-in .link {
   margin-top: 1.5rem;
   text-decoration: underline;
 }

@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   startDestinationDeckClient,
   startSourceDeckClient,
@@ -7,7 +7,7 @@ import {
 } from "../client/client.deck";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthMode, AuthStatus } from "../state/slice.auth";
-import { ResourceStatus, StoreState, dispatch } from "../state/store";
+import { ResourceStatus, StoreState } from "../state/store";
 import {
   loadAuth,
   loadDiscoverDestination,
@@ -20,18 +20,6 @@ import {
   removeDestinationDeckItem,
   setDeckReady,
 } from "../state/slice.deck";
-import {
-  hideTopToast,
-  hideBottomToast,
-  showBottomToast,
-  showTopToast,
-} from "../state/slice.globalui";
-import { nullTimeoutHandle } from "./utils";
-import ToastOverlay from "../overlays/components/ToastOverlay";
-import PopupOverlay, {
-  CustomPopupOverlay,
-  PopupProps,
-} from "../overlays/components/PopupOverlay";
 
 /* The global state of this app is managaed by redux. The custom hooks here interface with react-redux hooks.
  * These hooks are built with a homogenous paradigm. They are primarily for loading app data/resources.
@@ -316,115 +304,6 @@ function useTouchFlick(
 
   return flickDelta;
 }
-
-function useToast() {
-  const toastDurationMillis = 2000; //Show toast messages for 2 seconds.
-
-  const isTopToastShowing = useSelector<StoreState, boolean>(
-    (state) => state.globalUIState.isTopToastVisible
-  );
-  const isBottomToastShowing = useSelector<StoreState, boolean>(
-    (state) => state.globalUIState.isBottomToastVisible
-  );
-
-  const topToastMessage = useSelector<StoreState, string>(
-    (state) => state.globalUIState.topToastMessage
-  );
-  const bottomToastMessage = useSelector<StoreState, string>(
-    (state) => state.globalUIState.bottomToastMessage
-  );
-
-  const topTimeoutHandle = useRef(nullTimeoutHandle);
-  const bottomTimeoutHandle = useRef(nullTimeoutHandle);
-
-  useEffect(() => {
-    if (topTimeoutHandle.current) clearTimeout(topTimeoutHandle.current);
-    if (isTopToastShowing) {
-      topTimeoutHandle.current = setTimeout(() => {
-        dispatch(hideTopToast());
-      }, toastDurationMillis);
-    }
-  }, [isTopToastShowing]);
-
-  useEffect(() => {
-    if (bottomTimeoutHandle.current) clearTimeout(bottomTimeoutHandle.current);
-    if (isBottomToastShowing) {
-      bottomTimeoutHandle.current = setTimeout(() => {
-        dispatch(hideBottomToast());
-      }, toastDurationMillis);
-    }
-  }, [isBottomToastShowing]);
-
-  function showToast(message: string, location: "Top" | "Bottom" = "Top") {
-    switch (location) {
-      case "Top":
-        dispatch(showTopToast(message));
-        break;
-      case "Bottom":
-        dispatch(showBottomToast(message));
-        break;
-    }
-  }
-
-  const hydratedToastOverlay = useCallback(
-    () =>
-      ToastOverlay({
-        isTopToastShowing,
-        isBottomToastShowing,
-        topToastMessage,
-        bottomToastMessage,
-      }),
-    [
-      isTopToastShowing,
-      isBottomToastShowing,
-      topToastMessage,
-      bottomToastMessage,
-    ]
-  );
-
-  return { hydratedToastOverlay, showToast };
-}
-
-function usePopup() {
-  const [popups, setPopups] = useState(
-    new Map<string, PopupProps | ReactNode>()
-  );
-  const [currentPopup, setCurrentPopup] = useState(popups.get(""));
-
-  function pushPopup(owner: string, popup: PopupProps | ReactNode) {
-    const newPopups = new Map();
-    popups.forEach((value, key) => newPopups.set(key, value));
-    newPopups.set(owner, popup);
-    setPopups(newPopups);
-  }
-
-  function clearPopup(owner: string) {
-    const newPopups = new Map();
-    popups.forEach((value, key) => newPopups.set(key, value));
-    newPopups.delete(owner);
-    setPopups(newPopups);
-  }
-
-  useEffect(() => {
-    if (popups.size > 0) {
-      const firstKey = popups.keys().next().value;
-      setCurrentPopup(popups.get(firstKey));
-    } else {
-      setCurrentPopup(undefined);
-    }
-  }, [popups]);
-
-  const hydratedPopupOverlay = useCallback(() => {
-    if (!currentPopup) return;
-    if ((currentPopup as PopupProps).title !== undefined) {
-      return PopupOverlay(currentPopup as PopupProps);
-    } else {
-      return CustomPopupOverlay(currentPopup as ReactNode);
-    }
-  }, [currentPopup]);
-
-  return { hydratedPopupOverlay, pushPopup, clearPopup };
-}
 /**********REGULAR HOOKS END**********/
 
 export {
@@ -437,6 +316,4 @@ export {
   useTouchFlick,
   useNoDocumentScroll,
   useWindowSize,
-  useToast,
-  usePopup,
 };

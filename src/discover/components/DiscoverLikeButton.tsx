@@ -9,7 +9,7 @@ import {
 } from "../../client/client.deck";
 import SquareImage from "../../generic/components/SquareImage";
 import { nullTimeoutHandle } from "../../utils/utils";
-import { ToastContext } from "../../utils/context";
+import { ToastContext } from "../../overlays/components/ToastProvider";
 
 const settleTimeInMillis = 1000; //1 second time to settle.
 

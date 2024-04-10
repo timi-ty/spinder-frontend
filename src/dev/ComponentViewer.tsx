@@ -1,5 +1,5 @@
 import React from "react";
-import SandboxVerifyAuth from "../sandbox-components/components/SandboxVerifyAuth";
+import SandboxVerifyAuth from "../sandbox-components/components/SandboxSignIn";
 import "./ComponentViewer.scss";
 
 const isViewingComponent = false;

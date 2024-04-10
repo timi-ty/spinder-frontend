@@ -13,7 +13,7 @@ import {
 import { changeSource } from "../../client/client.deck";
 import { selectDiscoverSource } from "../../state/slice.discoversource";
 import "../styles/DiscoverBottomLeft.scss";
-import { ToastContext } from "../../utils/context";
+import { ToastContext } from "../../overlays/components/ToastProvider";
 
 const gap = 1; //rem
 

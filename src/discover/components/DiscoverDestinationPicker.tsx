@@ -23,7 +23,7 @@ import EmptyView from "../../generic/components/EmptyView";
 import ErrorOneMessageTwoAction from "../../generic/components/ErrorOneMessageTwoAction";
 import { loadDiscoverDestination } from "../../utils/loaders";
 import { searchDiscoverDestinations } from "../../client/client.api";
-import { ToastContext } from "../../utils/context";
+import { ToastContext } from "../../overlays/components/ToastProvider";
 
 interface Props {
   close: () => void;
