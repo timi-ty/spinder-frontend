@@ -9,7 +9,6 @@ import { useCallback, useEffect, useState } from "react";
 import { isFullScreen as getIsFullScreen } from "./client/client";
 import { useDispatch } from "react-redux";
 import SandboxVerifyAuth from "./sandbox-components/components/SandboxVerifyAuth";
-import React from "react";
 
 function App() {
   const { authStatus, authMode } = useAuthResource();

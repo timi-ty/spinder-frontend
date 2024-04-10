@@ -4,6 +4,7 @@ import {
   stopRenewingAuthentication,
 } from "../client/client";
 import {
+  anonymousLogin,
   finalizeLogin,
   getDiscoverDestinations,
   getDiscoverSources,
@@ -63,6 +64,16 @@ function loadAuth(): () => void {
         dispatch(loadAuthResource());
         dispatch(setAuthMode("UnacceptedAnon"));
         //Call API that can do a partial login. If it succeeds, set auth resource to logged in.
+        anonymousLogin()
+          .then((userId) => {
+            dispatch(loginAuthResource(userId));
+            console.log(`Using anon authentication for User:: ${userId}`);
+          })
+          .catch((error) => {
+            console.error(error);
+            dispatch(errorAuthResource());
+            console.error("Failed to use anon authentication:: Error.");
+          });
         console.warn(
           "Failed to use full authentication:: Trying anonymous user mode..."
         );

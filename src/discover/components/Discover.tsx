@@ -29,10 +29,6 @@ import {
 
 const waitForDeckMillis = 15000; //We wait for up to 15 seconds for the deck to be ready.
 
-interface Props {
-  mode: "Auth" | "Anon";
-}
-
 function Discover() {
   const dispatch = useDispatch();
   useNoDocumentScroll();

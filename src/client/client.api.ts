@@ -50,6 +50,32 @@ async function finalizeLogin(): Promise<string> {
   }
 }
 
+async function anonymousLogin(): Promise<string> {
+  try {
+    const url = `${backendUrl}/login/anon`;
+
+    const response = await fetch(url, fetchConfig());
+
+    if (response.ok) {
+      const loginData: FinalizeLoginData = await response.json();
+      return firebaseSignInWithCustomToken(loginData.firebaseCustomToken);
+    } else {
+      const errorResponse: SpinderError = await response.json();
+
+      throw errorResponse.status === 401 //We check for unauthorized in case we need to handle it differently.
+        ? errorResponse
+        : new Error(
+            `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
+          );
+    }
+  } catch (error: any) {
+    console.error(error);
+    throw error.status === 401 //We check for unauthorized in case we need to handle it differently.
+      ? error
+      : new Error("Failed to login anonymously.");
+  }
+}
+
 async function logout(): Promise<void> {
   try {
     const url = `${backendUrl}/login/logout`;
@@ -420,6 +446,7 @@ function safeStringify(data: any) {
 export {
   loginWithSpotifyUrl,
   finalizeLogin,
+  anonymousLogin,
   requestAccess,
   logout,
   renewAuthentication,
