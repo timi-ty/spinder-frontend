@@ -1,12 +1,16 @@
-import { LegacyRef, forwardRef } from "react";
 import "../styles/DiscoverBackgroundPanel.scss";
 import { useSelector } from "react-redux";
 import { DeckItem } from "../../client/client.model";
 import { StoreState } from "../../state/store";
+import { ReactNode, createContext, forwardRef, useRef } from "react";
+
+const DiscoverBackgroundContext = createContext(
+  document.getElementById("root")
+);
 
 const DiscoverBackgroundPanel = forwardRef(function DiscoverBackgroundPanel(
   _props,
-  ref: LegacyRef<HTMLDivElement>
+  ref: any
 ) {
   const activeDeckItemCursor = useSelector<StoreState, number>(
     (state) => state.deckState.activeDeckItemCursor
@@ -47,4 +51,21 @@ const DiscoverBackgroundPanel = forwardRef(function DiscoverBackgroundPanel(
   );
 });
 
-export default DiscoverBackgroundPanel;
+interface ProviderProps {
+  children?: ReactNode;
+}
+
+function DiscoverBackgroundProvider({ children }: ProviderProps) {
+  const backgroundRef = useRef(null);
+
+  return (
+    <DiscoverBackgroundContext.Provider value={backgroundRef.current}>
+      <DiscoverBackgroundPanel ref={backgroundRef} />
+      {children}
+    </DiscoverBackgroundContext.Provider>
+  );
+}
+
+export default DiscoverBackgroundProvider;
+
+export { DiscoverBackgroundContext };

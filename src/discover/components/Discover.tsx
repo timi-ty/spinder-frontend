@@ -1,4 +1,4 @@
-import { LegacyRef, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DiscoverTop from "./DiscoverTop";
 import DiscoverDeckView from "./DiscoverDeckView";
 import DiscoverBottom from "./DiscoverBottom";
@@ -20,12 +20,11 @@ import { resetSourceDeck } from "../../client/client.deck";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreState } from "../../state/store";
 import { DiscoverSource } from "../../client/client.model";
-import DiscoverBackgroundPanel from "./DiscoverBackgroundPanel";
-import { InteractionPanelContext } from "../../utils/context";
 import {
   setIsDestinationPickerOpen,
   setIsSourcePickerOpen,
 } from "../../state/slice.globalui";
+import DiscoverBackgroundProvider from "./DiscoverBackgroundPanel";
 
 const waitForDeckMillis = 15000; //We wait for up to 15 seconds for the deck to be ready.
 
@@ -80,22 +79,19 @@ function Discover() {
   useDiscoverSourceResource();
   useDiscoverDestinationResource();
 
-  const ineractionPanelRef: LegacyRef<HTMLDivElement> = useRef(null);
-
   return (
     <div className="discover" style={{ maxHeight: `${windowHeight}px` }}>
-      <DiscoverBackgroundPanel ref={ineractionPanelRef} />
-      <DiscoverTop
-        onClickDestinationPicker={() =>
-          dispatch(setIsDestinationPickerOpen(true))
-        }
-        onClickSourcePicker={() => dispatch(setIsSourcePickerOpen(true))}
-      />
-      <InteractionPanelContext.Provider value={ineractionPanelRef.current!}>
+      <DiscoverBackgroundProvider>
+        <DiscoverTop
+          onClickDestinationPicker={() =>
+            dispatch(setIsDestinationPickerOpen(true))
+          }
+          onClickSourcePicker={() => dispatch(setIsSourcePickerOpen(true))}
+        />
         {isDeckReady && <DiscoverDeckView />}
         {isDeckReady && <DiscoverBottom />}
-      </InteractionPanelContext.Provider>
-      {isDeckReady && <DiscoverSeeker />}
+        {isDeckReady && <DiscoverSeeker />}
+      </DiscoverBackgroundProvider>
       {!isDeckReady && !isTimedOut && (
         <div className="deck-loader-error">
           <FullComponentLoader />

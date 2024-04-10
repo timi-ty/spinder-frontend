@@ -14,7 +14,7 @@ import "../styles/DiscoverBottomRight.scss";
 import DiscoverLikeButton from "./DiscoverLikeButton";
 import { useSpotifyProfileResource } from "../../utils/hooks";
 import { logout } from "../../client/client";
-import { InteractionPanelContext } from "../../utils/context";
+import { DiscoverBackgroundContext } from "./DiscoverBackgroundPanel";
 
 function DiscoverBottomRight() {
   const activeDeckItemCursor = useSelector<StoreState, number>(
@@ -49,11 +49,11 @@ function DiscoverBottomRight() {
     setIsShowingAccountActions(false);
   }, []);
 
-  const interactionContainer = useContext(InteractionPanelContext);
+  const backgroundPanel = useContext(DiscoverBackgroundContext);
   useEffect(() => {
-    interactionContainer.addEventListener("click", onClickOutside);
+    backgroundPanel?.addEventListener("click", onClickOutside);
     return () => {
-      interactionContainer.removeEventListener("click", onClickOutside);
+      backgroundPanel?.removeEventListener("click", onClickOutside);
     };
   }, [isShowingAccountActions]);
 

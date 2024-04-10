@@ -10,7 +10,6 @@ import {
 import DiscoverDeckItemView from "./DiscoverDeckItemView";
 import "../styles/DiscoverDeckView.scss";
 import { getDeckItem, markVisitedDeckItem } from "../../client/client.deck";
-import { InteractionPanelContext } from "../../utils/context";
 import { useMouseFlick, useTouchFlick } from "../../utils/hooks";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -27,6 +26,7 @@ import {
 } from "../../utils/utils";
 import { StoreState } from "../../state/store";
 import { DeckItem } from "../../client/client.model";
+import { DiscoverBackgroundContext } from "./DiscoverBackgroundPanel";
 
 const dragActionThreshold = 20;
 
@@ -152,11 +152,11 @@ function DiscoverDeckView() {
     doPlayPauseClick.current = true;
   }, []);
 
-  const interactionContainer = useContext(InteractionPanelContext);
+  const interactionContainer = useContext(DiscoverBackgroundContext);
   useEffect(() => {
-    interactionContainer.addEventListener("click", onClickPlayPause);
+    interactionContainer?.addEventListener("click", onClickPlayPause);
     return () => {
-      interactionContainer.removeEventListener("click", onClickPlayPause);
+      interactionContainer?.removeEventListener("click", onClickPlayPause);
     };
   }, []);
 
