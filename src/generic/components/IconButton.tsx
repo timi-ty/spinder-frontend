@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import "../styles/IconButton.scss";
-import { pxToRem } from "../../utils/utils";
+import { pxToRem } from "../../utils";
 
 interface Props {
   title: string;

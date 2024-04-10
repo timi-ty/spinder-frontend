@@ -12,9 +12,9 @@ import SquareImage from "../../generic/components/SquareImage";
 import { StoreState } from "../../state/store";
 import "../styles/DiscoverBottomRight.scss";
 import DiscoverLikeButton from "./DiscoverLikeButton";
-import { useSpotifyProfileResource } from "../../utils/hooks";
 import { logout } from "../../client/client";
 import { DiscoverBackgroundContext } from "./DiscoverBackgroundPanel";
+import useSpotifyProfileResource from "../../resource-hooks/useSpotifyProfileResource";
 
 function DiscoverBottomRight() {
   const activeDeckItemCursor = useSelector<StoreState, number>(

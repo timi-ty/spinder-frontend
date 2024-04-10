@@ -8,7 +8,7 @@ import {
   showBottomToast,
 } from "../../state/slice.globalui";
 import { StoreState, dispatch } from "../../state/store";
-import { nullTimeoutHandle } from "../../utils/utils";
+import { nullTimeoutHandle } from "../../utils";
 
 interface Props {
   isTopToastShowing: boolean;

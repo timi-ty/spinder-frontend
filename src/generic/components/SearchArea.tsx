@@ -1,7 +1,7 @@
 import { LegacyRef, useCallback, useEffect, useRef, useState } from "react";
 import IconButton from "./IconButton";
 import "../styles/SearchArea.scss";
-import { nullTimeoutHandle } from "../../utils/utils";
+import { nullTimeoutHandle } from "../../utils";
 
 interface Props {
   onSearch: (text: string) => void;

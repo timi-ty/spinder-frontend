@@ -1,5 +1,5 @@
 import { useRef, useState, useLayoutEffect } from "react";
-import { pxToRem } from "../../utils/utils";
+import { pxToRem } from "../../utils";
 import "../styles/IconTextGridItem.scss";
 
 const defaultSize = 10.25; //rem

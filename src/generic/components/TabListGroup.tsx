@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import "../styles/TabListGroup.scss";
 import ImageTextListItem from "./ImageTextListItem";
-import { remToPx } from "../../utils/utils";
+import { remToPx } from "../../utils";
 
 interface TabListItem {
   id: string;

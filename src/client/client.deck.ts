@@ -1,4 +1,4 @@
-import { nullTimeoutHandle, shuffleArrayInPlace } from "../utils/utils";
+import { nullTimeoutHandle, shuffleArrayInPlace } from "../utils";
 import {
   changeDiscoverDestination,
   changeDiscoverSource,

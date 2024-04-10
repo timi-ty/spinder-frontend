@@ -10,7 +10,6 @@ import {
 import DiscoverDeckItemView from "./DiscoverDeckItemView";
 import "../styles/DiscoverDeckView.scss";
 import { getDeckItem, markVisitedDeckItem } from "../../client/client.deck";
-import { useMouseFlick, useTouchFlick } from "../../utils/hooks";
 import { useDispatch, useSelector } from "react-redux";
 import {
   changeActiveDeckItem,
@@ -23,10 +22,12 @@ import {
   lerp,
   nullTimeoutHandle,
   remToPx,
-} from "../../utils/utils";
+} from "../../utils";
 import { StoreState } from "../../state/store";
 import { DeckItem } from "../../client/client.model";
 import { DiscoverBackgroundContext } from "./DiscoverBackgroundPanel";
+import useMouseFlick from "../../utility-hooks/useMouseFlick";
+import useTouchFlick from "../../utility-hooks/useTouchFlick";
 
 const dragActionThreshold = 20;
 

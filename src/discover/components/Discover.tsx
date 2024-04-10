@@ -6,15 +6,8 @@ import DiscoverSeeker from "./DiscoverSeeker";
 import DiscoverDestinationPicker from "./DiscoverDestinationPicker";
 import "../styles/Discover.scss";
 import DiscoverSourcePicker from "./DiscoverSourcePicker";
-import {
-  useDeck,
-  useDiscoverDestinationResource,
-  useDiscoverSourceResource,
-  useNoDocumentScroll,
-  useWindowSize,
-} from "../../utils/hooks";
 import FullComponentLoader from "../../generic/components/FullComponentLoader";
-import { nullTimeoutHandle } from "../../utils/utils";
+import { nullTimeoutHandle } from "../../utils";
 import ErrorOneMessageTwoAction from "../../generic/components/ErrorOneMessageTwoAction";
 import { resetSourceDeck } from "../../client/client.deck";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,6 +18,11 @@ import {
   setIsSourcePickerOpen,
 } from "../../state/slice.globalui";
 import DiscoverBackgroundProvider from "./DiscoverBackgroundPanel";
+import useDiscoverDestinationResource from "../../resource-hooks/useDiscoverDestinationResource";
+import useDiscoverSourceResource from "../../resource-hooks/useDiscoverSourceResource";
+import useDeck from "../../utility-hooks/useDeck";
+import useNoDocumentScroll from "../../utility-hooks/useNoDocumentScroll";
+import useWindowSize from "../../utility-hooks/useWindowSize";
 
 const waitForDeckMillis = 15000; //We wait for up to 15 seconds for the deck to be ready.
 

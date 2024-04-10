@@ -1,7 +1,6 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreState } from "../../state/store";
-import { useDiscoverDestinationResource } from "../../utils/hooks";
 import FullComponentLoader from "../../generic/components/FullComponentLoader";
 import {
   DiscoverDestination,
@@ -21,9 +20,9 @@ import TitleBar from "../../generic/components/TitleBar";
 import { changeDestination } from "../../client/client.deck";
 import EmptyView from "../../generic/components/EmptyView";
 import ErrorOneMessageTwoAction from "../../generic/components/ErrorOneMessageTwoAction";
-import { loadDiscoverDestination } from "../../utils/loaders";
 import { searchDiscoverDestinations } from "../../client/client.api";
 import { ToastContext } from "../../overlays/components/ToastProvider";
+import useDiscoverDestinationResource from "../../resource-hooks/useDiscoverDestinationResource";
 
 interface Props {
   close: () => void;
@@ -74,7 +73,10 @@ function SearchFilterItems(
 function DiscoverDestinationPicker({ close }: Props) {
   const showToast = useContext(ToastContext);
   const dispatch = useDispatch();
-  const resourceStatus = useDiscoverDestinationResource();
+  const {
+    resourceStatus,
+    loadDiscoverDestination: reloadDiscoverDestinationResource,
+  } = useDiscoverDestinationResource();
   const discoverDestinationData = useSelector<
     StoreState,
     DiscoverDestinationData
@@ -174,7 +176,7 @@ function DiscoverDestinationPicker({ close }: Props) {
 
   const retryDestinationPicker = () => {
     //Load here interacts with redux to update the resource state which this picker listens to stay fresh.
-    loadDiscoverDestination();
+    reloadDiscoverDestinationResource();
   };
 
   const [opacity, setOpacity] = useState(0);

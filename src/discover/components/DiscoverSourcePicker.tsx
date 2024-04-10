@@ -1,7 +1,6 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { StoreState } from "../../state/store";
-import { useDiscoverSourceResource } from "../../utils/hooks";
 import { searchDiscoverSources } from "../../client/client.api";
 import FullComponentLoader from "../../generic/components/FullComponentLoader";
 import {
@@ -23,8 +22,8 @@ import DiscoverVibePicker from "./DiscoverVibePicker";
 import { changeSource } from "../../client/client.deck";
 import EmptyView from "../../generic/components/EmptyView";
 import ErrorOneMessageTwoAction from "../../generic/components/ErrorOneMessageTwoAction";
-import { loadDiscoverSource } from "../../utils/loaders";
 import { ToastContext } from "../../overlays/components/ToastProvider";
+import useDiscoverSourceResource from "../../resource-hooks/useDiscoverSourceResource";
 
 interface Props {
   close: () => void;
@@ -96,7 +95,8 @@ function SearchFilterItems(
 function DiscoverSourcePicker({ close }: Props) {
   const showToast = useContext(ToastContext);
   const dispatch = useDispatch();
-  const resourceStatus = useDiscoverSourceResource();
+  const { resourceStatus, loadDiscoverSource: reloadDiscoverSourceResource } =
+    useDiscoverSourceResource();
   const discoverSourceData = useSelector<StoreState, DiscoverSourceData>(
     (state) => state.discoverSourceState.data
   );
@@ -190,7 +190,7 @@ function DiscoverSourcePicker({ close }: Props) {
 
   const retrySourcePicker = () => {
     //Load here interacts with redux to update the resource state which this picker listens to stay fresh.
-    loadDiscoverSource();
+    reloadDiscoverSourceResource();
   };
 
   const [opacity, setOpacity] = useState(0);
