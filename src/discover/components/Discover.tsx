@@ -31,7 +31,6 @@ const waitForDeckMillis = 15000; //We wait for up to 15 seconds for the deck to 
 
 function Discover() {
   const dispatch = useDispatch();
-  useNoDocumentScroll();
   const [, windowHeight] = useWindowSize();
 
   const isDeckReady = useDeck(); //Add a loader until deck get ready.
@@ -41,6 +40,8 @@ function Discover() {
   const isSelectingDestination = useSelector<StoreState, boolean>(
     (state) => state.globalUIState.isDestinationPickerOpen
   );
+
+  useNoDocumentScroll(!isSelectingSource && !isSelectingDestination);
 
   const timoutHandle = useRef(nullTimeoutHandle);
   const [isTimedOut, setIsTimedOut] = useState(false);

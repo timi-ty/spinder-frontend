@@ -123,23 +123,26 @@ function useDiscoverDestinationResource() {
 /**********RESOURCE HOOKS END**********/
 
 /**********REGULAR HOOKS START**********/
-function useNoDocumentScroll() {
+function useNoDocumentScroll(condition: boolean) {
   const root = document.getElementById("root")!;
 
-  const preventScroll = useCallback((event: TouchEvent) => {
-    event.preventDefault();
-  }, []);
+  const preventScrollIfCondition = useCallback(
+    (event: TouchEvent) => {
+      if (condition) event.preventDefault();
+    },
+    [condition]
+  );
 
   useEffect(() => {
-    document.body.addEventListener("touchmove", preventScroll, {
+    document.body.addEventListener("touchmove", preventScrollIfCondition, {
       passive: false,
     });
     root.style.overflow = "hidden";
     return () => {
-      document.body.removeEventListener("touchmove", preventScroll);
+      document.body.removeEventListener("touchmove", preventScrollIfCondition);
       root.style.overflow = "";
     };
-  }, []);
+  }, [condition]);
 }
 
 function useWindowSize(): number[] {
