@@ -26,6 +26,7 @@ import {
   remToPx,
 } from "../../utils/utils";
 import { StoreState } from "../../state/store";
+import { DeckItem } from "../../client/client.model";
 
 const dragActionThreshold = 20;
 
@@ -40,22 +41,28 @@ function DiscoverDeckView() {
   //The jumping item is the item that will have to change it's absolute position behind the scenes without a transition.
   const [jumpingItemCursor, setJumpingItemCursor] = useState(-1);
 
-  const deckItem0 = useMemo(() => {
+  const deckItem0 = useSelector<StoreState, DeckItem>(
+    (state) => state.deckState.deckItem0
+  );
+  useEffect(() => {
     const deckItem = getDeckItem(cursor0);
     dispatch(setDeckItem0(deckItem));
-    return deckItem;
   }, [cursor0]);
 
-  const deckItem1 = useMemo(() => {
+  const deckItem1 = useSelector<StoreState, DeckItem>(
+    (state) => state.deckState.deckItem1
+  );
+  useEffect(() => {
     const deckItem = getDeckItem(cursor1);
     dispatch(setDeckItem1(deckItem));
-    return deckItem;
   }, [cursor1]);
 
-  const deckItem2 = useMemo(() => {
+  const deckItem2 = useSelector<StoreState, DeckItem>(
+    (state) => state.deckState.deckItem2
+  );
+  useEffect(() => {
     const deckItem = getDeckItem(cursor2);
     dispatch(setDeckItem2(deckItem));
-    return deckItem;
   }, [cursor2]);
 
   const activeDeckItem = useMemo(() => {
