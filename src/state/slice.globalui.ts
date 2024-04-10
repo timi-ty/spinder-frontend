@@ -1,73 +1,54 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface GlobalUIState {
-  isAwaitingFullScreen: boolean;
   isSourcePickerOpen: boolean;
   isDestinationPickerOpen: boolean;
-  isTopToastVisible: boolean;
-  isBottomToastVisible: boolean;
-  topToastMessage: string;
-  bottomToastMessage: string;
+  isAttemptingUnauthorizedAction: boolean;
+  lastAttemptedUnauthorizedAction: string;
 }
 
 const defaultGlobalUIState: GlobalUIState = {
-  isAwaitingFullScreen: false,
   isSourcePickerOpen: false,
   isDestinationPickerOpen: false,
-  isTopToastVisible: false,
-  isBottomToastVisible: false,
-  topToastMessage: "",
-  bottomToastMessage: "",
+  isAttemptingUnauthorizedAction: false,
+  lastAttemptedUnauthorizedAction: "",
 };
-
-interface StringAction {
-  type: string;
-  payload: string;
-}
 
 interface BooleanAction {
   type: string;
   payload: boolean;
 }
 
+interface StringAction {
+  type: string;
+  payload: string;
+}
+
 const globalUISlice = createSlice({
   name: "globalUIState",
   initialState: defaultGlobalUIState,
   reducers: {
-    setIsAwaitingFullScreen(state, action: BooleanAction) {
-      state.isAwaitingFullScreen = action.payload;
-    },
     setIsSourcePickerOpen(state, action: BooleanAction) {
       state.isSourcePickerOpen = action.payload;
     },
     setIsDestinationPickerOpen(state, action: BooleanAction) {
       state.isDestinationPickerOpen = action.payload;
     },
-    showTopToast: (state, action: StringAction) => {
-      state.isTopToastVisible = true;
-      state.topToastMessage = action.payload;
+    attemptUnauthorizedAction(state, action: StringAction) {
+      state.isAttemptingUnauthorizedAction = true;
+      state.lastAttemptedUnauthorizedAction = action.payload;
     },
-    showBottomToast: (state, action: StringAction) => {
-      state.isBottomToastVisible = true;
-      state.bottomToastMessage = action.payload;
-    },
-    hideTopToast: (state) => {
-      state.isTopToastVisible = false;
-    },
-    hideBottomToast: (state) => {
-      state.isBottomToastVisible = false;
+    dissmissUnauthorizedAction(state) {
+      state.isAttemptingUnauthorizedAction = false;
     },
   },
 });
 
 export const {
-  showBottomToast,
-  showTopToast,
-  hideBottomToast,
-  hideTopToast,
-  setIsAwaitingFullScreen,
   setIsSourcePickerOpen,
   setIsDestinationPickerOpen,
+  attemptUnauthorizedAction,
+  dissmissUnauthorizedAction,
 } = globalUISlice.actions;
 
 export { type GlobalUIState };

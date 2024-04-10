@@ -7,7 +7,7 @@ import { loginWithSpotifyUrl, requestAccess } from "../../client/client.api";
 import { useDispatch } from "react-redux";
 import { setAuthMode } from "../../state/slice.auth";
 
-function SandboxVerifyAuth() {
+function SandboxSignIn() {
   const [disableSubmit, setDisableSubmit] = useState(false);
   const [emailField, setEmailField] = useState("");
   const [isAllowedUser, setIsAllowedUser] = useState(false);
@@ -58,7 +58,7 @@ function SandboxVerifyAuth() {
   }
 
   return (
-    <form className="popup-sign-in" onSubmit={onSubmit} method="POST">
+    <form className="sandbox-sign-in" onSubmit={onSubmit} method="POST">
       {!requestedAccess && (
         <>
           <div className="title">Sign In</div>
@@ -78,7 +78,7 @@ function SandboxVerifyAuth() {
             {!isPendingResult && (
               <input
                 disabled={disableSubmit}
-                className="submit"
+                className="button"
                 type="submit"
                 value={`${isAllowedUser ? "Let's Go!" : "Request Access"}`}
               />
@@ -110,4 +110,4 @@ function SandboxVerifyAuth() {
   );
 }
 
-export default SandboxVerifyAuth;
+export default SandboxSignIn;

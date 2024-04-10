@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { AuthStatus } from "../state/slice.auth";
+import { AuthMode, AuthStatus } from "../state/slice.auth";
 import { StoreState, ResourceStatus, dispatch } from "../state/store";
 import { getSpotifyProfile } from "../client/client.api";
 import { SpotifyUserProfileData } from "../client/client.model";
@@ -14,6 +14,9 @@ function useSpotifyProfileResource() {
   const authStatus = useSelector<StoreState, AuthStatus>(
     (state) => state.authState.status
   );
+  const authMode = useSelector<StoreState, AuthMode>(
+    (state) => state.authState.mode
+  );
   const resourceStatus = useSelector<StoreState, ResourceStatus>(
     (state) => state.userProfileState.status
   );
@@ -24,8 +27,14 @@ function useSpotifyProfileResource() {
       );
       return;
     }
+    if (authMode !== "Full") {
+      console.log(
+        `Ignoring request to use User Profile Resource because auth mode is - ${authMode}`
+      );
+      return;
+    }
     loadUserProfile();
-  }, [authStatus]);
+  }, [authStatus, authMode]);
 
   return resourceStatus;
 }

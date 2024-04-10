@@ -21,7 +21,7 @@ function GenericPopupOverlay({
 }: GenericPopupProps) {
   return (
     <div className="popup-overlay">
-      <div className="popup">
+      <div className="generic-popup">
         <div className="title">{title}</div>
         <div className="message">{message}</div>
         {buttons.length > 0 && (
@@ -58,7 +58,7 @@ interface CustomPopupProps {
 function CustomPopupOverlay({ sandboxComponent }: CustomPopupProps) {
   return (
     <div className="popup-overlay">
-      <div className="popup">{sandboxComponent}</div>
+      <div className="custom-popup">{sandboxComponent}</div>
     </div>
   );
 }
@@ -79,17 +79,21 @@ function PopupProvider({ children }: ProviderProps) {
   const [currentPopup, setCurrentPopup] = useState(popups.get(""));
 
   function pushPopup(owner: string, popup: GenericPopupProps | ReactNode) {
-    const newPopups = new Map();
-    popups.forEach((value, key) => newPopups.set(key, value));
-    newPopups.set(owner, popup);
-    setPopups(newPopups);
+    setPopups((oldPopups) => {
+      const newPopups = new Map();
+      oldPopups.forEach((value, key) => newPopups.set(key, value));
+      newPopups.set(owner, popup);
+      return newPopups;
+    });
   }
 
   function clearPopup(owner: string) {
-    const newPopups = new Map();
-    popups.forEach((value, key) => newPopups.set(key, value));
-    newPopups.delete(owner);
-    setPopups(newPopups);
+    setPopups((oldPopups) => {
+      const newPopups = new Map();
+      oldPopups.forEach((value, key) => newPopups.set(key, value));
+      newPopups.delete(owner);
+      return newPopups;
+    });
   }
 
   useEffect(() => {

@@ -1,13 +1,5 @@
-import { ReactNode, createContext, useEffect, useRef } from "react";
+import { ReactNode, createContext, useEffect, useRef, useState } from "react";
 import "../styles/ToastOverlay.scss";
-import { useSelector } from "react-redux";
-import {
-  hideTopToast,
-  hideBottomToast,
-  showTopToast,
-  showBottomToast,
-} from "../../state/slice.globalui";
-import { StoreState, dispatch } from "../../state/store";
 import { nullTimeoutHandle } from "../../utils";
 
 interface Props {
@@ -52,19 +44,11 @@ interface ProviderProps {
 function ToastProvider({ children }: ProviderProps) {
   const toastDurationMillis = 2000; //Show toast messages for 2 seconds.
 
-  const isTopToastShowing = useSelector<StoreState, boolean>(
-    (state) => state.globalUIState.isTopToastVisible
-  );
-  const isBottomToastShowing = useSelector<StoreState, boolean>(
-    (state) => state.globalUIState.isBottomToastVisible
-  );
+  const [isTopToastShowing, setIsTopToastShowing] = useState(false);
+  const [isBottomToastShowing, setIsBottomToastShowing] = useState(false);
 
-  const topToastMessage = useSelector<StoreState, string>(
-    (state) => state.globalUIState.topToastMessage
-  );
-  const bottomToastMessage = useSelector<StoreState, string>(
-    (state) => state.globalUIState.bottomToastMessage
-  );
+  const [topToastMessage, setTopToastMessage] = useState("");
+  const [bottomToastMessage, setBottomToastMessage] = useState("");
 
   const topTimeoutHandle = useRef(nullTimeoutHandle);
   const bottomTimeoutHandle = useRef(nullTimeoutHandle);
@@ -73,7 +57,7 @@ function ToastProvider({ children }: ProviderProps) {
     if (topTimeoutHandle.current) clearTimeout(topTimeoutHandle.current);
     if (isTopToastShowing) {
       topTimeoutHandle.current = setTimeout(() => {
-        dispatch(hideTopToast());
+        setIsTopToastShowing(false);
       }, toastDurationMillis);
     }
   }, [isTopToastShowing]);
@@ -82,7 +66,7 @@ function ToastProvider({ children }: ProviderProps) {
     if (bottomTimeoutHandle.current) clearTimeout(bottomTimeoutHandle.current);
     if (isBottomToastShowing) {
       bottomTimeoutHandle.current = setTimeout(() => {
-        dispatch(hideBottomToast());
+        setIsBottomToastShowing(false);
       }, toastDurationMillis);
     }
   }, [isBottomToastShowing]);
@@ -90,10 +74,12 @@ function ToastProvider({ children }: ProviderProps) {
   function showToast(message: string, location: "Top" | "Bottom" = "Top") {
     switch (location) {
       case "Top":
-        dispatch(showTopToast(message));
+        setIsTopToastShowing(true);
+        setTopToastMessage(message);
         break;
       case "Bottom":
-        dispatch(showBottomToast(message));
+        setIsBottomToastShowing(true);
+        setBottomToastMessage(message);
         break;
     }
   }

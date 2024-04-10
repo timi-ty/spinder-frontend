@@ -8,7 +8,6 @@ import ComponentViewer, { isViewingComponent } from "./dev/ComponentViewer";
 import { Provider } from "react-redux";
 import { store } from "./state/store";
 import ErrorBoundary from "./ErrorBoundary";
-import PendingAccess from "./home/components/PendingAccess";
 import ToastProvider from "./overlays/components/ToastProvider";
 import PopupProvider from "./overlays/components/PopupProvider";
 
@@ -28,11 +27,6 @@ const browserRouter = createBrowserRouter([
   {
     path: "/home",
     element: <Home />, //Renders only if the user is not logged in or if the user goes to the home URL directly.
-    errorElement: <ErrorBoundary />,
-  },
-  {
-    path: "/home/pending_access",
-    element: <PendingAccess />, //Renders only if the user was redirected after requesting access.
     errorElement: <ErrorBoundary />,
   },
 ]);

@@ -4,23 +4,46 @@ import ErrorOneMessageTwoAction from "./generic/components/ErrorOneMessageTwoAct
 import FullComponentLoader from "./generic/components/FullComponentLoader";
 import { logout } from "./client/client";
 import { useContext, useEffect } from "react";
-import SandboxVerifyAuth from "./sandbox-components/components/SandboxSignIn";
+import SandboxSignIn from "./sandbox-components/components/SandboxSignIn";
 import { PopupContext } from "./overlays/components/PopupProvider";
 import useAuthResource from "./resource-hooks/useAuthResource";
+import { useSelector } from "react-redux";
+import { StoreState } from "./state/store";
+import SandboxUnauthorizedAction from "./sandbox-components/components/SandboxUnauthorizedAction";
 
 function App() {
   const { authStatus, authMode } = useAuthResource();
   const { pushPopup, clearPopup } = useContext(PopupContext);
+  const isAttemptingUnauthAction = useSelector<StoreState, boolean>(
+    (state) => state.globalUIState.isAttemptingUnauthorizedAction
+  );
+  const unauthActionDescription = useSelector<StoreState, string>(
+    (state) => state.globalUIState.lastAttemptedUnauthorizedAction
+  );
 
   useEffect(() => {
     if (authMode === "UnacceptedAnon") {
-      pushPopup("AuthMode", <SandboxVerifyAuth />);
+      console.log("Pushing uanon popup");
+      pushPopup("AuthMode", <SandboxSignIn />);
     } else {
       clearPopup("AuthMode");
     }
-
     return () => clearPopup("AuthMode");
   }, [authMode]);
+
+  useEffect(() => {
+    if (isAttemptingUnauthAction) {
+      pushPopup(
+        "UnauthAction",
+        <SandboxUnauthorizedAction
+          actionDescription={unauthActionDescription}
+        />
+      );
+    } else {
+      clearPopup("UnauthAction");
+    }
+    return () => clearPopup("UnauthAction");
+  }, [isAttemptingUnauthAction, unauthActionDescription]);
 
   return (
     <>

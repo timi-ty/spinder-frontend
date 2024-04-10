@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { AuthStatus } from "../state/slice.auth";
+import { AuthMode, AuthStatus } from "../state/slice.auth";
 import { StoreState, ResourceStatus, dispatch } from "../state/store";
 import { getDiscoverDestinations } from "../client/client.api";
 import { DiscoverDestinationData } from "../client/client.model";
@@ -14,6 +14,9 @@ function useDiscoverDestinationResource() {
   const authStatus = useSelector<StoreState, AuthStatus>(
     (state) => state.authState.status
   );
+  const authMode = useSelector<StoreState, AuthMode>(
+    (state) => state.authState.mode
+  );
   const resourceStatus = useSelector<StoreState, ResourceStatus>(
     (state) => state.discoverDestinationState.status
   );
@@ -24,8 +27,14 @@ function useDiscoverDestinationResource() {
       );
       return;
     }
+    if (authMode !== "Full") {
+      console.log(
+        `Ignoring request to use Discover Destination Resource because auth mode is - ${authMode}`
+      );
+      return;
+    }
     loadDiscoverDestination();
-  }, [authStatus]);
+  }, [authStatus, authMode]);
 
   return { resourceStatus, loadDiscoverDestination };
 }

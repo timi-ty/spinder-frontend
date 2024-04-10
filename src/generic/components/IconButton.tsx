@@ -8,6 +8,7 @@ interface Props {
   onAction: () => void;
   matchParentHeight?: boolean;
   showBackground?: boolean;
+  className?: string;
 }
 
 const defaultSize = 3; //rem
@@ -18,6 +19,7 @@ function IconButton({
   onAction,
   matchParentHeight = false,
   showBackground = true,
+  className = "",
 }: Props) {
   const ref: React.LegacyRef<HTMLButtonElement> = useRef(null);
   const [size, setSize] = useState(defaultSize);
@@ -41,7 +43,7 @@ function IconButton({
       type="button"
       title={title}
       ref={ref}
-      className="icon-button"
+      className={`icon-button ${className}`}
       onClick={onAction}
       style={{
         height: `${matchParentHeight ? "100%" : `${size}rem`}`,

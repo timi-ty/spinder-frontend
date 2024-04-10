@@ -1,5 +1,4 @@
-import React from "react";
-import SandboxVerifyAuth from "../sandbox-components/components/SandboxSignIn";
+import SandboxUnauthorizedAction from "../sandbox-components/components/SandboxUnauthorizedAction";
 import "./ComponentViewer.scss";
 
 const isViewingComponent = false;
@@ -7,7 +6,7 @@ const isViewingComponent = false;
 function ComponentViewer() {
   return (
     <div className="component-viewer">
-      <SandboxVerifyAuth />
+      <SandboxUnauthorizedAction actionDescription={"do this action"} />
     </div>
   );
 }

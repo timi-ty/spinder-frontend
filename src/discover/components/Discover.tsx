@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import DiscoverTop from "./DiscoverTop";
 import DiscoverDeckView from "./DiscoverDeckView";
 import DiscoverBottom from "./DiscoverBottom";
@@ -26,7 +26,7 @@ import useWindowSize from "../../utility-hooks/useWindowSize";
 
 const waitForDeckMillis = 15000; //We wait for up to 15 seconds for the deck to be ready.
 
-function Discover() {
+const Discover = memo(function Discover() {
   const dispatch = useDispatch();
   const [, windowHeight] = useWindowSize();
 
@@ -128,6 +128,6 @@ function Discover() {
       )}
     </div>
   );
-}
+});
 
 export default Discover;
