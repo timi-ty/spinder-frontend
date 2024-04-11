@@ -1,6 +1,7 @@
 import { ReactNode, createContext, useEffect, useRef, useState } from "react";
 import "../styles/ToastOverlay.scss";
 import { nullTimeoutHandle } from "../../utils";
+import useWindowSize from "../../utility-hooks/useWindowSize";
 
 interface Props {
   isTopToastShowing: boolean;
@@ -15,8 +16,10 @@ function ToastOverlay({
   topToastMessage,
   bottomToastMessage,
 }: Props) {
+  const [, windowHeight] = useWindowSize();
+
   return (
-    <div className="toast-overlay">
+    <div className="toast-overlay" style={{ maxHeight: `${windowHeight}px` }}>
       <div
         style={{ opacity: `${isTopToastShowing ? "1" : "0"}` }}
         className="message"

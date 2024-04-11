@@ -2,6 +2,7 @@ import { ReactNode, createContext, useEffect, useMemo, useState } from "react";
 import "../styles/PopupOverlay.scss";
 import { useDispatch } from "react-redux";
 import { setIsPopupShowing } from "../../state/slice.globalui";
+import useWindowSize from "../../utility-hooks/useWindowSize";
 
 interface PopupAction {
   text: string;
@@ -21,8 +22,10 @@ function GenericPopupOverlay({
   buttons,
   links,
 }: GenericPopupProps) {
+  const [, windowHeight] = useWindowSize();
+
   return (
-    <div className="popup-overlay">
+    <div className="popup-overlay" style={{ maxHeight: `${windowHeight}px` }}>
       <div className="generic-popup">
         <div className="title">{title}</div>
         <div className="message">{message}</div>
@@ -58,8 +61,10 @@ interface CustomPopupProps {
 }
 
 function CustomPopupOverlay({ sandboxComponent }: CustomPopupProps) {
+  const [, windowHeight] = useWindowSize();
+
   return (
-    <div className="popup-overlay">
+    <div className="popup-overlay" style={{ maxHeight: `${windowHeight}px` }}>
       <div className="custom-popup">{sandboxComponent}</div>
     </div>
   );
