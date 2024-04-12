@@ -5,13 +5,15 @@ function useNoDocumentScroll(condition: boolean) {
 
   const preventScrollIfCondition = useCallback(
     (event: TouchEvent) => {
-      if (condition) event.preventDefault();
+      if (condition) {
+        window.scrollY = 0;
+        event.preventDefault();
+      }
     },
     [condition]
   );
 
   useEffect(() => {
-    window.scrollY = 0;
     document.body.addEventListener("touchmove", preventScrollIfCondition, {
       passive: false,
     });
