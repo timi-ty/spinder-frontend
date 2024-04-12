@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from "react";
+import { LegacyRef, memo, useEffect, useRef, useState } from "react";
 import DiscoverTop from "./DiscoverTop";
 import DiscoverDeckView from "./DiscoverDeckView";
 import DiscoverBottom from "./DiscoverBottom";
@@ -38,7 +38,11 @@ const Discover = memo(function Discover() {
     (state) => state.globalUIState.isDestinationPickerOpen
   );
 
-  useNoDocumentScroll(!isSelectingSource && !isSelectingDestination);
+  const discover: LegacyRef<HTMLDivElement> = useRef(null);
+  useNoDocumentScroll(
+    !isSelectingSource && !isSelectingDestination,
+    discover.current
+  );
 
   const timoutHandle = useRef(nullTimeoutHandle);
   const [isTimedOut, setIsTimedOut] = useState(false);
@@ -78,7 +82,11 @@ const Discover = memo(function Discover() {
   useDiscoverDestinationResource();
 
   return (
-    <div className="discover" style={{ maxHeight: `${windowHeight}px` }}>
+    <div
+      className="discover"
+      style={{ maxHeight: `${windowHeight}px` }}
+      ref={discover}
+    >
       <DiscoverBackgroundProvider>
         <DiscoverTop
           onClickDestinationPicker={() =>

@@ -1,12 +1,16 @@
 import { useCallback, useEffect } from "react";
 
-function useNoDocumentScroll(condition: boolean) {
+function useNoDocumentScroll(
+  condition: boolean,
+  unscrolledElement: HTMLElement | null
+) {
   const root = document.getElementById("root")!;
 
   const preventScrollIfCondition = useCallback(
     (event: TouchEvent) => {
       if (condition) {
         window.scrollY = 0;
+        if (unscrolledElement) unscrolledElement.scrollTop = 0;
         event.preventDefault();
       }
     },
