@@ -11,6 +11,7 @@ function useNoDocumentScroll(condition: boolean) {
   );
 
   useEffect(() => {
+    window.scrollY = 0;
     document.body.addEventListener("touchmove", preventScrollIfCondition, {
       passive: false,
     });
