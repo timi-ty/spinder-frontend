@@ -10,6 +10,7 @@ function useNoDocumentScroll(
     (event: TouchEvent) => {
       if (condition) {
         window.scrollY = 0;
+        if (document.scrollingElement) document.scrollingElement.scrollTop = 0;
         if (unscrolledElement) unscrolledElement.scrollTop = 0;
         event.preventDefault();
       }
