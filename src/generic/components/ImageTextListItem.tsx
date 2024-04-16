@@ -1,5 +1,5 @@
 import { useRef, useLayoutEffect, useState } from "react";
-import "../styles/ImageTextListItem.scss";
+import styles from "../styles/ImageTextListItem.module.css";
 
 type ImageType = "Circle" | "Rounded";
 
@@ -34,11 +34,11 @@ function ImageTextListItem({
   const clipClass = imageType === "Circle" ? "circle" : "rounded";
 
   return (
-    <div className="image-text-list-item" onClick={onClick}>
+    <div className={styles.ImageTextListItem} onClick={onClick}>
       <div ref={detailsContainerRef} className="details-container">
         <img
           title={text}
-          className={`image ${clipClass}`}
+          className={`${styles.image} ${clipClass}`}
           src={image}
           onError={(ev) =>
             (ev.currentTarget.src = "/resources/fallback_square.svg")
@@ -47,13 +47,13 @@ function ImageTextListItem({
             width: `${imageSize}px`,
           }}
         />
-        <div className="text">{text}</div>
+        <div className={styles.text}>{text}</div>
       </div>
 
       {isSelected && (
         <img
           title="Selected"
-          className="checkmark"
+          className={styles.checkmark}
           src="/resources/ic_checkmark.svg"
         />
       )}

@@ -1,44 +1,42 @@
-@use "../../base";
-
-.search-area {
+.searchArea {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-left: 1rem; //right padding is done by cancel button if searching and set dynamically if not searching
+  padding-left: 1rem; /* right padding is done by cancel button if searching and set dynamically if not searching */
 }
 
-.search-area > .search-box {
+.searchArea > .searchBox {
   align-self: stretch;
   width: 100%;
   display: flex;
   align-items: center;
   gap: 1rem;
-  background: base.$search-bar-color;
+  background: var(--search-bar-color);
   border-radius: 50000rem;
   padding: 0% 1rem 0% 1rem;
 }
 
-.search-area > .search-box > .icon {
+.searchArea > .searchBox > .icon {
   height: 41.667%;
 }
 
-.search-area > .search-box > .loader {
+.searchArea > .searchBox > .loader {
   height: 41.667%;
   animation: rotate 3s linear infinite;
 }
 
-.search-area > .search-box > .search {
+.searchArea > .searchBox > .search {
   font-family: inherit;
   height: 100%;
   width: 100%;
-  color: base.$primary-text-color;
+  color: var(--primary-text-color);
   outline: none;
   border: none;
   background: none;
 }
 
-.search-area > .cancel {
+.searchArea > .cancel {
   height: 100%;
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;

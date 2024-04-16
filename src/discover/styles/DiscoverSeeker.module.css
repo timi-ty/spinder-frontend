@@ -1,6 +1,4 @@
-@use "../../base";
-
-.discover .seeker {
+.seeker {
   position: absolute;
   width: 100%;
   bottom: 0;
@@ -8,8 +6,8 @@
   z-index: 1;
 }
 
-.discover .seeker .foreground {
-  background: base.$primary-color;
+.seeker .foreground {
+  background: var(--primary-color);
   height: 100%;
   transition: width 0.5s;
 }

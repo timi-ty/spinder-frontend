@@ -8,7 +8,7 @@ import {
   DiscoverSourceData,
   emptySourceSearchResult,
 } from "../../client/client.model";
-import "../styles/DiscoverSourcePicker.scss";
+import styles from "../styles/DiscoverSourcePicker.module.css";
 import SearchArea from "../../generic/components/SearchArea";
 import TabListGroup, {
   TabListItem,
@@ -229,15 +229,15 @@ function DiscoverSourcePicker({ close }: Props) {
   }
 
   return (
-    <div className="source-picker" style={{ opacity: `${opacity}` }}>
+    <div className={styles.sourcePicker} style={{ opacity: `${opacity}` }}>
       {!isLoadingPicker && !isLoadingSourceChange && !isPickerError && (
         <>
           {!isSearching && (
-            <div className="title">
+            <div className={styles.title}>
               <TitleBar title={"Source"} onClose={() => closePicker()} />
             </div>
           )}
-          <div className="search">
+          <div className={styles.search}>
             <SearchArea
               onSearch={onSearch}
               onTextChanged={onSearchTextChanged}
@@ -247,17 +247,17 @@ function DiscoverSourcePicker({ close }: Props) {
           </div>
           {/* When searching, the title bar goes away which allows the bottom to occupy more space. */}
           <div
-            className="bottom"
+            className={styles.bottom}
             style={{ height: `${isSearching ? "calc(100% - 5rem)" : ""}` }}
           >
             {!isSearching && !isCompositeSource(selectedSourceItem) && (
               <div
-                className={`selected-source-item`}
+                className={styles.selectedSourceItem}
                 onClick={() => onSourceClick(selectedSourceItem, true)}
               >
                 <img
                   title={selectedSourceItem.name}
-                  className="icon"
+                  className={styles.icon}
                   src={selectedSourceItem.image}
                   style={{
                     clipPath: `${
@@ -274,7 +274,7 @@ function DiscoverSourcePicker({ close }: Props) {
                     }`,
                   }}
                 />
-                <div className="text">{selectedSourceItem.title}</div>
+                <div className={styles.text}>{selectedSourceItem.title}</div>
               </div>
             )}
             {!isSearching && (
@@ -323,14 +323,14 @@ function DiscoverSourcePicker({ close }: Props) {
             {isSearching &&
               !isResultUpdated &&
               searchedSourcedItems.length === 0 && (
-                <div className="loader-empty">
+                <div className={styles.loaderEmpty}>
                   <FullComponentLoader />
                 </div>
               )}
             {isSearching &&
               isResultUpdated &&
               searchedSourcedItems.length === 0 && (
-                <div className="loader-empty">
+                <div className={styles.loaderEmpty}>
                   <EmptyView />
                 </div>
               )}
@@ -338,12 +338,12 @@ function DiscoverSourcePicker({ close }: Props) {
         </>
       )}
       {(isLoadingPicker || isLoadingSourceChange) && (
-        <div className="loader-error-full-page">
+        <div className={styles.loaderErrorFullPage}>
           <FullComponentLoader />
         </div>
       )}
       {isPickerError && (
-        <div className="loader-error-full-page">
+        <div className={styles.loaderErrorFullPage}>
           <ErrorOneMessageTwoAction
             message={"There was a problem loading the source picker."}
             actionOne={{

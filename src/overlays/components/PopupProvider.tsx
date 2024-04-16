@@ -1,5 +1,5 @@
 import { ReactNode, createContext, useEffect, useMemo, useState } from "react";
-import "../styles/PopupOverlay.scss";
+import styles from "../styles/PopupOverlay.module.css";
 import { useDispatch } from "react-redux";
 import { setIsPopupShowing } from "../../state/slice.globalui";
 import useWindowSize from "../../utility-hooks/useWindowSize";
@@ -25,16 +25,19 @@ function GenericPopupOverlay({
   const [, windowHeight] = useWindowSize();
 
   return (
-    <div className="popup-overlay" style={{ maxHeight: `${windowHeight}px` }}>
-      <div className="generic-popup">
-        <div className="title">{title}</div>
-        <div className="message">{message}</div>
+    <div
+      className={styles.popupOverlay}
+      style={{ maxHeight: `${windowHeight}px` }}
+    >
+      <div className={styles.genericPopup}>
+        <div className={styles.title}>{title}</div>
+        <div className={styles.message}>{message}</div>
         {buttons.length > 0 && (
-          <div className="buttons">
+          <div className={styles.buttons}>
             {buttons.map((button) => (
               <button
                 key={button.text}
-                className="button"
+                className={styles.button}
                 onClick={button.action}
               >
                 {button.text}
@@ -43,9 +46,9 @@ function GenericPopupOverlay({
           </div>
         )}
         {links.length > 0 && (
-          <div className="links">
+          <div className={styles.links}>
             {links.map((link) => (
-              <a key={link.text} className="link" onClick={link.action}>
+              <a key={link.text} className={styles.link} onClick={link.action}>
                 {link.text}
               </a>
             ))}
@@ -64,8 +67,11 @@ function CustomPopupOverlay({ sandboxComponent }: CustomPopupProps) {
   const [, windowHeight] = useWindowSize();
 
   return (
-    <div className="popup-overlay" style={{ maxHeight: `${windowHeight}px` }}>
-      <div className="custom-popup">{sandboxComponent}</div>
+    <div
+      className={styles.popupOverlay}
+      style={{ maxHeight: `${windowHeight}px` }}
+    >
+      <div className={styles.customPopup}>{sandboxComponent}</div>
     </div>
   );
 }

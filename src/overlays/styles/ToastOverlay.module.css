@@ -1,6 +1,4 @@
-@use "../../base";
-
-.toast-overlay {
+.toastOverlay {
   position: absolute;
   top: 0px;
   left: 0px;
@@ -12,12 +10,12 @@
   align-items: center;
   pointer-events: none;
   padding: 1rem;
-  z-index: 10; //Very large. This is an overlay.
+  z-index: 10; /* Very large. This is an overlay. */
 }
 
-.toast-overlay .message {
-  background-color: base.$toast-bg-color;
-  color: base.$toast-text-color;
+.toastOverlay .message {
+  background-color: var(--toast-bg-color);
+  color: var(--toast-text-color);
   border-radius: 0.75rem;
   padding: 0.5rem;
   text-align: center;

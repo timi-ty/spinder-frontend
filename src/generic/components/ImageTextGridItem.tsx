@@ -1,6 +1,6 @@
 import { useRef, useState, useLayoutEffect } from "react";
 import { pxToRem } from "../../utils";
-import "../styles/ImageTextGridItem.scss";
+import styles from "../styles/ImageTextGridItem.module.css";
 
 const defaultSize = 10.25; //rem
 
@@ -44,7 +44,7 @@ function ImageTextGridItem({
   return (
     <div
       ref={ref}
-      className={`image-text-grid-item ${selected} ${className}`}
+      className={`${styles.imageTextGridItem} ${selected} ${className}`}
       style={{
         height: `${size}rem`,
         width: `${useAvailableWidth ? "" : `${size}rem`}`,
@@ -53,13 +53,13 @@ function ImageTextGridItem({
     >
       <img
         title={text}
-        className="image"
+        className={styles.image}
         src={image}
         onError={(ev) =>
           (ev.currentTarget.src = "/resources/fallback_square.svg")
         }
       />
-      <div className="text">{text}</div>
+      <div className={styles.text}>{text}</div>
     </div>
   );
 }

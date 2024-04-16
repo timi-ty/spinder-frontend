@@ -1,12 +1,12 @@
-.discover .background-panel {
+.backgroundPanel {
   position: absolute;
   top: 0px;
   width: 100%;
   height: 100%;
-  z-index: 0; //Create stacking context for just background panel, and also keeps the backgorund panel at low z-index.
+  z-index: 0; /* Create stacking context for just background panel, and also keeps the backgorund panel at low z-index. */
 }
-.discover .background-panel::after {
-  //Add a dark overlay to the background so we can use white text.
+.backgroundPanel::after {
+  /* Add a dark overlay to the background so we can use white text. */
   content: "";
   display: block;
   position: absolute;
@@ -19,13 +19,13 @@
   z-index: 2;
 }
 
-.discover .background-panel .container {
+.backgroundPanel .container {
   position: relative;
   width: 100%;
   height: 100%;
 }
 
-.discover .background-panel .swap-item {
+.backgroundPanel .swapItem {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -38,7 +38,7 @@
   filter: blur(100px);
 }
 
-.discover .background-panel .swap-item.inactive {
+.backgroundPanel .swapItem.inactive {
   opacity: 0;
   z-index: 0;
 }

@@ -1,4 +1,4 @@
-import "../styles/BalancedGrid.scss";
+import styles from "../styles/BalancedGrid.module.css";
 import IconTextGridItem from "./IconTextGridItem";
 import ImageTextGridItem from "./ImageTextGridItem";
 
@@ -28,7 +28,7 @@ function BalancedGrid<T extends BalancedGridItem>({
   className,
 }: Props<T>) {
   return (
-    <div className="balanced-grid">
+    <div className={styles.balancedGrid}>
       {showSelectedItem && graphicType === "Image" && (
         <ImageTextGridItem
           key={selectedItem.id}

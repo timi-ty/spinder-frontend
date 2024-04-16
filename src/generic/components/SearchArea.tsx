@@ -1,6 +1,6 @@
 import { LegacyRef, useCallback, useEffect, useRef, useState } from "react";
 import IconButton from "./IconButton";
-import "../styles/SearchArea.scss";
+import styles from "../styles/SearchArea.module.css";
 import { nullTimeoutHandle } from "../../utils";
 
 interface Props {
@@ -52,19 +52,23 @@ function SearchArea({
 
   return (
     <div
-      className="search-area"
+      className={styles.searchArea}
       style={{
         height: `${matchParentHeight ? "100%" : `${defaultHeight}rem`}`,
         paddingRight: `${isSearching ? "" : "1rem"}`, //When we're searching the cancel button handles our right padding
       }}
     >
-      <div className="search-box">
-        <img title="Search" className="icon" src={"/resources/ic_search.svg"} />
+      <div className={styles.searchBox}>
+        <img
+          title="Search"
+          className={styles.icon}
+          src={"/resources/ic_search.svg"}
+        />
         <input
           ref={inputRef}
           name="search"
           title="search"
-          className="search"
+          className={styles.search}
           value={searchText}
           placeholder={hint}
           onChange={(event) => {
@@ -76,13 +80,13 @@ function SearchArea({
         {isLoading && (
           <img
             title="Loader"
-            className="loader"
+            className={styles.loader}
             src={"/resources/ic_loader.svg"}
           />
         )}
       </div>
       {isSearching && (
-        <div className="cancel">
+        <div className={styles.cancel}>
           <IconButton
             icon={"/resources/ic_close.svg"}
             onAction={() => {

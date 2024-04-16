@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState } from "react";
-import "../styles/IconButton.scss";
+import styles from "../styles/IconButton.module.css";
 import { pxToRem } from "../../utils";
 
 interface Props {
@@ -43,7 +43,7 @@ function IconButton({
       type="button"
       title={title}
       ref={ref}
-      className={`icon-button ${className}`}
+      className={`${styles.iconButton} ${className}`}
       onClick={onAction}
       style={{
         height: `${matchParentHeight ? "100%" : `${size}rem`}`,
@@ -51,7 +51,7 @@ function IconButton({
         background: `${showBackground ? "" : "none"}`,
       }}
     >
-      <img title={title} className="icon" src={icon} />
+      <img title={title} className={styles.icon} src={icon} />
     </button>
   );
 }

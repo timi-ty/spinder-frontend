@@ -1,11 +1,11 @@
-.icon-button {
+.iconButton {
   border: none;
   border-radius: 16.667%;
   cursor: pointer;
   pointer-events: all;
 }
 
-.icon-button > .icon {
+.iconButton > .icon {
   height: 100%;
   width: 100%;
   object-fit: contain;

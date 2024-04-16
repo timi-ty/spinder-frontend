@@ -1,4 +1,4 @@
-.sandbox-unauth-action {
+.sandboxUnauthAction {
   width: 100%;
   padding: 1rem;
   display: flex;
@@ -7,15 +7,15 @@
   align-items: center;
 }
 
-.sandbox-unauth-action .title {
+.sandboxUnauthAction .title {
   font-weight: 600;
 }
 
-.sandbox-unauth-action .message {
+.sandboxUnauthAction .message {
   margin-top: 1rem;
 }
 
-.sandbox-unauth-action .button {
+.sandboxUnauthAction .button {
   margin-top: 1.5rem;
   padding: 0.5rem 1rem 0.5rem 1rem;
   border: none;
@@ -23,7 +23,7 @@
   cursor: pointer;
 }
 
-.sandbox-unauth-action .link {
+.sandboxUnauthAction .link {
   margin-top: 1.5rem;
   text-decoration: underline;
   cursor: pointer;

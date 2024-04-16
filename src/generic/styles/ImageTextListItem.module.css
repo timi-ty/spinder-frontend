@@ -1,6 +1,4 @@
-@use "../../base";
-
-.image-text-list-item {
+.imageTextListItem {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -8,33 +6,33 @@
   width: 100%;
   height: 4.5rem;
   padding: 0.75rem 0rem 0.75rem 0rem;
-  border-bottom: 1px solid base.$divider-color;
+  border-bottom: 1px solid var(--divider-color);
   cursor: pointer;
 }
-.image-text-list-item:last-child {
+.imageTextListItem:last-child {
   border-bottom: none;
 }
 
-.image-text-list-item .details-container {
+.imageTextListItem .detailsContainer {
   height: 100%;
   display: flex;
   align-items: center;
   gap: 1.25rem;
 }
 
-.image-text-list-item .image {
+.imageTextListItem .image {
   height: 100%;
   object-fit: cover;
 }
 
-.image-text-list-item .text {
+.imageTextListItem .text {
   font-size: 0.875rem;
 }
 
-.image-text-list-item .image.circle {
+.imageTextListItem .image.circle {
   clip-path: circle();
 }
 
-.image-text-list-item .image.rounded {
+.imageTextListItem .image.rounded {
   border-radius: 0.25rem;
 }

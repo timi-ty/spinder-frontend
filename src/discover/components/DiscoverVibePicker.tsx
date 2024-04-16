@@ -1,4 +1,4 @@
-import "../styles/DiscoverVibePicker.scss";
+import styles from "../styles/DiscoverVibePicker.module.css";
 
 type VibePickerStatus = "Searching" | "Found" | "Not Found";
 
@@ -15,20 +15,22 @@ function DiscoverVibePicker({
 }: Props) {
   return (
     <div
-      className="vibe-picker"
+      className={styles.vibePicker}
       onClick={() => {
         if (pickerStatus === "Found") onClick(); // Can only pick the vibe after it has been found
       }}
     >
       {pickerStatus === "Found" && (
-        <div className="found-a-vibe">Found a vibe</div>
+        <div className={styles.foundVibe}>Found a vibe</div>
       )}
-      {pickerStatus === "Found" && <div className="vibe-name">#{vibeName}</div>}
+      {pickerStatus === "Found" && (
+        <div className={styles.vibeName}>#{vibeName}</div>
+      )}
       {pickerStatus === "Searching" && (
-        <div className="search-overlay">Searching for a vibe...</div>
+        <div className={styles.searchOverlay}>Searching for a vibe...</div>
       )}
       {pickerStatus === "Not Found" && (
-        <div className="not-found">Couldn't find a vibe</div>
+        <div className={styles.notFound}>Couldn't find a vibe</div>
       )}
     </div>
   );

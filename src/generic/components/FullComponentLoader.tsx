@@ -1,9 +1,13 @@
-import "../styles/FullComponentLoader.scss";
+import styles from "../styles/FullComponentLoader.module.css";
 
 function FullComponentLoader() {
   return (
-    <div className="component-loader">
-      <img title="Spinner" className="spinner" src="/resources/ic_loader.svg" />
+    <div className={styles.componentLoader}>
+      <img
+        title="Spinner"
+        className={styles.spinner}
+        src="/resources/ic_loader.svg"
+      />
     </div>
   );
 }

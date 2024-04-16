@@ -1,0 +1,13 @@
+@import url('../../animations.css');
+
+.likeButton {
+    width: 100%;
+    height: 100%; /* Stretch to share height evenly with artist-image */
+    text-align: center;
+    cursor: pointer;
+    pointer-events: all;
+  }
+  
+.likeButton.animate {
+    animation: pulse 0.25s ease;
+  }

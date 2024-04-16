@@ -12,7 +12,7 @@ import {
 } from "react";
 import { changeSource } from "../../client/client.deck";
 import { selectDiscoverSource } from "../../state/slice.discoversource";
-import "../styles/DiscoverBottomLeft.scss";
+import styles from "../styles/DiscoverBottomLeft.module.css";
 import { ToastContext } from "../../overlays/components/ToastProvider";
 
 const gap = 1; //rem
@@ -67,25 +67,25 @@ function DiscoverBottomLeft() {
   }, [topContainerSizeObserver]);
 
   return (
-    <div className="bottom-left">
-      <div ref={topContainerRef} className="top">
+    <div className={styles.bottomLeft}>
+      <div ref={topContainerRef} className={styles.top}>
         <a href={`${activeDeckItem.trackUri}`}>
           <img
             title="Spotify"
-            className="spotify-icon"
+            className={styles.spotifyIcon}
             src="/resources/ic_spotify_white.png"
           />
         </a>
-        <div className="track-title">
-          <a className="link" href={`${activeDeckItem.trackUri}`}>
+        <div className={styles.trackTitle}>
+          <a className={styles.link} href={`${activeDeckItem.trackUri}`}>
             <span>{activeDeckItem.trackName}</span>
           </a>
         </div>
-        <div className="track-artists">
+        <div className={styles.trackArtists}>
           {activeDeckItem.artists.map((artist, index) => (
             <a
               key={artist.artistUri}
-              className="link"
+              className={styles.link}
               href={`${artist.artistUri}`}
             >
               <span>{`${artist.artistName}${
@@ -99,13 +99,13 @@ function DiscoverBottomLeft() {
         </div>
       </div>
       <div
-        className="bottom"
+        className={styles.bottom}
         style={{ height: `calc(100% - ${topContainerHeight}px - ${gap}rem)` }}
       >
-        <div className="related-sources">
+        <div className={styles.relatedSources}>
           {relatedSources.map((source) => (
             <div
-              className="source"
+              className={styles.source}
               key={source.id}
               onClick={() => onSourceClick(source)}
             >{`#${source.name}`}</div>

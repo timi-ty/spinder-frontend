@@ -3,7 +3,7 @@ import {
   addAudioElementTimeUpdateListener,
   removeAudioElementTimeUpdateListener,
 } from "../../client/client.audio";
-import "../styles/DiscoverSeeker.scss";
+import styles from "../styles/DiscoverSeeker.module.css";
 
 function DiscoverSeeker() {
   const [seekerProgress, setSeekerProgress] = useState(0);
@@ -20,8 +20,11 @@ function DiscoverSeeker() {
   }, []);
 
   return (
-    <div className="seeker">
-      <div className="foreground" style={{ width: `${seekerProgress}%` }}></div>
+    <div className={styles.seeker}>
+      <div
+        className={styles.foreground}
+        style={{ width: `${seekerProgress}%` }}
+      ></div>
     </div>
   );
 }

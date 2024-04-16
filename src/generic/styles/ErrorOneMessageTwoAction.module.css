@@ -1,6 +1,4 @@
-@use "../../base";
-
-.error-one-message-two-action {
+.errorOneMessageTwoAction {
   width: 100%;
   height: 100%;
   display: flex;
@@ -8,14 +6,14 @@
   justify-content: center;
   text-align: center;
   gap: 0.5rem;
-  background: base.$root-area-bg-color;
+  background: var(--root-area-bg-color);
   padding: 1rem;
 }
 
-.error-one-message-two-action > .message {
+.errorOneMessageTwoAction > .message {
   padding-bottom: 1rem;
 }
 
-.error-one-message-two-action > .button {
+.errorOneMessageTwoAction > .button {
   height: 2rem;
 }

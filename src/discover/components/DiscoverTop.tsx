@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import IconButton from "../../generic/components/IconButton";
 import { AuthMode } from "../../state/slice.auth";
 import { StoreState } from "../../state/store";
-import "../styles/DiscoverTop.scss";
+import styles from "../styles/DiscoverTop.module.css";
 import useAction from "../../utility-hooks/useAction";
 
 interface Props {
@@ -17,7 +17,7 @@ function DiscoverTop({ onClickSourcePicker, onClickDestinationPicker }: Props) {
   const doAction = useAction();
 
   return (
-    <div className="top">
+    <div className={styles.top}>
       <IconButton
         icon={"/resources/ic_discover_source.svg"}
         onAction={() =>

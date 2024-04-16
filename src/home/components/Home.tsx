@@ -1,4 +1,4 @@
-import "../styles/Home.scss";
+import "../styles/Home.module.css";
 
 const appUrl = import.meta.env.DEV
   ? "http://localhost:5173/"

@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import "../styles/TabListGroup.scss";
+import styles from "../styles/TabListGroup.module.css";
 import ImageTextListItem from "./ImageTextListItem";
 import { remToPx } from "../../utils";
 
@@ -62,17 +62,17 @@ function TabListGroup<T extends TabListItem>({
   }, [tabArray.length]);
 
   return (
-    <div className="tab-list-group">
-      <div className="tabs">
+    <div className={styles.tabListGroup}>
+      <div className={styles.tabs}>
         {tabArray.map((tabItems, index) => {
           const tabName =
             tabItems[0]
               .group; /*If the tab exists then it has at least 1 item.*/
-          const selected = index === selectedTab ? "selected" : "";
+          const selected = index === selectedTab ? styles.selected : "";
           return (
             <div
               ref={(itemRef) => (tabRefs.current[index] = itemRef)}
-              className={`tab-item ${selected}`}
+              className={`${styles.tabItem} ${selected}`}
               onClick={() => setSelectedTab(index)}
               key={tabName}
             >
@@ -81,15 +81,15 @@ function TabListGroup<T extends TabListItem>({
           );
         })}
       </div>
-      <div className="divider"></div>
+      <div className={styles.divider}></div>
       <div
-        className="selector"
+        className={styles.selector}
         style={{
           width: `${selectorWidth}px`,
           translate: `${selectorTranslation}px 0px`,
         }}
       ></div>
-      <div className="list">
+      <div className={styles.list}>
         {tabArray.length > selectedTab &&
           tabArray[selectedTab].map((item) => {
             const isSelected = item.id === selectedItem.id;

@@ -1,15 +1,15 @@
-@use "../../base";
+@import url('../../animations.css');
 
-.component-loader {
+.componentLoader {
   width: 100%;
   height: 100%;
-  background: base.$root-area-bg-color;
+  background: var(--root-area-bg-color);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.component-loader .spinner {
+.componentLoader .spinner {
   width: 50%;
   animation: rotate 3s linear infinite;
 }

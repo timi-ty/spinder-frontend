@@ -1,4 +1,4 @@
-import "../styles/DiscoverBackgroundPanel.scss";
+import styles from "../styles/DiscoverBackgroundPanel.module.css";
 import { useSelector } from "react-redux";
 import { DeckItem } from "../../client/client.model";
 import { StoreState } from "../../state/store";
@@ -26,23 +26,23 @@ const DiscoverBackgroundPanel = forwardRef(function DiscoverBackgroundPanel(
   );
 
   return (
-    <div ref={ref} className="background-panel">
-      <div className="container">
+    <div ref={ref} className={styles.backgroundPanel}>
+      <div className={styles.container}>
         <img
-          className={`swap-item ${
-            activeDeckItemCursor === 0 ? "" : "inactive"
+          className={`${styles.swapItem} ${
+            activeDeckItemCursor === 0 ? "" : `${styles.inactive}`
           }`}
           src={`${deckItem0.image}`}
         />
         <img
-          className={`swap-item ${
-            activeDeckItemCursor === 1 ? "" : "inactive"
+          className={`${styles.swapItem} ${
+            activeDeckItemCursor === 1 ? "" : `${styles.inactive}`
           }`}
           src={`${deckItem1.image}`}
         />
         <img
-          className={`swap-item ${
-            activeDeckItemCursor === 2 ? "" : "inactive"
+          className={`${styles.swapItem} ${
+            activeDeckItemCursor === 2 ? "" : `${styles.inactive}`
           }`}
           src={`${deckItem2.image}`}
         />

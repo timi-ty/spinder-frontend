@@ -1,9 +1,9 @@
-.discover > .deck {
+.deck {
   position: relative;
   width: 100%;
   height: calc(
     (100% - 5rem) / 2
-  ); //Share space evenly with bottom (full minus top divided by 2)
+  ); /* Share space evenly with bottom (full minus top divided by 2) */
   padding: 1rem;
   display: flex;
   justify-content: center;
@@ -11,7 +11,7 @@
   pointer-events: none;
 }
 
-.discover > .deck > .deck-items-container {
+.deck > .deckItemsContainer {
   position: relative;
   height: 100%;
   width: 100%;

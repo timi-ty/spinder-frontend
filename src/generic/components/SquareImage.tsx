@@ -5,7 +5,7 @@ import {
   useMemo,
   useEffect,
 } from "react";
-import "../styles/SquareImage.scss";
+import styles from "../styles/SquareImage.module.css";
 
 interface Props {
   image: string;
@@ -68,7 +68,7 @@ function SquareImage({
   return (
     <img
       title={title}
-      className={`circle-image ${extraClassName}`}
+      className={`${styles.image} ${extraClassName}`}
       src={image}
       onError={(ev) =>
         (ev.currentTarget.src = "/resources/fallback_square.svg")

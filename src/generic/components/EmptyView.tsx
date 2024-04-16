@@ -1,8 +1,8 @@
-import "../styles/EmptyView.scss";
+import styles from "../styles/EmptyView.module.css";
 
 function EmptyView() {
   return (
-    <div className="empty-view">
+    <div className={styles.emptyView}>
       <div>There is nothing here.</div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { useRef, useState, useLayoutEffect } from "react";
 import { pxToRem } from "../../utils";
-import "../styles/IconTextGridItem.scss";
+import styles from "../styles/IconTextGridItem.module.css";
 
 const defaultSize = 10.25; //rem
 
@@ -44,7 +44,7 @@ function IconTextGridItem({
   return (
     <div
       ref={ref}
-      className={`icon-text-grid-item ${selected} ${className}`}
+      className={`${styles.iconTextGridItem} ${selected} ${className}`}
       style={{
         height: `${size}rem`,
         width: `${useAvailableWidth ? "" : `${size}rem`}`,
@@ -53,13 +53,13 @@ function IconTextGridItem({
     >
       <img
         title={text}
-        className="icon"
+        className={styles.icon}
         src={icon}
         onError={(ev) =>
           (ev.currentTarget.src = "/resources/fallback_square.svg")
         }
       />
-      <div className="text">{text}</div>
+      <div className={styles.text}>{text}</div>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-.vibe-picker {
+.vibePicker {
   position: relative;
   width: 100%;
   height: 6.25rem;
@@ -11,7 +11,7 @@
   cursor: pointer;
 }
 
-.vibe-picker > .search-overlay {
+.vibePicker > .searchOverlay {
   position: absolute;
   width: calc(100% - 2px);
   height: calc(6.25rem - 2px);
@@ -26,12 +26,12 @@
   cursor: not-allowed;
 }
 
-.vibe-picker .found-a-vibe {
+.vibePicker .foundVibe {
   font-size: 0.875rem;
   color: #f1fbf5;
 }
 
-.vibe-picker .vibe-name {
+.vibePicker .vibeName {
   font-size: 2rem;
   color: #f1fbf5;
   font-weight: 600;
@@ -39,7 +39,7 @@
   padding-bottom: 0.5rem;
 }
 
-.vibe-picker .not-found {
+.vibePicker .notFound {
   position: absolute;
   top: 0px;
   left: 0px;

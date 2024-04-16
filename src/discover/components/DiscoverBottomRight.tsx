@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { DeckItem } from "../../client/client.model";
 import SquareImage from "../../generic/components/SquareImage";
 import { StoreState } from "../../state/store";
-import "../styles/DiscoverBottomRight.scss";
+import styles from "../styles/DiscoverBottomRight.module.css";
 import DiscoverLikeButton from "./DiscoverLikeButton";
 import { logout } from "../../client/client";
 import { DiscoverBackgroundContext } from "./DiscoverBackgroundPanel";
@@ -63,13 +63,13 @@ function DiscoverBottomRight() {
   );
 
   return (
-    <div className="bottom-right">
-      <div className="top">
-        <div ref={artistImageContainerRef} className="artist-image">
+    <div className={styles.bottomRight}>
+      <div className={styles.top}>
+        <div ref={artistImageContainerRef} className={styles.artistImage}>
           {/* Swap chain here to optimize loading artist images */}
           <a
-            className={`swap-item ${
-              activeDeckItemCursor === 0 ? "active" : ""
+            className={`${styles.swapItem} ${
+              activeDeckItemCursor === 0 ? `${styles.active}` : ""
             }`}
             href={`${
               deckItem0.artists.length > 0 ? deckItem0.artists[0].artistUri : ""
@@ -88,8 +88,8 @@ function DiscoverBottomRight() {
             />
           </a>
           <a
-            className={`swap-item ${
-              activeDeckItemCursor === 1 ? "active" : ""
+            className={`${styles.swapItem} ${
+              activeDeckItemCursor === 1 ? `${styles.active}` : ""
             }`}
             href={`${
               deckItem1.artists.length > 0 ? deckItem1.artists[0].artistUri : ""
@@ -108,8 +108,8 @@ function DiscoverBottomRight() {
             />
           </a>
           <a
-            className={`swap-item ${
-              activeDeckItemCursor === 2 ? "active" : ""
+            className={`${styles.swapItem} ${
+              activeDeckItemCursor === 2 ? `${styles.active}` : ""
             }`}
             href={`${
               deckItem2.artists.length > 0 ? deckItem2.artists[0].artistUri : ""
@@ -132,7 +132,7 @@ function DiscoverBottomRight() {
       </div>
       <div
         ref={rightBottomRef}
-        className="bottom"
+        className={styles.bottom}
         onClick={() => setIsShowingAccountActions((a) => !a)}
       >
         <SquareImage
@@ -149,18 +149,18 @@ function DiscoverBottomRight() {
       </div>
       {isShowingAccountActions && (
         <div
-          className="account-actions"
+          className={styles.accountActions}
           style={{ top: `${(rightBottomRef.current?.offsetTop ?? 0) - 80}px` }}
         >
           <div
-            className={`account-action ${
+            className={`${styles.accountAction} ${
               authMode === "Full" ? "" : "unauth-action"
             }`}
           >
             {authMode === "Full" && <a href={profleUri}>My Profile</a>}
             {authMode !== "Full" && "No Profile"}
           </div>
-          <div className="account-action" onClick={() => logout()}>
+          <div className={styles.accountAction} onClick={() => logout()}>
             Logout
           </div>
         </div>

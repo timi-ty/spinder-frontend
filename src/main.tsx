@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import "./main.scss";
+import "./animations.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./home/components/Home";
-import "./main.scss";
 import App from "./App";
 import ComponentViewer, { isViewingComponent } from "./dev/ComponentViewer";
 import { Provider } from "react-redux";

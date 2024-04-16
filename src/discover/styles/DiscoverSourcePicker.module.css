@@ -1,78 +1,76 @@
-@use "../../base";
-
-.discover > .source-picker {
+.sourcePicker {
   position: absolute;
   top: 0;
   width: 100%;
   height: 100%;
-  background: base.$root-area-bg-color;
+  background: var(--root-area-bg-color);
   z-index: 2;
   opacity: 0;
   transition: opacity 0.25s ease;
 }
 
-.discover > .source-picker > .title {
+.sourcePicker > .title {
   position: relative;
   width: 100%;
   padding-top: 1rem;
   height: 4rem;
 }
 
-.discover > .source-picker > .search {
+.sourcePicker > .search {
   position: relative;
   width: 100%;
   height: 3rem;
   margin-top: 1rem;
 }
 
-.discover > .source-picker > .bottom {
+.sourcePicker > .bottom {
   position: relative;
   width: 100%;
   margin-top: 1rem;
-  //Use rest of height less title, search and top-level margins.
+  /* Use rest of height less title, search and top-level margins. */
   height: calc(100% - 9rem);
   padding-left: 1rem;
-  padding-right: 12px; //Scrollbar is always 4px wide. Balance out.
+  padding-right: 12px; /* Scrollbar is always 4px wide. Balance out. */
   overflow-y: scroll;
   overflow-x: hidden;
 }
 
-.discover > .source-picker > .bottom > .tab-list-group {
+.sourcePicker > .bottom > .tabListGroup {
   padding-top: 1rem;
 }
 
-.discover > .source-picker .selected-source-item {
+.sourcePicker .selectedSourceItem {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 7.5rem;
-  background: base.$card-bg-color;
+  background: var(--card-bg-color);
   margin-bottom: 0.5rem;
-  border: 2px solid base.$selected-outline-color;
+  border: 2px solid var(--selected-outline-color);
   border-radius: 0.75rem;
 }
 
-.discover > .source-picker .selected-source-item .icon {
+.sourcePicker .selectedSourceItem .icon {
   height: 3rem;
   object-fit: cover;
 }
 
-.discover > .source-picker .selected-source-item .text {
+.sourcePicker .selectedSourceItem .text {
   padding-top: 0.25rem;
   font-size: 1rem;
 }
 
-.discover > .source-picker .bottom > .loader-empty {
-  //Use rest of height less title, search and top-level margins.
+.sourcePicker .bottom > .loaderEmpty {
+  /* Use rest of height less title, search and top-level margins. */
   height: calc(100% - 8rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.discover > .source-picker .loader-error-full-page {
+.sourcePicker .loaderErrorFullPage {
   height: 100%;
   display: flex;
   flex-direction: column;

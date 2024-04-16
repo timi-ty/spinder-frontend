@@ -1,0 +1,7 @@
+.balancedGrid {
+  width: 100%;
+  gap: 1rem;
+  display: grid;
+  grid-template-columns: calc(50% - 0.5rem) calc(50% - 0.5rem); /* half the full grid width minus the gap. */
+  padding-bottom: 1rem;
+}

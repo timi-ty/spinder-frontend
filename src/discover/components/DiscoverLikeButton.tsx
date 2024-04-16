@@ -12,6 +12,7 @@ import { nullTimeoutHandle } from "../../utils";
 import { ToastContext } from "../../overlays/components/ToastProvider";
 import useAction from "../../utility-hooks/useAction";
 import { AuthMode } from "../../state/slice.auth";
+import styles from "../styles/DiscoverLikeButton.module.css";
 
 const settleTimeInMillis = 1000; //1 second time to settle.
 
@@ -129,9 +130,9 @@ function DiscoverLikeButton() {
   return (
     <div
       ref={containerRef}
-      className={`like-button ${isAnimating ? "animate" : ""} ${
-        authMode === "Full" ? "" : "unauth-action"
-      }`}
+      className={`${styles.likeButton} ${
+        isAnimating ? `${styles.animate}` : ""
+      } ${authMode === "Full" ? "" : "unauth-action"}`}
       onClick={() => {
         doAction(onClickLike, {
           requiresFullAuth: true,

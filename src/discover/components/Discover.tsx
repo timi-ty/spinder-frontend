@@ -4,7 +4,7 @@ import DiscoverDeckView from "./DiscoverDeckView";
 import DiscoverBottom from "./DiscoverBottom";
 import DiscoverSeeker from "./DiscoverSeeker";
 import DiscoverDestinationPicker from "./DiscoverDestinationPicker";
-import "../styles/Discover.scss";
+import styles from "../styles/Discover.module.css";
 import DiscoverSourcePicker from "./DiscoverSourcePicker";
 import FullComponentLoader from "../../generic/components/FullComponentLoader";
 import { nullTimeoutHandle } from "../../utils";
@@ -83,7 +83,7 @@ const Discover = memo(function Discover() {
 
   return (
     <div
-      className="discover"
+      className={styles.discover}
       style={{ maxHeight: `${windowHeight}px` }}
       ref={discover}
     >
@@ -99,12 +99,12 @@ const Discover = memo(function Discover() {
         {isDeckReady && <DiscoverSeeker />}
       </DiscoverBackgroundProvider>
       {!isDeckReady && !isTimedOut && (
-        <div className="deck-loader-error">
+        <div className={styles.deckLoaderError}>
           <FullComponentLoader />
         </div>
       )}
       {!isDeckReady && isTimedOut && (
-        <div className="deck-loader-error">
+        <div className={styles.deckLoaderError}>
           <ErrorOneMessageTwoAction
             message={
               "We encountered a problem while curating your deck. If this error persists, please try a different source or reload the page."

@@ -1,4 +1,4 @@
-.sandbox-sign-in {
+.sandboxSignIn {
   width: 100%;
   padding: 1rem;
   display: flex;
@@ -7,32 +7,32 @@
   align-items: center;
 }
 
-.sandbox-sign-in .title {
+.sandboxSignIn .title {
   font-weight: 600;
 }
 
-.sandbox-sign-in .message {
+.sandboxSignIn .message {
   margin-top: 1rem;
 }
 
-.sandbox-sign-in .email-input {
+.sandboxSignIn .emailInput {
   margin-top: 1rem;
   padding: 0.25rem 0.5rem 0.25rem 0.5rem;
 }
 
-.sandbox-sign-in .button {
+.sandboxSignIn .button {
   padding: 0.5rem 1rem 0.5rem 1rem;
   border: none;
   border-radius: 0.3rem;
   cursor: pointer;
 }
 
-.sandbox-sign-in .submit-container {
+.sandboxSignIn .submitContainer {
   margin-top: 1rem;
   max-height: 2rem;
 }
 
-.sandbox-sign-in .link {
+.sandboxSignIn .link {
   margin-top: 1.5rem;
   text-decoration: underline;
   cursor: pointer;

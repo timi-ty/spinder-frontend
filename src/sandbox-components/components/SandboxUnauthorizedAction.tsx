@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import "../styles/SandboxUnauthorizedAction.scss";
+import styles from "../styles/SandboxUnauthorizedAction.module.css";
 import { dissmissUnauthorizedAction } from "../../state/slice.globalui";
 import { setAuthMode } from "../../state/slice.auth";
 
@@ -21,13 +21,13 @@ function SandboxUnauthorizedAction({ actionDescription }: Props) {
   }
 
   return (
-    <div className="sandbox-unauth-action">
-      <div className="title">You'd have to sign in</div>
-      <div className="message">Sign in to {actionDescription}.</div>
-      <button className="button" onClick={onClickSignIn}>
+    <div className={styles.sandboxUnauthAction}>
+      <div className={styles.title}>You'd have to sign in</div>
+      <div className={styles.message}>Sign in to {actionDescription}.</div>
+      <button className={styles.button} onClick={onClickSignIn}>
         Sign In
       </button>
-      <div className="link" onClick={onClickContinue}>
+      <div className={styles.link} onClick={onClickContinue}>
         Continue anonymously
       </div>
     </div>

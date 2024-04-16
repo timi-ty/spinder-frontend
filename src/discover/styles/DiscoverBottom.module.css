@@ -1,9 +1,9 @@
-.discover > .bottom {
+.bottom {
   position: relative;
-  width: calc(100% - 0rem); //minus marginx
+  width: calc(100% - 0rem); /* minus marginx */
   height: calc(
     ((100% - 5rem) / 2)
-  ); //Share space evenly with deck-view (full minus top divided by 2) //minus marginy
+  ); /* Share space evenly with deck-view (full minus top divided by 2) minus marginy */
   padding: 1rem 1rem 2rem 1rem;
   gap: 1rem;
   display: grid;

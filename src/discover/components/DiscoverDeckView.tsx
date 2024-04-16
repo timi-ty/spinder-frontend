@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 import DiscoverDeckItemView from "./DiscoverDeckItemView";
-import "../styles/DiscoverDeckView.scss";
+import styles from "../styles/DiscoverDeckView.module.css";
 import { getDeckItem, markVisitedDeckItem } from "../../client/client.deck";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -254,8 +254,8 @@ function DiscoverDeckView() {
 
   //In order not to reload the image and audio fed into DeckItemView, we only need to makesure that the value passed into mDeckItem does not change until we've used it.
   return (
-    <div className="deck">
-      <div ref={containerRef} className="deck-items-container">
+    <div className={styles.deck}>
+      <div ref={containerRef} className={styles.deckItemsContainer}>
         <DiscoverDeckItemView
           deckItemViewIndex={0}
           mDeckItem={deckItem0}

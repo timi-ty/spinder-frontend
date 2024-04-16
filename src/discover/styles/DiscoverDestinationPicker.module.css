@@ -1,50 +1,48 @@
-@use "../../base";
-
-.discover > .destination-picker {
+.destinationPicker {
   position: absolute;
   top: 0;
   width: 100%;
   height: 100%;
-  background: base.$root-area-bg-color;
+  background: var(--root-area-bg-color);
   z-index: 2;
   opacity: 0;
   transition: opacity 0.25s ease;
 }
 
-.discover > .destination-picker > .title {
+.destinationPicker > .title {
   position: relative;
   width: 100%;
   padding-top: 1rem;
   height: 4rem;
 }
 
-.discover > .destination-picker > .search {
+.destinationPicker > .search {
   position: relative;
   width: 100%;
   height: 3rem;
   margin-top: 1rem;
 }
 
-.discover > .destination-picker > .bottom {
+.destinationPicker > .bottom {
   position: relative;
   width: 100%;
   margin-top: 1rem;
-  //Use rest of height less title, search and margins.
+  /* Use rest of height less title, search and margins. */
   height: calc(100% - 9rem);
   padding-left: 1rem;
-  padding-right: 12px; //Scrollbar is always 4px wide. Balance out.
+  padding-right: 12px; /* Scrollbar is always 4px wide. Balance out. */
   overflow-y: scroll;
 }
 
-.discover > .destination-picker .bottom > .loader-empty {
-  //Use rest of height less title, search and top-level margins.
+.destinationPicker .bottom > .loaderEmpty {
+  /* Use rest of height less title, search and top-level margins. */
   height: calc(100% - 8rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.discover > .destination-picker .loader-error-full-page {
+.destinationPicker .loaderErrorFullPage {
   height: 100%;
   display: flex;
   flex-direction: column;

@@ -8,7 +8,7 @@ import {
   emptyDestinationSearchResult,
 } from "../../client/client.model";
 import { selectDiscoverDestination } from "../../state/slice.discoverdestination";
-import "../styles/DiscoverDestinationPicker.scss";
+import styles from "../styles/DiscoverDestinationPicker.module.css";
 import SearchArea from "../../generic/components/SearchArea";
 import TabListGroup, {
   TabListItem,
@@ -188,15 +188,15 @@ function DiscoverDestinationPicker({ close }: Props) {
   };
 
   return (
-    <div className="destination-picker" style={{ opacity: `${opacity}` }}>
+    <div className={styles.destinationPicker} style={{ opacity: `${opacity}` }}>
       {!isLoadingPicker && !isLoadingDestinationChange && !isPickerError && (
         <>
           {!isSearching && (
-            <div className="title">
+            <div className={styles.title}>
               {<TitleBar title={"Destination"} onClose={() => closePicker()} />}
             </div>
           )}
-          <div className="search">
+          <div className={styles.search}>
             <SearchArea
               onSearch={onSearch}
               onTextChanged={onSearchTextChanged}
@@ -206,7 +206,7 @@ function DiscoverDestinationPicker({ close }: Props) {
           </div>
           {/* When searching, the title bar goes away which allows the bottom to occupy more space. */}
           <div
-            className="bottom"
+            className={styles.bottom}
             style={{ height: `${isSearching ? "calc(100% - 5rem)" : ""}` }}
           >
             {!isSearching && (
@@ -227,7 +227,7 @@ function DiscoverDestinationPicker({ close }: Props) {
               />
             )}
             {isSearching && searchResults.length === 0 && (
-              <div className="loader-empty">
+              <div className={styles.loaderEmpty}>
                 <EmptyView />
               </div>
             )}
@@ -235,12 +235,12 @@ function DiscoverDestinationPicker({ close }: Props) {
         </>
       )}
       {(isLoadingPicker || isLoadingDestinationChange) && (
-        <div className="loader-error-full-page">
+        <div className={styles.loaderErrorFullPage}>
           <FullComponentLoader />
         </div>
       )}
       {isPickerError && (
-        <div className="loader-error-full-page">
+        <div className={styles.loaderErrorFullPage}>
           <ErrorOneMessageTwoAction
             message={"There was a problem loading the destination picker."}
             actionOne={{

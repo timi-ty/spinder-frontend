@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { isExistingFirestoreDoc } from "../../client/client.firebase";
 import FullComponentLoader from "../../generic/components/FullComponentLoader";
-import "../styles/SandboxSignIn.scss";
+import styles from "../styles/SandboxSignIn.module.css";
 import React from "react";
 import { loginWithSpotifyUrl, requestAccess } from "../../client/client.api";
 import { useDispatch } from "react-redux";
@@ -58,13 +58,13 @@ function SandboxSignIn() {
   }
 
   return (
-    <form className="sandbox-sign-in" onSubmit={onSubmit} method="POST">
+    <form className={styles.sandboxSignIn} onSubmit={onSubmit} method="POST">
       {!requestedAccess && (
         <>
-          <div className="title">Sign In</div>
+          <div className={styles.title}>Sign In</div>
           <input
             required
-            className="email-input"
+            className={styles.emailInput}
             id="email"
             name="email"
             type="email"
@@ -73,26 +73,26 @@ function SandboxSignIn() {
             onChange={(ev) => setEmailField(ev.target.value)}
             placeholder="Your Spotify email address"
           />
-          <div className="submit-container">
+          <div className={styles.submitContainer}>
             {isPendingResult && <FullComponentLoader />}
             {!isPendingResult && (
               <input
                 disabled={disableSubmit}
-                className="button"
+                className={styles.button}
                 type="submit"
                 value={`${isAllowedUser ? "Let's Go!" : "Request Access"}`}
               />
             )}
           </div>
-          <div className="link" onClick={continueAnon}>
+          <div className={styles.link} onClick={continueAnon}>
             Continue anonymously
           </div>
         </>
       )}
       {requestedAccess && (
         <>
-          <div className="title">Be Anonymous For Now</div>
-          <div className="message">
+          <div className={styles.title}>Be Anonymous For Now</div>
+          <div className={styles.message}>
             Thank you for requesting access to the full version of Spindr!{" "}
             <br />
             <br />
@@ -100,7 +100,7 @@ function SandboxSignIn() {
             limited version of Spindr in anonymous mode.
           </div>
           <input
-            className="submit-container button"
+            className={`${styles.submitContainer} ${styles.button}`}
             type="submit"
             value="Continue anonymously"
           />

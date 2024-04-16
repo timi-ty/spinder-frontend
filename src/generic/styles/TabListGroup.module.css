@@ -1,6 +1,4 @@
-@use "../../base";
-
-.tab-list-group .tabs {
+.tabListGroup .tabs {
   display: flex;
   justify-content: space-between;
   padding-top: 0.5rem;
@@ -8,25 +6,25 @@
   gap: 1rem;
 }
 
-.tab-list-group .tabs .tab-item {
+.tabListGroup .tabs .tabItem {
   font-size: 0.875rem;
   width: 100%;
   text-align: center;
   cursor: pointer;
 }
 
-.tab-list-group .divider {
+.tabListGroup .divider {
   margin-left: -0.5rem;
   margin-right: -0.5rem;
-  border-bottom: 1px solid base.$divider-color;
+  border-bottom: 1px solid var(--divider-color);
 }
 
-.tab-list-group .selector {
+.tabListGroup .selector {
   height: 0.3rem;
-  background-color: base.$primary-color;
+  background-color: var(--primary-color);
 }
 
-.tab-list-group .list {
+.tabListGroup .list {
   padding-top: 1rem;
   padding-bottom: 1rem;
 }

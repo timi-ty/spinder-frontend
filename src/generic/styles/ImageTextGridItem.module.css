@@ -1,22 +1,20 @@
-@use "../../base";
-
-.image-text-grid-item {
+.imageTextGridItem {
   position: relative;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  z-index: 0; //Create a stacking context just for this item.
-  background-color: base.$card-bg-color;
+  z-index: 0; /* Create a stacking context just for this item. */
+  background-color: var(--card-bg-color);
   border-radius: 0.75rem;
   cursor: pointer;
 }
 
-.image-text-grid-item.selected {
-  border: 2px solid base.$selected-outline-color;
+.imageTextGridItem.selected {
+  border: 2px solid var(--selected-outline-color);
   border-radius: 0.75rem;
 }
 
-.image-text-grid-item::after {
+.imageTextGridItem::after {
   content: "";
   position: absolute;
   top: 0;
@@ -28,7 +26,7 @@
   border-radius: 0.75rem;
 }
 
-.image-text-grid-item > .image {
+.imageTextGridItem > .image {
   position: absolute;
   left: 0;
   top: 0;
@@ -38,12 +36,12 @@
   object-fit: cover;
 }
 
-.image-text-grid-item > .text {
+.imageTextGridItem > .text {
   position: relative;
-  color: base.$primary-text-color;
+  color: var(--primary-text-color);
   font-size: 1rem;
   font-weight: 400;
   padding-bottom: 1rem;
-  z-index: 1; //Show the text ontop of the gradient.
+  z-index: 1; /* Show the text ontop of the gradient. */
   text-align: center;
 }

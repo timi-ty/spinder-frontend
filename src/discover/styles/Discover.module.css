@@ -4,7 +4,7 @@
   height: 100%;
 }
 
-.discover > .deck-loader-error {
+.discover > .deckLoaderError {
   position: absolute;
   top: 0px;
   height: 100%;

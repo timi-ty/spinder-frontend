@@ -1,0 +1,67 @@
+.bottomRight {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.bottomRight .top {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bottomRight .artistImage {
+  position: relative;
+  width: 100%;
+  height: 100%; /* Stretch to share height evenly with like-button */
+  text-align: center;
+  pointer-events: all;
+  z-index: 0; /* Create a new stacking context just for the swap chain items */
+}
+
+.bottomRight .artistImage .swapItem {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  opacity: 0;
+  z-index: 0;
+  transition: opacity 0.5s ease;
+}
+
+.bottomRight .artistImage .swapItem.active {
+  position: relative;
+  opacity: 1;
+  z-index: 1;
+}
+
+.bottomRight .bottom {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0rem 0.5rem 0rem 0.5rem;
+  text-align: center;
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.bottomRight .accountActions {
+  position: absolute;
+  background-color: var(--card-bg-color);
+  border-radius: 0.75rem;
+  pointer-events: all;
+}
+
+.bottomRight .accountAction {
+  font-size: 0.875rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+.bottomRight .accountAction:first-child {
+  border-bottom: 1px solid var(--divider-color);
+}

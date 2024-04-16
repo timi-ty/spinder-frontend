@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { onAudioElementTimeUpdate } from "../../client/client.audio";
-import "../styles/DiscoverDeckItemView.scss";
+import styles from "../styles/DiscoverDeckItemView.module.css";
 import { DeckItem } from "../../client/client.model";
 
 interface Props {
@@ -38,7 +38,7 @@ function DiscoverDeckItemView({
 
   return (
     <div
-      className="deck-item"
+      className={styles.deckItem}
       style={{
         translate: `0px ${verticalTranslation}px`,
         transition: `${transitionTranslate ? "translate 0.5s ease" : ""}`,
@@ -55,7 +55,7 @@ function DiscoverDeckItemView({
           />
           <img
             title={mDeckItem.trackName}
-            className="image"
+            className={styles.image}
             src={mDeckItem.image}
           />
         </>
