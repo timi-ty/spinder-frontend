@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef } from "react";
 import { TooltipContext } from "../overlays/components/TooltipProvider";
-import "./ComponentViewer.scss";
+import styles from "./ComponentViewer.module.css";
 import withOverlayProviders from "../overlays/components/withOverlayProviders";
 
 const isViewingComponent = true;
@@ -16,7 +16,7 @@ function ComponentViewer() {
   }, [ref.current]);
 
   return (
-    <div className="component-viewer">
+    <div className={styles.componentViewer}>
       <div ref={ref}>Tooltip Target</div>
     </div>
   );
