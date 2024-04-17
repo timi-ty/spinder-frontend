@@ -12,6 +12,7 @@
   padding: 1rem;
   z-index: 100; /* Very large. This is an overlay. */
   background-color: rgba(26, 26, 26, 0.742);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 

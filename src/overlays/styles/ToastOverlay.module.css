@@ -19,6 +19,7 @@
   border-radius: 0.75rem;
   padding: 0.5rem;
   text-align: center;
+  width: -moz-fit-content;
   width: fit-content;
   transition: opacity 0.5s;
   font-size: 0.875rem;

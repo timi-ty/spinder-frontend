@@ -11,13 +11,19 @@ function ComponentViewer() {
 
   useEffect(() => {
     if (ref.current) {
-      registerTooltip({ message: "This is a tooltip", target: ref.current });
+      registerTooltip({
+        message:
+          "This is a skjdbf sdkjbfjsk sdkjdbf jk;ksdbfkj sjdbflkj lksjdbfkjb nsdkjfbn lkjbdffg;jkb dlkjfgbf:DJN tooltip",
+        target: ref.current,
+      });
     }
   }, [ref.current]);
 
   return (
     <div className={styles.componentViewer}>
-      <div ref={ref}>Tooltip Target</div>
+      <div ref={ref} style={{ translate: "200px 340px", width: "fit-content" }}>
+        Tooltip Target
+      </div>
     </div>
   );
 }

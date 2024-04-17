@@ -51,7 +51,7 @@ function SquareImage({
       if (containerRef.current)
         containerSizeObserver.unobserve(containerRef.current);
     };
-  });
+  }, []);
 
   useLayoutEffect(() => {
     if (containerWidth > containerHeight && !forceIsWidthLimited) {
