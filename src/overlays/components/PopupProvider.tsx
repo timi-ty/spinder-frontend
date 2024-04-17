@@ -1,8 +1,9 @@
 import { ReactNode, createContext, useEffect, useMemo, useState } from "react";
 import styles from "../styles/PopupOverlay.module.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setIsPopupShowing } from "../../state/slice.globalui";
 import useWindowSize from "../../utility-hooks/useWindowSize";
+import { StoreState } from "../../state/store";
 
 interface PopupAction {
   text: string;
@@ -76,8 +77,13 @@ function CustomPopupOverlay({ sandboxComponent }: CustomPopupProps) {
   );
 }
 
+interface Popup {
+  owner: string;
+  value: GenericPopupProps | ReactNode;
+}
+
 const PopupContext = createContext({
-  pushPopup: (_owner: string, _popup: GenericPopupProps | ReactNode) => {},
+  pushPopup: (_popup: Popup) => {},
   clearPopup: (_owner: string) => {},
 });
 
@@ -87,54 +93,51 @@ interface ProviderProps {
 
 function PopupProvider({ children }: ProviderProps) {
   const dispatch = useDispatch();
-  const [popups, setPopups] = useState(
-    new Map<string, GenericPopupProps | ReactNode>()
+  const isPopupShowing = useSelector<StoreState, boolean>(
+    (state) => state.globalUIState.isPopupShowing
   );
-  const [currentPopup, setCurrentPopup] = useState(popups.get(""));
+  const [popups, setPopups] = useState(() => {
+    const emptyPopups: Popup[] = [];
+    return emptyPopups;
+  });
+  const [currentPopup, setCurrentPopup] = useState(popups[0]);
 
-  function pushPopup(owner: string, popup: GenericPopupProps | ReactNode) {
-    setPopups((oldPopups) => {
-      const newPopups = new Map();
-      oldPopups.forEach((value, key) => newPopups.set(key, value));
-      newPopups.set(owner, popup);
-      return newPopups;
-    });
+  function pushPopup(popup: Popup) {
+    setPopups((oldPopups) => [...oldPopups, popup]);
   }
 
   function clearPopup(owner: string) {
-    setPopups((oldPopups) => {
-      const newPopups = new Map();
-      oldPopups.forEach((value, key) => newPopups.set(key, value));
-      newPopups.delete(owner);
-      return newPopups;
-    });
+    setPopups((oldPopups) =>
+      oldPopups.filter((popup) => popup.owner !== owner)
+    );
   }
 
   useEffect(() => {
-    if (popups.size > 0) {
+    if (popups.length > 0) {
       dispatch(setIsPopupShowing(true));
-      const firstKey = popups.keys().next().value;
-      setCurrentPopup(popups.get(firstKey));
+      setCurrentPopup(popups[0]);
     } else {
       dispatch(setIsPopupShowing(false));
-      setCurrentPopup(undefined);
     }
   }, [popups]);
 
   const isCustomPopup = useMemo(
     () =>
-      currentPopup && (currentPopup as GenericPopupProps).title === undefined,
+      currentPopup &&
+      (currentPopup.value as GenericPopupProps).title === undefined,
     [currentPopup]
   );
 
   return (
     <PopupContext.Provider value={{ pushPopup, clearPopup }}>
       {children}
-      {currentPopup && isCustomPopup && (
-        <CustomPopupOverlay sandboxComponent={currentPopup as ReactNode} />
+      {isPopupShowing && currentPopup && isCustomPopup && (
+        <CustomPopupOverlay
+          sandboxComponent={currentPopup.value as ReactNode}
+        />
       )}
-      {currentPopup && !isCustomPopup && (
-        <GenericPopupOverlay {...(currentPopup as GenericPopupProps)} />
+      {isPopupShowing && currentPopup && !isCustomPopup && (
+        <GenericPopupOverlay {...(currentPopup.value as GenericPopupProps)} />
       )}
     </PopupContext.Provider>
   );

@@ -9,20 +9,12 @@ import ComponentViewer, { isViewingComponent } from "./dev/ComponentViewer";
 import { Provider } from "react-redux";
 import { store } from "./state/store";
 import ErrorBoundary from "./ErrorBoundary";
-import ToastProvider from "./overlays/components/ToastProvider";
-import PopupProvider from "./overlays/components/PopupProvider";
 
 //TODO: Create error page to handle error boundary.
 const browserRouter = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <ToastProvider>
-        <PopupProvider>
-          <App />
-        </PopupProvider>
-      </ToastProvider>
-    ), //The single page Web App is rendered under the root page of the frontend.
+    element: <App />, //The single page Web App is rendered under the root page of the frontend.
     errorElement: <ErrorBoundary />,
   },
   {

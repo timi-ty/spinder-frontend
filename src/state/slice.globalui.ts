@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface GlobalUIState {
   isPopupShowing: boolean;
+  isTooltipShowing: boolean;
   isSourcePickerOpen: boolean;
   isDestinationPickerOpen: boolean;
   isAttemptingUnauthorizedAction: boolean;
@@ -10,6 +11,7 @@ interface GlobalUIState {
 
 const defaultGlobalUIState: GlobalUIState = {
   isPopupShowing: false,
+  isTooltipShowing: false,
   isSourcePickerOpen: false,
   isDestinationPickerOpen: false,
   isAttemptingUnauthorizedAction: false,
@@ -33,6 +35,9 @@ const globalUISlice = createSlice({
     setIsPopupShowing(state, action: BooleanAction) {
       state.isPopupShowing = action.payload;
     },
+    setIsTooltipShowing(state, action: BooleanAction) {
+      state.isTooltipShowing = action.payload;
+    },
     setIsSourcePickerOpen(state, action: BooleanAction) {
       state.isSourcePickerOpen = action.payload;
     },
@@ -51,6 +56,7 @@ const globalUISlice = createSlice({
 
 export const {
   setIsPopupShowing,
+  setIsTooltipShowing,
   setIsSourcePickerOpen,
   setIsDestinationPickerOpen,
   attemptUnauthorizedAction,

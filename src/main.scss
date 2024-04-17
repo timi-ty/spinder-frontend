@@ -1,3 +1,8 @@
+@font-face {
+  font-family: Inter;
+  src: url(./assets/Inter.ttf);
+}
+
 :root {
   --font-stack: Inter, Helvetica, sans-serif;
   --primary-color: #1db954;
@@ -80,11 +85,6 @@ Set the height to match the min-aspect-ratio by default. */
       width: calc(100vh / $min-aspect-ratio);
     }
   }
-}
-
-@font-face {
-  font-family: Inter;
-  src: url(./assets/Inter.ttf);
 }
 
 * {

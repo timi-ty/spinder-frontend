@@ -10,7 +10,7 @@
   align-items: center;
   pointer-events: none;
   padding: 1rem;
-  z-index: 10; /* Very large. This is an overlay. */
+  z-index: 100; /* Very large. This is an overlay. */
 }
 
 .toastOverlay .message {

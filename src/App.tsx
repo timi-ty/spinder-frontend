@@ -10,6 +10,7 @@ import useAuthResource from "./resource-hooks/useAuthResource";
 import { useSelector } from "react-redux";
 import { StoreState } from "./state/store";
 import SandboxUnauthorizedAction from "./sandbox-components/components/SandboxUnauthorizedAction";
+import withOverlayProviders from "./overlays/components/withOverlayProviders";
 
 function App() {
   const { authStatus, authMode } = useAuthResource();
@@ -24,7 +25,7 @@ function App() {
   useEffect(() => {
     if (authMode === "UnacceptedAnon") {
       console.log("Pushing uanon popup");
-      pushPopup("AuthMode", <SandboxSignIn />);
+      pushPopup({ owner: "AuthMode", value: <SandboxSignIn /> });
     } else {
       clearPopup("AuthMode");
     }
@@ -33,12 +34,14 @@ function App() {
 
   useEffect(() => {
     if (isAttemptingUnauthAction) {
-      pushPopup(
-        "UnauthAction",
-        <SandboxUnauthorizedAction
-          actionDescription={unauthActionDescription}
-        />
-      );
+      pushPopup({
+        owner: "UnauthAction",
+        value: (
+          <SandboxUnauthorizedAction
+            actionDescription={unauthActionDescription}
+          />
+        ),
+      });
     } else {
       clearPopup("UnauthAction");
     }
@@ -63,4 +66,4 @@ function App() {
   );
 }
 
-export default App;
+export default withOverlayProviders(<App />);

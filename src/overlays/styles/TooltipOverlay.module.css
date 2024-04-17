@@ -1,0 +1,25 @@
+.tooltipOverlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+    padding: 1rem;
+    z-index: 100; /* Very large. This is an overlay. */
+  }
+  
+  .tooltipOverlay .message {
+    background-color: var(--toast-bg-color);
+    color: var(--toast-text-color);
+    border-radius: 0.75rem;
+    padding: 0.5rem;
+    text-align: center;
+    width: fit-content;
+    transition: opacity 0.5s;
+    font-size: 0.875rem;
+  }
