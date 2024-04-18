@@ -45,8 +45,9 @@
   }
 
   .tooltipOverlay .info{
-    margin-top: 2rem;
+    margin-top: 1rem;
     font-size: 0.875rem;
+    font-weight: 600;
   }
 
   .tooltipOverlay .close{

@@ -132,7 +132,11 @@ function TooltipOverlay({ tooltip, onOverlayClick, progress, close }: Props) {
       style={{ width: `${windowWidth}px`, height: `${windowHeight}px` }}
       onClick={onOverlayClick}
     >
-      <div className={styles.info}>Tap to continue ({progress})</div>
+      <div className={styles.info}>
+        Find music you love on Spindr! <br />
+        <br />
+        Tap to continue ({progress})
+      </div>
       <div
         className={styles.close}
         style={{ right: `${appRect.right - appRect.width + 8}px` }}
