@@ -14,6 +14,7 @@ import { changeSource } from "../../client/client.deck";
 import { selectDiscoverSource } from "../../state/slice.discoversource";
 import styles from "../styles/DiscoverBottomLeft.module.css";
 import { ToastContext } from "../../overlays/components/ToastProvider";
+import { TooltipContext } from "../../overlays/components/TooltipProvider";
 
 const gap = 1; //rem
 
@@ -66,6 +67,21 @@ function DiscoverBottomLeft() {
     };
   }, [topContainerSizeObserver]);
 
+  const registerTooltip = useContext(TooltipContext);
+
+  const relatedSourcesRef = useRef(null);
+  const [tooltipeed, setTooltipped] = useState(false);
+
+  useEffect(() => {
+    if (relatedSourcesRef.current && !tooltipeed) {
+      registerTooltip({
+        message: "Click a vibe # to quickly load new recommendation from it",
+        target: relatedSourcesRef.current,
+        onTipped: () => setTooltipped(true),
+      });
+    }
+  }, [relatedSourcesRef.current]);
+
   return (
     <div className={styles.bottomLeft}>
       <div ref={topContainerRef} className={styles.top}>
@@ -105,6 +121,7 @@ function DiscoverBottomLeft() {
         <div className={styles.relatedSources}>
           {relatedSources.map((source) => (
             <div
+              ref={relatedSourcesRef}
               className={styles.source}
               key={source.id}
               onClick={() => onSourceClick(source)}

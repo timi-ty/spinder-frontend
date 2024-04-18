@@ -3,7 +3,7 @@ import { TooltipContext } from "../overlays/components/TooltipProvider";
 import styles from "./ComponentViewer.module.css";
 import withOverlayProviders from "../overlays/components/withOverlayProviders";
 
-const isViewingComponent = true;
+const isViewingComponent = false;
 
 function ComponentViewer() {
   const firstRef = useRef(null);

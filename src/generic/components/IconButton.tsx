@@ -1,4 +1,10 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import {
+  MutableRefObject,
+  forwardRef,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import styles from "../styles/IconButton.module.css";
 import { pxToRem } from "../../utils";
 
@@ -13,15 +19,18 @@ interface Props {
 
 const defaultSize = 3; //rem
 
-function IconButton({
-  title,
-  icon,
-  onAction,
-  matchParentHeight = false,
-  showBackground = true,
-  className = "",
-}: Props) {
-  const ref: React.LegacyRef<HTMLButtonElement> = useRef(null);
+const IconButton = forwardRef(function IconButton(
+  {
+    title,
+    icon,
+    onAction,
+    matchParentHeight = false,
+    showBackground = true,
+    className = "",
+  }: Props,
+  forwardedRef: any
+) {
+  const ref: MutableRefObject<HTMLButtonElement | null> = useRef(null);
   const [size, setSize] = useState(defaultSize);
 
   useLayoutEffect(() => {
@@ -39,21 +48,27 @@ function IconButton({
   }, [matchParentHeight]);
 
   return (
-    <button
-      type="button"
-      title={title}
-      ref={ref}
-      className={`${styles.iconButton} ${className}`}
-      onClick={onAction}
+    <div
+      ref={forwardedRef}
       style={{
         height: `${matchParentHeight ? "100%" : `${size}rem`}`,
         width: `${size}rem`,
-        background: `${showBackground ? "" : "none"}`,
       }}
     >
-      <img title={title} className={styles.icon} src={icon} />
-    </button>
+      <button
+        type="button"
+        title={title}
+        ref={ref}
+        className={`${styles.iconButton} ${className}`}
+        onClick={onAction}
+        style={{
+          background: `${showBackground ? "" : "none"}`,
+        }}
+      >
+        <img title={title} className={styles.icon} src={icon} />
+      </button>
+    </div>
   );
-}
+});
 
 export default IconButton;

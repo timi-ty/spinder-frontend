@@ -103,7 +103,12 @@ function PopupProvider({ children }: ProviderProps) {
   const [currentPopup, setCurrentPopup] = useState(popups[0]);
 
   function pushPopup(popup: Popup) {
-    setPopups((oldPopups) => [...oldPopups, popup]);
+    setPopups((oldPopups) => {
+      const newPopups = oldPopups.filter(
+        (oldPopup) => oldPopup.owner !== popup.owner
+      );
+      return [...newPopups, popup];
+    });
   }
 
   function clearPopup(owner: string) {

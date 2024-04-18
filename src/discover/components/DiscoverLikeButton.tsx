@@ -13,6 +13,7 @@ import { ToastContext } from "../../overlays/components/ToastProvider";
 import useAction from "../../utility-hooks/useAction";
 import { AuthMode } from "../../state/slice.auth";
 import styles from "../styles/DiscoverLikeButton.module.css";
+import { TooltipContext } from "../../overlays/components/TooltipProvider";
 
 const settleTimeInMillis = 1000; //1 second time to settle.
 
@@ -126,6 +127,16 @@ function DiscoverLikeButton() {
   const authMode = useSelector<StoreState, AuthMode>(
     (state) => state.authState.mode
   );
+
+  const registerTooltip = useContext(TooltipContext);
+
+  useEffect(() => {
+    if (containerRef.current)
+      registerTooltip({
+        message: "Like 💖 a recommendation to save it",
+        target: containerRef.current,
+      });
+  }, [containerRef.current]);
 
   return (
     <div

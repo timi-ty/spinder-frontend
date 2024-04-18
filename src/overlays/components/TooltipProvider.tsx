@@ -23,6 +23,7 @@ const vertClearance = 30; //px
 interface Tooltip {
   message: string;
   target: HTMLElement;
+  onTipped?: () => void;
 }
 
 interface Props {
@@ -185,10 +186,9 @@ function TooltipProvider({ children }: ProviderProps) {
   const [maxTipCount, setMaxTipCount] = useState(0);
 
   function registerTooltip(tooltip: Tooltip) {
-    console.log("registered tip");
     setTooltips((oldTooltips) => {
       const filteredTips = oldTooltips.filter(
-        (oldTooltip) => oldTooltip.target !== tooltip.target
+        (oldTooltip) => oldTooltip.message !== tooltip.message
       );
       setMaxTipCount((m) => Math.max(m, filteredTips.length + 1));
       return [...filteredTips, tooltip];
@@ -197,7 +197,7 @@ function TooltipProvider({ children }: ProviderProps) {
 
   function clearTooltip(tooltip: Tooltip) {
     setTooltips((oldTooltips) =>
-      oldTooltips.filter((oldTooltip) => oldTooltip.target !== tooltip.target)
+      oldTooltips.filter((oldTooltip) => oldTooltip.message !== tooltip.message)
     );
   }
 
@@ -208,7 +208,9 @@ function TooltipProvider({ children }: ProviderProps) {
   useEffect(() => {
     if (tooltips.length > 0) {
       dispatch(setIsTooltipShowing(true));
-      setCurrentTooltip(tooltips[0]);
+      const currentTooltip = tooltips[0];
+      setCurrentTooltip(currentTooltip);
+      if (currentTooltip.onTipped) currentTooltip.onTipped();
     } else {
       dispatch(setIsTooltipShowing(false));
     }

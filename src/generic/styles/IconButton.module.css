@@ -3,6 +3,8 @@
   border-radius: 16.667%;
   cursor: pointer;
   pointer-events: all;
+  width: 100%;
+  height: 100%;
 }
 
 .iconButton > .icon {

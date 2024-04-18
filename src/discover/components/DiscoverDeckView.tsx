@@ -28,6 +28,7 @@ import { DeckItem } from "../../client/client.model";
 import { DiscoverBackgroundContext } from "./DiscoverBackgroundPanel";
 import useMouseFlick from "../../utility-hooks/useMouseFlick";
 import useTouchFlick from "../../utility-hooks/useTouchFlick";
+import { TooltipContext } from "../../overlays/components/TooltipProvider";
 
 const dragActionThreshold = 20;
 
@@ -251,6 +252,17 @@ function DiscoverDeckView() {
         return 0;
     }
   };
+
+  const registerTooltip = useContext(TooltipContext);
+
+  useEffect(() => {
+    if (containerRef.current)
+      registerTooltip({
+        message:
+          "Swipe 👆 up ↑ or down ↓ to scroll through your recommendations",
+        target: containerRef.current,
+      });
+  }, [containerRef.current]);
 
   //In order not to reload the image and audio fed into DeckItemView, we only need to makesure that the value passed into mDeckItem does not change until we've used it.
   return (
