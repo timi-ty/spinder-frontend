@@ -6,23 +6,42 @@ import withOverlayProviders from "../overlays/components/withOverlayProviders";
 const isViewingComponent = true;
 
 function ComponentViewer() {
-  const ref = useRef(null);
+  const firstRef = useRef(null);
+  const secondRef = useRef(null);
   const registerTooltip = useContext(TooltipContext);
 
   useEffect(() => {
-    if (ref.current) {
+    if (firstRef.current) {
       registerTooltip({
-        message:
-          "This is a skjdbf sdkjbfjsk sdkjdbf jk;ksdbfkj sjdbflkj lksjdbfkjb nsdkjfbn lkjbdffg;jkb dlkjfgbf:DJN tooltip",
-        target: ref.current,
+        message: "This is the first tooltip",
+        target: firstRef.current,
       });
     }
-  }, [ref.current]);
+  }, [firstRef.current]);
+
+  useEffect(() => {
+    if (secondRef.current) {
+      registerTooltip({
+        message: "This is the second tooltip",
+        target: secondRef.current,
+      });
+    }
+  }, [secondRef.current]);
 
   return (
     <div className={styles.componentViewer}>
-      <div ref={ref} style={{ translate: "200px 340px", width: "fit-content" }}>
-        Tooltip Target
+      <div
+        ref={firstRef}
+        style={{ translate: "200px 340px", width: "fit-content" }}
+      >
+        First Tooltip Target
+      </div>
+
+      <div
+        ref={secondRef}
+        style={{ translate: "50px 140px", width: "fit-content" }}
+      >
+        Second Tooltip Target
       </div>
     </div>
   );

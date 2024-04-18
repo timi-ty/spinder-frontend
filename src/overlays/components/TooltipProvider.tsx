@@ -15,6 +15,7 @@ import { setIsTooltipShowing } from "../../state/slice.globalui";
 import { StoreState } from "../../state/store";
 import useAppRect from "../../utility-hooks/useAppRect";
 import { normalizeRotation } from "../../utils";
+import IconButton from "../../generic/components/IconButton";
 
 const RAD_TO_DEG = 57.2958;
 const vertClearance = 30; //px
@@ -27,9 +28,11 @@ interface Tooltip {
 interface Props {
   tooltip: Tooltip;
   onOverlayClick: () => void;
+  progress: string;
+  close: () => void;
 }
 
-function TooltipOverlay({ tooltip, onOverlayClick }: Props) {
+function TooltipOverlay({ tooltip, onOverlayClick, progress, close }: Props) {
   const tooltipRef: LegacyRef<HTMLDivElement> = useRef(null);
   const pointerRef: LegacyRef<HTMLImageElement> = useRef(null);
   const [windowWidth, windowHeight] = useWindowSize();
@@ -126,7 +129,21 @@ function TooltipOverlay({ tooltip, onOverlayClick }: Props) {
     <div
       className={styles.tooltipOverlay}
       style={{ width: `${windowWidth}px`, height: `${windowHeight}px` }}
+      onClick={onOverlayClick}
     >
+      <div className={styles.info}>Tap to continue ({progress})</div>
+      <div
+        className={styles.close}
+        style={{ right: `${appRect.right - appRect.width + 8}px` }}
+      >
+        <IconButton
+          title={"Close"}
+          icon={"resources/ic_close.svg"}
+          onAction={close}
+          matchParentHeight
+          showBackground={false}
+        />
+      </div>
       <div
         id="tooltip"
         ref={tooltipRef}
@@ -165,15 +182,27 @@ function TooltipProvider({ children }: ProviderProps) {
     return emptyTooltips;
   });
   const [currentTooltip, setCurrentTooltip] = useState(tooltips[0]);
+  const [maxTipCount, setMaxTipCount] = useState(0);
 
   function registerTooltip(tooltip: Tooltip) {
-    setTooltips((oldTooltips) => [...oldTooltips, tooltip]);
+    console.log("registered tip");
+    setTooltips((oldTooltips) => {
+      const filteredTips = oldTooltips.filter(
+        (oldTooltip) => oldTooltip.target !== tooltip.target
+      );
+      setMaxTipCount((m) => Math.max(m, filteredTips.length + 1));
+      return [...filteredTips, tooltip];
+    });
   }
 
   function clearTooltip(tooltip: Tooltip) {
     setTooltips((oldTooltips) =>
       oldTooltips.filter((oldTooltip) => oldTooltip.target !== tooltip.target)
     );
+  }
+
+  function clearAll() {
+    setTooltips([]);
   }
 
   useEffect(() => {
@@ -192,6 +221,8 @@ function TooltipProvider({ children }: ProviderProps) {
         <TooltipOverlay
           tooltip={currentTooltip}
           onOverlayClick={() => clearTooltip(currentTooltip)}
+          progress={`${maxTipCount - tooltips.length + 1}/${maxTipCount}`}
+          close={() => clearAll()}
         />
       )}
     </TooltipContext.Provider>
