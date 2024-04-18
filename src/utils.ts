@@ -32,11 +32,16 @@ function isMobileTouchDevice() {
   );
 }
 
+function normalizeRotation(degrees: number) {
+  return ((((degrees + 180) % 360) + 360) % 360) - 180;
+}
+
 const nullTimeoutHandle: NodeJS.Timeout | null = null;
 
 export {
   pxToRem,
   remToPx,
+  normalizeRotation,
   nullTimeoutHandle,
   shuffleArrayInPlace,
   lerp,

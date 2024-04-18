@@ -3,6 +3,7 @@ import {
   ReactNode,
   createContext,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -13,6 +14,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { setIsTooltipShowing } from "../../state/slice.globalui";
 import { StoreState } from "../../state/store";
 import useAppRect from "../../utility-hooks/useAppRect";
+import { normalizeRotation } from "../../utils";
+
+const RAD_TO_DEG = 57.2958;
+const vertClearance = 30; //px
 
 interface Tooltip {
   message: string;
@@ -26,31 +31,41 @@ interface Props {
 
 function TooltipOverlay({ tooltip, onOverlayClick }: Props) {
   const tooltipRef: LegacyRef<HTMLDivElement> = useRef(null);
+  const pointerRef: LegacyRef<HTMLImageElement> = useRef(null);
   const [windowWidth, windowHeight] = useWindowSize();
   const appRect = useAppRect();
   const [position, setPosition] = useState({
     x: tooltip.target.getBoundingClientRect().x,
     y: tooltip.target.getBoundingClientRect().y,
   });
+  const [pointerPosition, setPointerPosition] = useState({
+    x: 0,
+    y: 0,
+  });
+  const [rotation, setRotation] = useState(0);
 
   const containerSizeObserver = useMemo(
     () =>
       new ResizeObserver(() => {
         if (!tooltipRef.current) return;
 
-        var targetLeft = tooltip.target.getBoundingClientRect().left;
-        var targetTop = tooltip.target.getBoundingClientRect().top;
-        var targetHeight = tooltip.target.getBoundingClientRect().height;
-        var targetWidth = tooltip.target.getBoundingClientRect().width;
+        const targetRect = tooltip.target.getBoundingClientRect();
+        var targetLeft = targetRect.left;
+        var targetTop = targetRect.top;
+        var targetHeight = targetRect.height;
+        var targetWidth = targetRect.width;
 
-        var tooltipHeight = tooltipRef.current.getBoundingClientRect().height;
-        var tooltipWidth = tooltipRef.current.getBoundingClientRect().width;
+        const tooltipRect = tooltipRef.current.getBoundingClientRect();
+        var tooltipHeight = tooltipRect.height;
+        var tooltipWidth = tooltipRect.width;
 
         var predictedPositionX = targetLeft;
-        var predictedPositionY = targetTop + targetHeight + 20;
+        var predictedPositionY = targetTop + targetHeight + vertClearance;
 
+        var isAbove = false;
         if (predictedPositionY + tooltipHeight > windowHeight) {
-          predictedPositionY = targetTop - tooltipHeight - 20;
+          predictedPositionY = targetTop - tooltipHeight - vertClearance;
+          isAbove = true;
         }
 
         if (predictedPositionX + tooltipWidth > appRect.right) {
@@ -61,11 +76,20 @@ function TooltipOverlay({ tooltip, onOverlayClick }: Props) {
           x: predictedPositionX,
           y: predictedPositionY,
         });
+
+        if (!pointerRef.current) return;
+        const pointerRect = pointerRef.current.getBoundingClientRect();
+        setPointerPosition({
+          x: predictedPositionX + tooltipWidth / 2 - pointerRect.width / 2,
+          y: isAbove
+            ? predictedPositionY + tooltipHeight - 10
+            : predictedPositionY - pointerRect.height + 10,
+        });
       }),
-    [tooltip, tooltipRef, windowWidth, windowHeight]
+    [tooltip, tooltipRef.current, pointerRef.current, windowWidth, windowHeight]
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     containerSizeObserver.observe(tooltip.target);
     if (tooltipRef.current) containerSizeObserver.observe(tooltipRef.current);
     return () => {
@@ -74,6 +98,29 @@ function TooltipOverlay({ tooltip, onOverlayClick }: Props) {
         containerSizeObserver.unobserve(tooltipRef.current);
     };
   }, [containerSizeObserver]);
+
+  useEffect(() => {
+    if (!pointerRef.current) return;
+
+    const pointerRect = pointerRef.current.getBoundingClientRect();
+    const pointerCenter = {
+      x: pointerPosition.x + pointerRect.width / 2,
+      y: pointerPosition.y + pointerRect.height / 2,
+    };
+    const targetRect = tooltip.target.getBoundingClientRect();
+    const targetCenter = {
+      x: targetRect.left + targetRect.width / 2,
+      y: targetRect.top + targetRect.height / 2,
+    };
+
+    const displacement = {
+      x: targetCenter.x - pointerCenter.x,
+      y: targetCenter.y - pointerCenter.y,
+    };
+    const angle = Math.atan2(displacement.y, displacement.x) * RAD_TO_DEG;
+
+    setRotation(normalizeRotation(angle + 90)); //90deg offset because of the image orientation
+  }, [position]);
 
   return (
     <div
@@ -86,8 +133,18 @@ function TooltipOverlay({ tooltip, onOverlayClick }: Props) {
         className={styles.message}
         style={{ translate: `${position.x}px ${position.y}px` }}
       >
+        <img className={styles.messageIcon} src="resources/info.png" />
         {tooltip.message}
       </div>
+      <img
+        ref={pointerRef}
+        className={styles.pointer}
+        src="/resources/pointer.png"
+        style={{
+          rotate: `${rotation}deg`,
+          translate: `${pointerPosition.x}px ${pointerPosition.y}px`,
+        }}
+      />
     </div>
   );
 }

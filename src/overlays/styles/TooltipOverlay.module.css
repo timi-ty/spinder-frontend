@@ -10,13 +10,36 @@
   }
   
   .tooltipOverlay .message {
+    position: relative;
     background-color: var(--toast-bg-color);
     color: var(--toast-text-color);
     border-radius: 0.75rem;
-    padding: 0.5rem;
-    text-align: center;
+    padding: 0.5rem 0.5rem 0.5rem 2rem;
     width: -moz-fit-content;
     width: fit-content;
-    max-width: 15rem;
+    max-width: 20rem;
     font-size: 0.875rem;
+    z-index: 0;
+  }
+
+  .tooltipOverlay .messageIcon{
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    top: calc(50% - 0.75rem);
+    left: 0.25rem;
+  }
+
+  .tooltipOverlay .pointer{
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 3rem;
+    height: 3rem;
+    z-index: 2;
+    border-radius: 50%;
+  }
+
+  .tooltipOverlay .info{
+
   }
