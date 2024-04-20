@@ -1,3 +1,7 @@
+.tabListGroup{
+  margin-top: 1rem;
+}
+
 .tabListGroup .tabs {
   display: flex;
   justify-content: space-between;

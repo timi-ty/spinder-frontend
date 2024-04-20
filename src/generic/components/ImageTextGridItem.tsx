@@ -39,7 +39,7 @@ function ImageTextGridItem({
     }
   }, [useAvailableWidth]);
 
-  const selected = isSelected ? "selected" : "";
+  const selected = isSelected ? styles.selected : "";
 
   return (
     <div

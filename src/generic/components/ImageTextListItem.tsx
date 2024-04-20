@@ -31,11 +31,11 @@ function ImageTextListItem({
     }
   }, []);
 
-  const clipClass = imageType === "Circle" ? "circle" : "rounded";
+  const clipClass = imageType === "Circle" ? styles.circle : styles.rounded;
 
   return (
-    <div className={styles.ImageTextListItem} onClick={onClick}>
-      <div ref={detailsContainerRef} className="details-container">
+    <div className={styles.imageTextListItem} onClick={onClick}>
+      <div ref={detailsContainerRef} className={styles.detailsContainer}>
         <img
           title={text}
           className={`${styles.image} ${clipClass}`}
