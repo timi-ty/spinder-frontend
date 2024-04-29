@@ -7,6 +7,7 @@ const appUrl = import.meta.env.DEV
 function Home() {
   return (
     <div className={styles.home}>
+      <img className={styles.logo} src="/resources/spindr-logo.svg"></img>
       <div>
         <h1>Spindr</h1>
       </div>
