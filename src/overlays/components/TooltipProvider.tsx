@@ -188,8 +188,16 @@ function TooltipProvider({ children }: ProviderProps) {
   });
   const [currentTooltip, setCurrentTooltip] = useState(tooltips[0]);
   const [maxTipCount, setMaxTipCount] = useState(0);
+  const [seenTips, setSeenTips] = useState(new Set<string>());
 
   function registerTooltip(tooltip: Tooltip) {
+    if (seenTips.has(tooltip.message)) return;
+    setSeenTips((oldSeenTips) => {
+      const newSeenTips = new Set<string>();
+      oldSeenTips.forEach((oldSeenTip) => newSeenTips.add(oldSeenTip));
+      newSeenTips.add(tooltip.message);
+      return newSeenTips;
+    });
     setTooltips((oldTooltips) => {
       const filteredTips = oldTooltips.filter(
         (oldTooltip) => oldTooltip.message !== tooltip.message
