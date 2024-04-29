@@ -73,15 +73,12 @@ function SandboxSignIn() {
             onChange={(ev) => setEmailField(ev.target.value)}
             placeholder="Your Spotify email address"
           />
-          <div className={styles.submitContainer}>
+          <div className={styles.submit}>
             {isPendingResult && <FullComponentLoader />}
             {!isPendingResult && (
-              <input
-                disabled={disableSubmit}
-                className={styles.button}
-                type="submit"
-                value={`${isAllowedUser ? "Let's Go!" : "Request Access"}`}
-              />
+              <button disabled={disableSubmit} type="submit">{`${
+                isAllowedUser ? "Let's Go!" : "Request Access"
+              }`}</button>
             )}
           </div>
           <div className={styles.link} onClick={continueAnon}>
@@ -99,11 +96,9 @@ function SandboxSignIn() {
             While we process your access request, please continue to use the
             limited version of Spindr in anonymous mode.
           </div>
-          <input
-            className={`${styles.submitContainer} ${styles.button}`}
-            type="submit"
-            value="Continue anonymously"
-          />
+          <button className={styles.submit} type="submit">
+            Continue anonymously
+          </button>
         </>
       )}
     </form>

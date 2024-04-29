@@ -15,21 +15,13 @@
   margin-top: 1rem;
 }
 
+.sandboxSignIn .submit {
+  margin-top: 1rem;
+}
+
 .sandboxSignIn .emailInput {
   margin-top: 1rem;
   padding: 0.25rem 0.5rem 0.25rem 0.5rem;
-}
-
-.sandboxSignIn .button {
-  padding: 0.5rem 1rem 0.5rem 1rem;
-  border: none;
-  border-radius: 0.3rem;
-  cursor: pointer;
-}
-
-.sandboxSignIn .submitContainer {
-  margin-top: 1rem;
-  max-height: 2rem;
 }
 
 .sandboxSignIn .link {
