@@ -13,7 +13,3 @@
 .errorOneMessageTwoAction > .message {
   padding-bottom: 1rem;
 }
-
-.errorOneMessageTwoAction > .button {
-  height: 2rem;
-}

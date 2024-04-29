@@ -3,6 +3,7 @@ import { DeckItem, DiscoverSource } from "../../client/client.model";
 import { StoreState, dispatch } from "../../state/store";
 import {
   LegacyRef,
+  MutableRefObject,
   useCallback,
   useContext,
   useEffect,
@@ -69,18 +70,19 @@ function DiscoverBottomLeft() {
 
   const registerTooltip = useContext(TooltipContext);
 
-  const relatedSourcesRef = useRef(null);
+  const relatedSourceRef: MutableRefObject<HTMLDivElement | null> =
+    useRef(null);
   const [tooltipeed, setTooltipped] = useState(false);
 
   useEffect(() => {
-    if (relatedSourcesRef.current && !tooltipeed) {
+    if (relatedSourceRef.current && !tooltipeed) {
       registerTooltip({
         message: "Click a vibe # to quickly load new recommendation from it",
-        target: relatedSourcesRef.current,
+        target: relatedSourceRef.current,
         onTipped: () => setTooltipped(true),
       });
     }
-  }, [relatedSourcesRef.current]);
+  }, [relatedSourceRef.current]);
 
   return (
     <div className={styles.bottomLeft}>
@@ -119,9 +121,11 @@ function DiscoverBottomLeft() {
         style={{ height: `calc(100% - ${topContainerHeight}px - ${gap}rem)` }}
       >
         <div className={styles.relatedSources}>
-          {relatedSources.map((source) => (
+          {relatedSources.map((source, index) => (
             <div
-              ref={relatedSourcesRef}
+              ref={(mRef) => {
+                if (index === 0) relatedSourceRef.current = mRef;
+              }}
               className={styles.source}
               key={source.id}
               onClick={() => onSourceClick(source)}

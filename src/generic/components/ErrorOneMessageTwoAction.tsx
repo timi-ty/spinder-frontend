@@ -15,16 +15,12 @@ function ErrorOneMessageTwoAction({ message, actionOne, actionTwo }: Props) {
   return (
     <div className={styles.errorOneMessageTwoAction}>
       <div className={styles.message}>{message}</div>
-      <button
-        title={actionOne.name}
-        className={styles.button}
-        onClick={() => actionOne.action()}
-      >
+      <button title={actionOne.name} onClick={() => actionOne.action()}>
         {actionOne.name}
       </button>
       <button
         title={actionTwo.name}
-        className={styles.button}
+        className="secondary"
         onClick={() => actionTwo.action()}
       >
         {actionTwo.name}
