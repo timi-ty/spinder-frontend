@@ -4,6 +4,8 @@ Welcome to Spindr! The ultimate music discovery application built with React.js!
 
 This is the frontend repo. Refer here for the backend repo [Spindr backend](https://github.com/timi-ty/spinder-backend).
 
+*Disclaimer: I use the "var" keyword in this repo and have recently learned that it is bad paractice. It doesn't cause problems here because I use it only in global and function scope.*
+
 ## Features
 
 - **Music Discovery:** Discover new tracks and artists effortlessly.
