@@ -417,7 +417,7 @@ export default DiscoverDeckView;
 Enjoy discovering new music with Spindr, and feel free to contribute to the project on [GitHub](https://github.com/timi-ty/spinder-frontend.git).
 
 ## License
-Spindr is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+Spindr is licensed under the GPL License. See the [LICENSE](LICENSE) file for more details.
 
 ## Contact
 For questions, suggestions, or contributions, please contact [timilehin.ty@gmail.com](timilehin.ty@gmail.com).
