@@ -2,6 +2,8 @@
 
 Welcome to Spindr! The ultimate music discovery application built with React.js! With Spindr, you can explore new music, manage your favorite tracks, and enjoy a seamless user experience powered by advanced React patterns and robust state management.
 
+This is the frontend repo. Refer here for the backend repo [Spindr backend](https://github.com/timi-ty/spinder-backend).
+
 ## Features
 
 - **Music Discovery:** Discover new tracks and artists effortlessly.
