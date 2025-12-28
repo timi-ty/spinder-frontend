@@ -27,7 +27,7 @@ interface Props {
 }
 
 function DiscoverDeckItemView({
-  deckItemViewIndex,
+  deckItemViewIndex: _deckItemViewIndex,
   mDeckItem,
   verticalTranslation,
   isPlaying,

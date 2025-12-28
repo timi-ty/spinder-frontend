@@ -66,7 +66,6 @@ let isInitialized = false;
 let initPromise: Promise<string> | null = null;
 let stateChangeCallback: ((state: SpotifyPlaybackState | null) => void) | null =
   null;
-let currentTrackUri: string | null = null;
 
 function initializePlayer(accessToken: string): Promise<string> {
   // Return existing promise if initialization is in progress
@@ -147,8 +146,6 @@ async function playTrack(trackUri: string): Promise<void> {
     throw new Error("Player not initialized");
   }
 
-  currentTrackUri = trackUri;
-
   const response = await fetch(
     `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`,
     {
@@ -216,7 +213,6 @@ async function getCurrentPlaybackState(): Promise<SpotifyPlaybackState | null> {
 }
 
 function disconnectPlayer(): void {
-  currentTrackUri = null;
   if (player) {
     player.disconnect();
     player = null;
