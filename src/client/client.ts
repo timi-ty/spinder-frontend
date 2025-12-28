@@ -2,10 +2,12 @@ import {
   errorAuthResource,
   loadAuthResource,
   logoutAuthResource,
+  setSpotifyAccessToken,
 } from "../state/slice.auth";
 import { dispatch, store } from "../state/store";
 import { renewAuthentication, logout as doLogout } from "./client.api";
 import { startFirebaseClient } from "./client.firebase";
+import { disconnectPlayer } from "./client.spotify-player";
 
 startFirebaseClient();
 
@@ -54,6 +56,10 @@ async function renewAutheticationCallback() {
   renewAuthentication()
     .then((renewedAuth) => {
       retryAttempts = 0;
+      // Update the spotify access token in state
+      if (renewedAuth.spotifyAccessToken) {
+        dispatch(setSpotifyAccessToken(renewedAuth.spotifyAccessToken));
+      }
       console.log(
         `Renewed Authentication - UserId: ${
           renewedAuth.userId
@@ -76,6 +82,7 @@ async function logout(): Promise<void> {
   //Make logout API request here.
   dispatch(loadAuthResource());
   try {
+    disconnectPlayer(); // Disconnect the Spotify player on logout
     await doLogout();
     dispatch(logoutAuthResource());
   } catch (error) {

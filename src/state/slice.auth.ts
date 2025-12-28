@@ -7,21 +7,28 @@ interface AuthState {
   mode: AuthMode;
   status: AuthStatus;
   userId: string;
+  spotifyAccessToken: string;
 }
 
 const defaultAuthState: AuthState = {
   mode: "Full",
   status: "Empty",
   userId: "",
+  spotifyAccessToken: "",
 };
 
 interface LoginAction {
-  payload: string; //UserId
+  payload: { userId: string; spotifyAccessToken: string };
   type: string;
 }
 
 interface AuthModeAction {
   payload: AuthMode;
+  type: string;
+}
+
+interface SetSpotifyTokenAction {
+  payload: string;
   type: string;
 }
 
@@ -38,11 +45,13 @@ const authSlice = createSlice({
     },
     loginAuthResource: (state, action: LoginAction) => {
       state.status = "LoggedIn";
-      state.userId = action.payload;
+      state.userId = action.payload.userId;
+      state.spotifyAccessToken = action.payload.spotifyAccessToken;
     },
     logoutAuthResource: (state) => {
       state.status = "LoggedOut";
       state.userId = "";
+      state.spotifyAccessToken = "";
     },
     errorAuthResource: (state) => {
       state.status = "Error";
@@ -51,6 +60,9 @@ const authSlice = createSlice({
     emptyAuthResource: (state) => {
       state.status = "Empty";
       state.userId = "";
+    },
+    setSpotifyAccessToken: (state, action: SetSpotifyTokenAction) => {
+      state.spotifyAccessToken = action.payload;
     },
   },
 });
@@ -62,6 +74,7 @@ export const {
   logoutAuthResource,
   errorAuthResource,
   emptyAuthResource,
+  setSpotifyAccessToken,
 } = authSlice.actions;
 
 export { type AuthState, type AuthStatus, type AuthMode };

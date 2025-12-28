@@ -18,6 +18,7 @@ import {
   setIsSourcePickerOpen,
 } from "../../state/slice.globalui";
 import DiscoverBackgroundProvider from "./DiscoverBackgroundPanel";
+import DiscoverPremiumBanner from "./DiscoverPremiumBanner";
 import useDiscoverDestinationResource from "../../resource-hooks/useDiscoverDestinationResource";
 import useDiscoverSourceResource from "../../resource-hooks/useDiscoverSourceResource";
 import useDeck from "../../utility-hooks/useDeck";
@@ -94,6 +95,7 @@ const Discover = memo(function Discover() {
           }
           onClickSourcePicker={() => dispatch(setIsSourcePickerOpen(true))}
         />
+        <DiscoverPremiumBanner />
         {isDeckReady && <DiscoverDeckView />}
         {isDeckReady && <DiscoverBottom />}
         {isDeckReady && <DiscoverSeeker />}

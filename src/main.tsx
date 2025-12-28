@@ -1,3 +1,8 @@
+// Redirect localhost to 127.0.0.1 in development to maintain consistent origin
+if (import.meta.env.DEV && window.location.hostname === 'localhost') {
+  window.location.replace(window.location.href.replace('localhost', '127.0.0.1'));
+}
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./main.scss";

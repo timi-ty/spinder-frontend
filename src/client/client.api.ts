@@ -139,6 +139,27 @@ async function renewAuthentication(): Promise<RenewedAuthData> {
     throw new Error("Failed to renew authentication.");
   }
 }
+
+async function getSpotifyAccessToken(): Promise<string> {
+  try {
+    const url = `${backendUrl}/auth/spotify-token`;
+
+    const response = await fetch(url, fetchConfig());
+
+    if (response.ok) {
+      const data: { spotifyAccessToken: string } = await response.json();
+      return data.spotifyAccessToken;
+    } else {
+      const errorResponse: SpinderError = await response.json();
+      throw new Error(
+        `Status: ${errorResponse.status}, Message: ${errorResponse.message}`
+      );
+    }
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to get Spotify access token.");
+  }
+}
 /**********AUTH END**********/
 
 /**********USER START**********/
@@ -450,6 +471,7 @@ export {
   requestAccess,
   logout,
   renewAuthentication,
+  getSpotifyAccessToken,
   getSpotifyProfile,
   getDiscoverSources,
   searchDiscoverSources,

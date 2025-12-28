@@ -25,12 +25,13 @@ export { type FinalizeLoginData, type RequestAccessResult };
 /**********AUTH START**********/
 interface RenewedAuthData {
   userId: string;
+  spotifyAccessToken: string;
   spotifyAccessTokenExpiresIn: number;
   firebaseIdTokenExpiresIn: number;
 }
 
 export { type RenewedAuthData };
-/**********AUTH START**********/
+/**********AUTH END**********/
 
 /**********USER START**********/
 interface ExplicitContent {

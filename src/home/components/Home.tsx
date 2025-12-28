@@ -1,7 +1,7 @@
 import styles from "../styles/Home.module.css";
 
 const appUrl = import.meta.env.DEV
-  ? "http://localhost:5173/"
+  ? "http://127.0.0.1:5173/"
   : "https://spindr.pro/";
 
 function Home() {

@@ -14,7 +14,11 @@ import {
   startRenewingAuthentication,
   stopRenewingAuthentication,
 } from "../client/client";
-import { finalizeLogin, anonymousLogin } from "../client/client.api";
+import {
+  finalizeLogin,
+  anonymousLogin,
+  getSpotifyAccessToken,
+} from "../client/client.api";
 
 function useAuthResource() {
   const authStatus = useSelector<StoreState, AuthStatus>(
@@ -36,13 +40,24 @@ function useAuthResource() {
   return { authStatus: authStatus, authMode: authMode };
 }
 
+async function completeLoginWithSpotifyToken(userId: string): Promise<void> {
+  try {
+    const spotifyAccessToken = await getSpotifyAccessToken();
+    dispatch(loginAuthResource({ userId, spotifyAccessToken }));
+    console.log(`Using Authentication for User:: ${userId}`);
+  } catch (error) {
+    console.error("Failed to get Spotify access token:", error);
+    // Still login but without token - audio won't work but app will function
+    dispatch(loginAuthResource({ userId, spotifyAccessToken: "" }));
+  }
+}
+
 function loadAuth(): () => void {
   dispatch(loadAuthResource());
 
   finalizeLogin()
     .then((userId) => {
-      dispatch(loginAuthResource(userId));
-      console.log(`Using Authentication for User:: ${userId}`);
+      completeLoginWithSpotifyToken(userId);
     })
     .catch((error) => {
       if (error.status === 401) {
@@ -52,7 +67,7 @@ function loadAuth(): () => void {
         //Call API that can do a partial login. If it succeeds, set auth resource to logged in.
         anonymousLogin()
           .then((userId) => {
-            dispatch(loginAuthResource(userId));
+            completeLoginWithSpotifyToken(userId);
             console.log(`Using anon authentication for User:: ${userId}`);
           })
           .catch((error) => {
