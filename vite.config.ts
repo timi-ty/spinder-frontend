@@ -7,4 +7,7 @@ export default defineConfig({
   css: {
     modules: {},
   },
+  server: {
+    host: "127.0.0.1",
+  },
 });
