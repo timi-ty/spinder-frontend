@@ -1,0 +1,71 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: prod
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Create deployment package
+        working-directory: dist
+        run: tar -czf ../frontend-deploy.tar.gz .
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Upload deployment package
+        run: |
+          scp -P ${{ secrets.SSH_PORT }} -i ~/.ssh/deploy_key \
+            frontend-deploy.tar.gz \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/tmp/
+
+      - name: Deploy to server
+        run: |
+          ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/deploy_key \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'DEPLOY_SCRIPT'
+          set -e
+
+          DEPLOY_DIR="/var/www/spindr.pro/frontend"
+
+          echo "==> Cleaning frontend directory"
+          rm -rf "$DEPLOY_DIR"/*
+
+          echo "==> Extracting new deployment"
+          tar -xzf /tmp/frontend-deploy.tar.gz -C "$DEPLOY_DIR/"
+
+          echo "==> Cleanup"
+          rm -f /tmp/frontend-deploy.tar.gz
+
+          echo "==> Deployment complete!"
+          ls -la "$DEPLOY_DIR"
+          DEPLOY_SCRIPT
+
+      - name: Cleanup SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
+
