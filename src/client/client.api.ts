@@ -18,7 +18,7 @@ import {
 } from "./client.model";
 
 const backendUrl = import.meta.env.DEV
-  ? "http://localhost:4001/api"
+  ? "http://localhost:3001/api"
   : "https://spindr.pro/api";
 
 /**********LOGIN START**********/
