@@ -53,6 +53,11 @@ interface SpotifyPlaybackState {
   };
 }
 
+// Preview configuration (exported for use in progress calculation)
+const PREVIEW_START_MS = 45000; // Start 45 seconds into the track
+const PREVIEW_DURATION_MS = 15000; // 15 seconds of playback
+const PREVIEW_END_MS = PREVIEW_START_MS + PREVIEW_DURATION_MS;
+
 // Player state
 let player: SpotifyPlayer | null = null;
 let deviceId: string | null = null;
@@ -61,6 +66,7 @@ let isInitialized = false;
 let initPromise: Promise<string> | null = null;
 let stateChangeCallback: ((state: SpotifyPlaybackState | null) => void) | null =
   null;
+let currentTrackUri: string | null = null;
 
 function initializePlayer(accessToken: string): Promise<string> {
   // Return existing promise if initialization is in progress
@@ -141,6 +147,8 @@ async function playTrack(trackUri: string): Promise<void> {
     throw new Error("Player not initialized");
   }
 
+  currentTrackUri = trackUri;
+
   const response = await fetch(
     `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`,
     {
@@ -149,13 +157,24 @@ async function playTrack(trackUri: string): Promise<void> {
         Authorization: `Bearer ${currentAccessToken}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ uris: [trackUri] }),
+      body: JSON.stringify({ 
+        uris: [trackUri],
+        position_ms: PREVIEW_START_MS // Start directly at 45 seconds
+      }),
     }
   );
 
   if (!response.ok && response.status !== 204) {
     const error = await response.json().catch(() => ({}));
     throw new Error(error.error?.message || "Failed to play track");
+  }
+}
+
+// Called during polling to enforce preview end (auto-pause after 15 seconds)
+async function enforcePreviewBounds(state: SpotifyPlaybackState): Promise<void> {
+  if (!player || state.paused) return;
+  if (state.position >= PREVIEW_END_MS) {
+    await player.pause();
   }
 }
 
@@ -197,6 +216,7 @@ async function getCurrentPlaybackState(): Promise<SpotifyPlaybackState | null> {
 }
 
 function disconnectPlayer(): void {
+  currentTrackUri = null;
   if (player) {
     player.disconnect();
     player = null;
@@ -220,8 +240,11 @@ export {
   setVolume,
   setStateChangeCallback,
   getCurrentPlaybackState,
+  enforcePreviewBounds,
   disconnectPlayer,
   isPlayerReady,
+  PREVIEW_START_MS,
+  PREVIEW_DURATION_MS,
   type SpotifyPlaybackState,
 };
 

@@ -5,7 +5,11 @@ import {
   playTrack,
   pausePlayback,
   setStateChangeCallback,
+  getCurrentPlaybackState,
+  enforcePreviewBounds,
   isPlayerReady,
+  PREVIEW_START_MS,
+  PREVIEW_DURATION_MS,
   type SpotifyPlaybackState,
 } from "../../client/client.spotify-player";
 import { onAudioElementTimeUpdate } from "../../client/client.audio";
@@ -46,7 +50,6 @@ function DiscoverDeckItemView({
     authMode !== "Full" || userProduct === "premium" || userProduct === "";
 
   const playerInitializedRef = useRef(false);
-  const currentTrackUriRef = useRef<string | null>(null);
 
   // Initialize player when we have a token and audio is available
   useEffect(() => {
@@ -63,20 +66,16 @@ function DiscoverDeckItemView({
       });
   }, [spotifyAccessToken, isAudioAvailable]);
 
-  // Handle playback state changes for progress updates
-  const handleStateChange = useCallback(
-    (state: SpotifyPlaybackState | null) => {
-      if (state && !state.paused) {
-        // Create a mock audio element event for the seeker
-        const mockAudioElement = {
-          currentTime: state.position / 1000,
-          duration: state.duration / 1000,
-        } as HTMLAudioElement;
-        onAudioElementTimeUpdate(mockAudioElement);
-      }
-    },
-    []
-  );
+  // Handle playback state changes (for detecting track end, etc.)
+  const handleStateChange = useCallback((state: SpotifyPlaybackState | null) => {
+    if (state && !state.paused) {
+      const previewPosition = Math.max(0, state.position - PREVIEW_START_MS);
+      onAudioElementTimeUpdate({
+        currentTime: previewPosition / 1000,
+        duration: PREVIEW_DURATION_MS / 1000,
+      } as HTMLAudioElement);
+    }
+  }, []);
 
   // Set up state change callback
   useEffect(() => {
@@ -84,50 +83,42 @@ function DiscoverDeckItemView({
     return () => setStateChangeCallback(null);
   }, [handleStateChange]);
 
-  // Handle play/pause
+  // Poll playback state: enforce preview bounds + smooth progress updates
+  useEffect(() => {
+    if (!isPlaying || !isAudioAvailable || !isPlayerReady()) return;
+
+    const pollInterval = setInterval(async () => {
+      const state = await getCurrentPlaybackState();
+      if (!state) return;
+
+      // Enforce preview bounds (seek to 45s if before, pause if after 60s)
+      await enforcePreviewBounds(state);
+
+      // Update progress bar
+      if (!state.paused) {
+        const previewPosition = Math.max(0, state.position - PREVIEW_START_MS);
+        onAudioElementTimeUpdate({
+          currentTime: previewPosition / 1000,
+          duration: PREVIEW_DURATION_MS / 1000,
+        } as HTMLAudioElement);
+      }
+    }, 250);
+
+    return () => clearInterval(pollInterval);
+  }, [isPlaying, isAudioAvailable]);
+
+  // Handle play/pause - always restart preview from 45s when playing
   useEffect(() => {
     if (!isAudioAvailable) return;
     if (!mDeckItem || !mDeckItem.trackUri) return;
     if (!isPlayerReady()) return;
 
-    const playCurrentTrack = async () => {
-      try {
-        if (isPlaying) {
-          // Only play if track changed or we need to start
-          if (currentTrackUriRef.current !== mDeckItem.trackUri) {
-            await playTrack(mDeckItem.trackUri);
-            currentTrackUriRef.current = mDeckItem.trackUri;
-          }
-        } else {
-          await pausePlayback();
-        }
-      } catch (error) {
-        console.error("Playback error:", error);
-      }
-    };
-
-    playCurrentTrack();
+    if (isPlaying) {
+      playTrack(mDeckItem.trackUri).catch((e) => console.error("Playback error:", e));
+    } else {
+      pausePlayback();
+    }
   }, [isPlaying, mDeckItem?.trackUri, isAudioAvailable]);
-
-  // Play new track when deck item changes and we're playing
-  useEffect(() => {
-    if (!isAudioAvailable) return;
-    if (!mDeckItem || !mDeckItem.trackUri || !isPlaying) return;
-    if (!isPlayerReady()) return;
-
-    const playNewTrack = async () => {
-      if (currentTrackUriRef.current !== mDeckItem.trackUri) {
-        try {
-          await playTrack(mDeckItem.trackUri);
-          currentTrackUriRef.current = mDeckItem.trackUri;
-        } catch (error) {
-          console.error("Failed to play new track:", error);
-        }
-      }
-    };
-
-    playNewTrack();
-  }, [mDeckItem?.trackUri, isAudioAvailable]);
 
   return (
     <div
