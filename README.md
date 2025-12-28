@@ -20,7 +20,7 @@ This is the frontend repo. Refer here for the backend repo [Spindr backend](http
 
 ## Installation
 
-To get started with Spindr, follow these steps:
+To get started with the Spindr frontend, follow these steps:
 
 ```bash
 git clone https://github.com/timi-ty/spinder-frontend.git
