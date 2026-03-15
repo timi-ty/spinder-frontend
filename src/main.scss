@@ -24,7 +24,7 @@
   --glow-color-subtle: rgba(0, 229, 204, 0.15);
   --glow-color-faint: rgba(0, 229, 204, 0.08);
   --border-accent: rgba(0, 229, 204, 0.3);
-  --border-accent-subtle: rgba(0, 229, 204, 0.15);
+  --border-accent-subtle: rgba(0, 229, 204, 0.12);
   --border-accent-faint: rgba(0, 229, 204, 0.1);
 }
 
@@ -78,18 +78,21 @@ $max-width: 40rem;
     height: calc($min-aspect-ratio * $max-width);
   }
 
+  /* If the screen is tall enough, use the full viewport height. */
   @media screen and (min-height: calc($min-aspect-ratio * $max-width)) {
     #root {
       height: 100vh;
     }
   }
 
+  /* Cap at max-aspect-ratio. */
   @media screen and (min-height: calc($max-aspect-ratio * $max-width)) {
     #root {
       height: calc($max-aspect-ratio * $max-width);
     }
   }
 
+  /* If the screen is shorter, fill viewport height and shrink width. */
   @media screen and (max-height: calc($min-aspect-ratio * $max-width)) {
     #root {
       height: 100vh;

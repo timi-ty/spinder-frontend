@@ -4,6 +4,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* shadcn/ui theme foundation. These variables and @theme mappings are
+   required by the shadcn CLI and any future shadcn components. */
 :root {
     --background: oklch(0.02 0.005 240);
     --foreground: oklch(0.95 0 0);
