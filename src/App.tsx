@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { StoreState } from "./state/store";
 import SandboxUnauthorizedAction from "./sandbox-components/components/SandboxUnauthorizedAction";
 import withOverlayProviders from "./overlays/components/withOverlayProviders";
+import OrbBackdrop from "@/components/ui/orb-backdrop";
 
 function App() {
   const { authStatus, authMode } = useAuthResource();
@@ -48,8 +49,12 @@ function App() {
     return () => clearPopup("UnauthAction");
   }, [isAttemptingUnauthAction, unauthActionDescription]);
 
+  const showOrbFallback =
+    authStatus === "Loading" || authStatus === "Error";
+
   return (
     <>
+      {showOrbFallback && <OrbBackdrop opacity={0.5} />}
       {authStatus === "Loading" && <FullComponentLoader />}
       {authStatus === "LoggedIn" && <Discover />}
       {authStatus === "Error" && (

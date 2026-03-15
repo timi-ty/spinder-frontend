@@ -1,4 +1,5 @@
 import styles from "../styles/Home.module.css";
+import OrbBackdrop from "@/components/ui/orb-backdrop";
 
 const appUrl = import.meta.env.DEV
   ? "http://127.0.0.1:5173/"
@@ -7,17 +8,15 @@ const appUrl = import.meta.env.DEV
 function Home() {
   return (
     <div className={styles.home}>
-      <img className={styles.logo} src="/resources/spindr-logo.svg"></img>
-      <div>
-        <h1>Spindr</h1>
+      <OrbBackdrop />
+      <div className={styles.content}>
+        <img className={styles.logo} src="/resources/spindr-logo.svg" />
+        <h1 className={styles.title}>Spindr</h1>
+        <p className={styles.tagline}>Find music you love.</p>
+        <a href={appUrl}>
+          <button type="submit">Launch Spindr</button>
+        </a>
       </div>
-      <div>
-        <div>Find music you love.</div>
-      </div>
-      {/* This should change app state rather than unecessarilly loading the app again */}
-      <a href={appUrl}>
-        <button type="submit">Launch Spindr</button>
-      </a>
     </div>
   );
 }
