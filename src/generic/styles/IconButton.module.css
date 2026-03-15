@@ -6,6 +6,12 @@
   width: 100%;
   height: 100%;
   padding: 0rem;
+  background-color: transparent;
+  transition: filter 0.15s ease;
+}
+
+.iconButton:hover {
+  filter: drop-shadow(0 0 6px var(--glow-color));
 }
 
 .iconButton > .icon {

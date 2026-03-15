@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { DeckItem } from "../../client/client.model";
 import { StoreState } from "../../state/store";
 import { ReactNode, createContext, forwardRef, useRef } from "react";
+import OrbBackdrop from "@/components/ui/orb-backdrop";
 
 const DiscoverBackgroundContext = createContext(
   document.getElementById("root")
@@ -27,6 +28,7 @@ const DiscoverBackgroundPanel = forwardRef(function DiscoverBackgroundPanel(
 
   return (
     <div ref={ref} className={styles.backgroundPanel}>
+      <OrbBackdrop opacity={0.3} enableGlitch={false} />
       <div className={styles.container}>
         <img
           className={`${styles.swapItem} ${
@@ -47,6 +49,7 @@ const DiscoverBackgroundPanel = forwardRef(function DiscoverBackgroundPanel(
           src={`${deckItem2.image}`}
         />
       </div>
+      <div className={styles.tealOverlay} />
     </div>
   );
 });

@@ -3,7 +3,7 @@
 .componentLoader {
   width: 100%;
   height: 100%;
-  background: var(--root-area-bg-color);
+  background: transparent;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,4 +12,6 @@
 .componentLoader .spinner {
   width: 50%;
   animation: rotate 3s linear infinite;
+  filter: hue-rotate(160deg) brightness(1.2);
+  opacity: 0.8;
 }

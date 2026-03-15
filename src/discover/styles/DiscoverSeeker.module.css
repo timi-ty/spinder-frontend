@@ -4,10 +4,12 @@
   bottom: 0;
   height: 0.5rem;
   z-index: 1;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .seeker .foreground {
-  background: var(--primary-color);
+  background: linear-gradient(to right, var(--primary-color), var(--primary-color-bright));
   height: 100%;
   transition: width 0.5s;
+  box-shadow: 0 0 8px var(--glow-color);
 }

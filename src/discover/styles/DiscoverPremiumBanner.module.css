@@ -9,11 +9,13 @@
   gap: 0.5rem;
   padding: 0.5rem 1rem;
   background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glow-color-subtle);
   border-radius: 2rem;
-  color: #ffd700;
-  font-size: 0.85rem;
+  color: var(--primary-color);
+  font-size: 0.75rem;
   font-weight: 500;
+  letter-spacing: 0.05em;
   white-space: nowrap;
   pointer-events: none;
 }
@@ -25,4 +27,3 @@
 .text {
   opacity: 0.95;
 }
-

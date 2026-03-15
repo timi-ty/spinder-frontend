@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-left: 1rem; /* right padding is done by cancel button if searching and set dynamically if not searching */
+  padding-left: 1rem;
 }
 
 .searchArea > .searchBox {
@@ -15,21 +15,32 @@
   align-items: center;
   gap: 1rem;
   background: var(--search-bar-color);
+  border: 1px solid transparent;
   border-radius: 50000rem;
   padding: 0% 1rem 0% 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.searchArea > .searchBox:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 12px var(--glow-color-subtle);
 }
 
 .searchArea > .searchBox > .icon {
   height: 41.667%;
+  opacity: 0.6;
 }
 
 .searchArea > .searchBox > .loader {
   height: 41.667%;
   animation: rotate 3s linear infinite;
+  opacity: 0.6;
 }
 
 .searchArea > .searchBox > .search {
   font-family: inherit;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
   height: 100%;
   width: 100%;
   color: var(--primary-text-color);
@@ -38,10 +49,19 @@
   background: none;
 }
 
+.searchArea > .searchBox > .search::placeholder {
+  color: var(--secondary-text-color);
+  opacity: 0.7;
+}
+
 .searchArea > .cancel {
   height: 100%;
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   padding-right: 1rem;
   padding-left: 1rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--primary-color);
 }
