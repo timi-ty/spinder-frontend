@@ -5,6 +5,7 @@ if (import.meta.env.DEV && window.location.hostname === 'localhost') {
 
 import React from "react";
 import ReactDOM from "react-dom/client";
+import "./index.css";
 import "./main.scss";
 import "./animations.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
