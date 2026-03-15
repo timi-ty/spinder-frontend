@@ -6,10 +6,14 @@
   justify-content: center;
   text-align: center;
   gap: 0.5rem;
-  background: var(--root-area-bg-color);
-  padding: 1rem;
+  background: transparent;
+  padding: 1.5rem;
 }
 
 .errorOneMessageTwoAction > .message {
   padding-bottom: 1rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+  opacity: 0.85;
 }

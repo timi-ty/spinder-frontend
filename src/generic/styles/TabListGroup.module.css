@@ -1,4 +1,4 @@
-.tabListGroup{
+.tabListGroup {
   margin-top: 1rem;
 }
 
@@ -11,10 +11,18 @@
 }
 
 .tabListGroup .tabs .tabItem {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   width: 100%;
   text-align: center;
   cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+
+.tabListGroup .tabs .tabItem:hover {
+  opacity: 1;
 }
 
 .tabListGroup .divider {
@@ -24,8 +32,9 @@
 }
 
 .tabListGroup .selector {
-  height: 0.3rem;
-  background-color: var(--primary-color);
+  height: 2px;
+  background: linear-gradient(to right, var(--primary-color), #00ffd5);
+  box-shadow: 0 0 8px rgba(0, 229, 204, 0.3);
 }
 
 .tabListGroup .list {

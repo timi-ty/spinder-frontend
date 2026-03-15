@@ -1,6 +1,6 @@
 .sandboxSignIn {
   width: 100%;
-  padding: 1rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -9,10 +9,17 @@
 
 .sandboxSignIn .title {
   font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .sandboxSignIn .message {
   margin-top: 1rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  opacity: 0.85;
+  text-align: center;
 }
 
 .sandboxSignIn .submit {
@@ -21,11 +28,32 @@
 
 .sandboxSignIn .emailInput {
   margin-top: 1rem;
-  padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-stack);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  color: var(--primary-text-color);
+  background: var(--search-bar-color);
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.sandboxSignIn .emailInput:focus {
+  border-color: var(--primary-color);
 }
 
 .sandboxSignIn .link {
   margin-top: 1.5rem;
-  text-decoration: underline;
+  color: var(--primary-color);
+  text-decoration: none;
   cursor: pointer;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  transition: opacity 0.15s ease;
+}
+
+.sandboxSignIn .link:hover {
+  opacity: 0.8;
 }

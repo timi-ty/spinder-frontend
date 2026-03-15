@@ -10,17 +10,21 @@
   align-items: center;
   pointer-events: none;
   padding: 1rem;
-  z-index: 100; /* Very large. This is an overlay. */
+  z-index: 100;
 }
 
 .toastOverlay .message {
-  background-color: var(--toast-bg-color);
-  color: var(--toast-text-color);
-  border-radius: 0.75rem;
-  padding: 0.5rem;
+  background-color: var(--card-bg-color);
+  color: var(--primary-text-color);
+  border: 1px solid rgba(0, 229, 204, 0.15);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
   text-align: center;
   width: -moz-fit-content;
   width: fit-content;
   transition: opacity 0.5s;
-  font-size: 0.875rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
 }
