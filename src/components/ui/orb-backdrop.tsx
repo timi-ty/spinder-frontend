@@ -9,9 +9,10 @@ interface OrbBackdropProps {
 }
 
 const ASCII_DENSITY = " .:-=+*#%@";
+const GRAIN_SCALE = 4;
 
 export default function OrbBackdrop({
-  className = "",
+  className,
   opacity = 1,
   enableGlitch = true,
   enabled = true,
@@ -24,12 +25,14 @@ export default function OrbBackdrop({
     rotation: 0,
     atmosphereShift: 0,
     glitchIntensity: 0,
-    glitchFrequency: 0,
   });
   const tweensRef = useRef<gsap.core.Tween[]>([]);
 
   useEffect(() => {
     if (!enabled) return;
+
+    paramsRef.current = { rotation: 0, atmosphereShift: 0, glitchIntensity: 0 };
+    timeRef.current = 0;
 
     const cvs = canvasRef.current;
     const grainCvs = grainCanvasRef.current;
@@ -71,13 +74,6 @@ export default function OrbBackdrop({
           yoyo: true,
           ease: "power2.inOut",
           repeatDelay: 3 + Math.random() * 4,
-        }),
-        gsap.to(params, {
-          glitchFrequency: 1,
-          duration: 0.05,
-          repeat: -1,
-          yoyo: true,
-          ease: "none",
         })
       );
     }
@@ -92,16 +88,21 @@ export default function OrbBackdrop({
         frameRef.current = requestAnimationFrame(render);
         return;
       }
-      lastRender = timestamp;
 
-      timeRef.current += 0.033;
+      const dt = lastRender === 0 ? 0.033 : (timestamp - lastRender) / 1000;
+      lastRender = timestamp;
+      timeRef.current += dt;
       const time = timeRef.current;
 
       const container = canvas.parentElement;
       if (!container) return;
-      const width = (canvas.width = grainCanvas.width = container.clientWidth);
-      const height = (canvas.height = grainCanvas.height =
-        container.clientHeight);
+      const width = (canvas.width = container.clientWidth);
+      const height = (canvas.height = container.clientHeight);
+
+      const grainW = Math.ceil(width / GRAIN_SCALE);
+      const grainH = Math.ceil(height / GRAIN_SCALE);
+      grainCanvas.width = grainW;
+      grainCanvas.height = grainH;
 
       if (width === 0 || height === 0) {
         frameRef.current = requestAnimationFrame(render);
@@ -136,7 +137,7 @@ export default function OrbBackdrop({
         params.rotation,
         params.glitchIntensity
       );
-      renderFilmGrain(grainCtx, width, height, time, params.glitchIntensity);
+      renderFilmGrain(grainCtx, grainW, grainH, time, params.glitchIntensity);
 
       frameRef.current = requestAnimationFrame(render);
     }
@@ -152,7 +153,7 @@ export default function OrbBackdrop({
 
   return (
     <div
-      className={className}
+      className={className || undefined}
       style={{
         position: "absolute",
         inset: 0,
@@ -180,6 +181,7 @@ export default function OrbBackdrop({
           height: "100%",
           mixBlendMode: "overlay",
           opacity: 0.6,
+          imageRendering: "pixelated",
         }}
       />
     </div>
@@ -316,9 +318,9 @@ function drawAsciiSphere(
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
-  const spacing = 9;
-  const cols = Math.min(Math.floor(width / spacing), 150);
-  const rows = Math.min(Math.floor(height / spacing), 100);
+  const spacing = 14;
+  const cols = Math.min(Math.floor(width / spacing), 90);
+  const rows = Math.min(Math.floor(height / spacing), 65);
   const glitchChars = ["\u2588", "\u2593", "\u2592", "\u2591", "\u2584", "\u2580", "\u25A0", "\u25A1"];
 
   for (let i = 0; i < cols; i++) {
@@ -380,24 +382,24 @@ function renderFilmGrain(
 
   if (glitchIntensity > 0.3) {
     ctx.globalCompositeOperation = "screen";
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < 50; i++) {
       const gx = Math.random() * width;
       const gy = Math.random() * height;
       ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.5 * glitchIntensity})`;
       ctx.beginPath();
-      ctx.arc(gx, gy, Math.random() * 3 + 0.5, 0, Math.PI * 2);
+      ctx.arc(gx, gy, Math.random() * 2 + 0.5, 0, Math.PI * 2);
       ctx.fill();
     }
   }
 
   ctx.globalCompositeOperation = "screen";
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 25; i++) {
     ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.3})`;
     ctx.beginPath();
     ctx.arc(
       Math.random() * width,
       Math.random() * height,
-      Math.random() * 2 + 0.5,
+      Math.random() * 1.5 + 0.5,
       0,
       Math.PI * 2
     );
@@ -405,7 +407,7 @@ function renderFilmGrain(
   }
 
   ctx.globalCompositeOperation = "multiply";
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 15; i++) {
     ctx.fillStyle = `rgba(0,0,0,${Math.random() * 0.5 + 0.5})`;
     ctx.beginPath();
     ctx.arc(
