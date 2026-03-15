@@ -4,28 +4,32 @@
 }
 
 :root {
-  --font-stack: Inter, Helvetica, sans-serif;
-  --primary-color: #1db954;
-  --primary-button-color: #36ff7c;
-  --secondary-button-color: #72b487;
-  --primary-text-color: #fbfbfb;
-  --secondary-text-color: #5a5d64;
-  --empty-area-bg-color: #1b1b1b;
-  --root-area-bg-color: #131722;
-  --card-bg-color: #242731;
-  --search-bar-color: #343741;
-  --divider-color: #343741;
-  --selected-outline-color: #abe5c0;
-  --toast-bg-color: #fbfbfb;
-  --toast-text-color: #1b1b1b;
+  --font-stack: "JetBrains Mono", Inter, monospace;
+  --font-display: "Arial Black", Arial, sans-serif;
+  --primary-color: #00e5cc;
+  --primary-button-color: #00ffd5;
+  --secondary-button-color: #5ba89b;
+  --primary-text-color: #f0f0f0;
+  --secondary-text-color: #6b7280;
+  --empty-area-bg-color: #000000;
+  --root-area-bg-color: #050508;
+  --card-bg-color: #0d0d12;
+  --search-bar-color: #1a1a24;
+  --divider-color: #1a1a24;
+  --selected-outline-color: #00e5cc;
+  --toast-bg-color: #f0f0f0;
+  --toast-text-color: #050508;
+  --glow-color: rgba(0, 229, 204, 0.35);
 }
 
-$min-aspect-ratio: 1.5; /* = height : width (mobile first). */
-$max-aspect-ratio: 2.3; /* = height : width (mobile first). Research shows that at the moment the largest mobile aspect ratio is 20:9 = 2.222. */
+html {
+  line-height: normal;
+}
+
+$min-aspect-ratio: 1.5;
+$max-aspect-ratio: 2.3;
 $max-width: 40rem;
 
-/* Use the entire screen width by default (mobile first). */
-/* Set the height to match the min-aspect-ratio by default. */
 #root {
   position: relative;
   width: 100%;
@@ -34,15 +38,14 @@ $max-width: 40rem;
   flex-direction: column;
   align-content: flex-start;
   background: var(--root-area-bg-color);
+  overflow: hidden;
 }
 
-/* If the screen height is greater than the height which matches the min-aspect-ratio, use the entire screen height. */
 @media screen and (min-height: calc($min-aspect-ratio * 100vw)) {
   #root {
     height: 100vh;
   }
 
-  /* If the screen height is greater than the max-height, always use the max-height. */
   @media screen and (min-height: calc($max-aspect-ratio * 100vw)) {
     #root {
       height: calc($max-aspect-ratio * 100vw);
@@ -50,7 +53,6 @@ $max-width: 40rem;
   }
 }
 
-/* If the screen height is less than the height which matches the min-aspect-ratio, use the entire screen height and adjust the width to match. */
 @media screen and (max-height: calc($min-aspect-ratio * 100vw)) {
   #root {
     height: 100vh;
@@ -58,29 +60,24 @@ $max-width: 40rem;
   }
 }
 
-/* If screen width is greater than max-width, first use the max-width. 
-Set the height to match the min-aspect-ratio by default. */
 @media screen and (min-width: $max-width) {
   #root {
     width: $max-width;
     height: calc($min-aspect-ratio * $max-width);
   }
 
-  /* If the screen height is greater than the height which matches the min-aspect-ratio, use the entire screen height. */
   @media screen and (min-height: calc($min-aspect-ratio * $max-width)) {
     #root {
       height: 100vh;
     }
   }
 
-  /* If the screen height is greater than the max-height, always use the max-height. */
   @media screen and (min-height: calc($max-aspect-ratio * $max-width)) {
     #root {
       height: calc($max-aspect-ratio * $max-width);
     }
   }
 
-  /* If the screen height is less than the height which matches the min-aspect-ratio, use the entire screen height and adjust the width to match. */
   @media screen and (max-height: calc($min-aspect-ratio * $max-width)) {
     #root {
       height: 100vh;
@@ -104,25 +101,33 @@ Set the height to match the min-aspect-ratio by default. */
   user-select: none;
 }
 
-/* Style the scrollbar for WebKit browsers (Chrome, Safari) */
+img, svg, video, canvas {
+  display: revert;
+  vertical-align: revert;
+}
+
+img, video {
+  max-width: revert;
+  height: revert;
+}
+
 *::-webkit-scrollbar {
-  width: 4px; /* Fixed width for the scrollbar */
+  width: 4px;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: var(
-    --divider-color
-  ); /* Color of the thumb (scrollable area) */
+  background-color: var(--primary-color);
+  border-radius: 2px;
 }
 
 *::-webkit-scrollbar-track {
-  background: none; /* Background color of the track (non-scrollable area) */
+  background: var(--root-area-bg-color);
 }
 
 body {
   font: 100% var(--font-stack);
   color: var(--primary-text-color);
-  background: var(--empty-area-bg-color);
+  background: #000;
   width: 100%;
   height: 100%;
   display: flex;
@@ -130,11 +135,13 @@ body {
 }
 
 a {
-  color: var(--primary-text-color);
+  color: var(--primary-color);
   text-decoration: none;
+  transition: opacity 0.2s ease;
 }
 a:hover {
-  text-decoration: underline;
+  opacity: 0.8;
+  text-decoration: none;
 }
 
 .unauth-action {
@@ -142,13 +149,31 @@ a:hover {
 }
 
 button {
+  font-family: var(--font-stack);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   background-color: var(--primary-button-color);
+  color: #050508;
   border: none;
-  border-radius: 0.5rem;
-  padding: 0.75rem 1rem 0.75rem 1rem;
+  border-radius: 0.25rem;
+  padding: 0.75rem 1.25rem;
   cursor: pointer;
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+button:hover {
+  box-shadow: 0 0 16px var(--glow-color);
 }
 
 button.secondary {
-  background-color: var(--secondary-button-color);
+  background-color: transparent;
+  color: var(--primary-text-color);
+  border: 1px solid var(--secondary-button-color);
+}
+
+button.secondary:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 12px var(--glow-color);
 }
