@@ -23,7 +23,7 @@
 
 .searchArea > .searchBox:focus-within {
   border-color: var(--primary-color);
-  box-shadow: 0 0 12px rgba(0, 229, 204, 0.15);
+  box-shadow: 0 0 12px var(--glow-color-subtle);
 }
 
 .searchArea > .searchBox > .icon {

@@ -28,7 +28,7 @@
 }
 
 .bottomLeft .trackArtists {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   font-weight: 400;
   padding-top: 0.5rem;
   white-space: nowrap;
@@ -55,7 +55,7 @@
   letter-spacing: 0.05em;
   border-style: solid;
   border-width: 1px;
-  border-color: rgba(0, 229, 204, 0.3);
+  border-color: var(--border-accent);
   border-radius: 50000000rem;
   padding: 0.5rem 0.75rem;
   cursor: pointer;
@@ -68,7 +68,7 @@
 
 .bottomLeft .source:hover {
   border-color: var(--primary-color);
-  box-shadow: 0 0 10px rgba(0, 229, 204, 0.2);
+  box-shadow: 0 0 10px var(--glow-color-subtle);
 }
 
 .bottomLeft .top {

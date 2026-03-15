@@ -33,8 +33,8 @@
 
 .tabListGroup .selector {
   height: 2px;
-  background: linear-gradient(to right, var(--primary-color), #00ffd5);
-  box-shadow: 0 0 8px rgba(0, 229, 204, 0.3);
+  background: linear-gradient(to right, var(--primary-color), var(--primary-color-bright));
+  box-shadow: 0 0 8px var(--border-accent);
 }
 
 .tabListGroup .list {

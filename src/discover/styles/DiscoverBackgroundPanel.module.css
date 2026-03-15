@@ -1,3 +1,8 @@
+/* Stacking order within this panel:
+   z-index 0: OrbBackdrop (canvas animation)
+   z-index 1: album art container (.container + .swapItem images)
+   z-index 2: teal radial-gradient overlay (.tealOverlay)
+   z-index 3: dark overlay (::after pseudo-element) */
 .backgroundPanel {
   position: absolute;
   top: 0px;
@@ -53,7 +58,7 @@
   z-index: 2;
   background: radial-gradient(
     ellipse at center,
-    rgba(0, 229, 204, 0.08) 0%,
+    var(--glow-color-faint) 0%,
     transparent 70%
   );
   pointer-events: none;

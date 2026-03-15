@@ -53,7 +53,7 @@
 .bottomRight .accountActions {
   position: absolute;
   background-color: var(--card-bg-color);
-  border: 1px solid rgba(0, 229, 204, 0.15);
+  border: 1px solid var(--border-accent-subtle);
   border-radius: 0.5rem;
   pointer-events: all;
   backdrop-filter: blur(12px);
@@ -68,7 +68,7 @@
 }
 
 .bottomRight .accountAction:hover {
-  background-color: rgba(0, 229, 204, 0.08);
+  background-color: var(--glow-color-faint);
 }
 
 .bottomRight .accountAction:first-child {

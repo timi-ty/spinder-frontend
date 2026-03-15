@@ -16,7 +16,7 @@
 .toastOverlay .message {
   background-color: var(--card-bg-color);
   color: var(--primary-text-color);
-  border: 1px solid rgba(0, 229, 204, 0.15);
+  border: 1px solid var(--border-accent-subtle);
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   text-align: center;

@@ -20,16 +20,24 @@
   --toast-bg-color: #f0f0f0;
   --toast-text-color: #050508;
   --glow-color: rgba(0, 229, 204, 0.35);
+  --primary-color-bright: #00ffd5;
+  --glow-color-subtle: rgba(0, 229, 204, 0.15);
+  --glow-color-faint: rgba(0, 229, 204, 0.08);
+  --border-accent: rgba(0, 229, 204, 0.3);
+  --border-accent-subtle: rgba(0, 229, 204, 0.15);
+  --border-accent-faint: rgba(0, 229, 204, 0.1);
 }
 
 html {
   line-height: normal;
 }
 
-$min-aspect-ratio: 1.5;
-$max-aspect-ratio: 2.3;
+$min-aspect-ratio: 1.5; /* = height : width (mobile first). */
+$max-aspect-ratio: 2.3; /* = height : width (mobile first). The largest mobile aspect ratio is ~20:9 = 2.222. */
 $max-width: 40rem;
 
+/* Use the entire screen width by default (mobile first).
+   Set the height to match the min-aspect-ratio by default. */
 #root {
   position: relative;
   width: 100%;
@@ -41,11 +49,13 @@ $max-width: 40rem;
   overflow: hidden;
 }
 
+/* If the screen is tall enough, use the full viewport height instead. */
 @media screen and (min-height: calc($min-aspect-ratio * 100vw)) {
   #root {
     height: 100vh;
   }
 
+  /* Cap at max-aspect-ratio to avoid overly tall layouts. */
   @media screen and (min-height: calc($max-aspect-ratio * 100vw)) {
     #root {
       height: calc($max-aspect-ratio * 100vw);
@@ -53,6 +63,7 @@ $max-width: 40rem;
   }
 }
 
+/* If the screen is shorter than the min-aspect-ratio, fill viewport height and shrink width to match. */
 @media screen and (max-height: calc($min-aspect-ratio * 100vw)) {
   #root {
     height: 100vh;
@@ -60,6 +71,7 @@ $max-width: 40rem;
   }
 }
 
+/* On wide screens, cap content at max-width and repeat the same aspect-ratio logic. */
 @media screen and (min-width: $max-width) {
   #root {
     width: $max-width;
@@ -101,14 +113,15 @@ $max-width: 40rem;
   user-select: none;
 }
 
-img, svg, video, canvas {
-  display: revert;
-  vertical-align: revert;
+/* Counter Tailwind Preflight display:block on media elements. */
+img, svg, video {
+  display: inline;
+  vertical-align: baseline;
 }
 
-img, video {
-  max-width: revert;
-  height: revert;
+canvas {
+  display: inline-block;
+  vertical-align: baseline;
 }
 
 *::-webkit-scrollbar {

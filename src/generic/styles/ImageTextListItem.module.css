@@ -12,7 +12,7 @@
 }
 
 .imageTextListItem:hover {
-  background-color: rgba(0, 229, 204, 0.04);
+  background-color: var(--glow-color-faint);
 }
 
 .imageTextListItem:last-child {

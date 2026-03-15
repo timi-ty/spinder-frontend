@@ -81,8 +81,3 @@
     --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@layer base {
-  body {
-    @apply bg-background text-foreground;
-  }
-}

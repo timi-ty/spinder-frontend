@@ -10,7 +10,7 @@
 }
 
 .likeButton:hover {
-  filter: drop-shadow(0 0 8px rgba(0, 229, 204, 0.5));
+  filter: drop-shadow(0 0 8px var(--glow-color));
 }
 
 .likeButton.animate {

@@ -11,7 +11,7 @@
 }
 
 .iconButton:hover {
-  filter: drop-shadow(0 0 6px rgba(0, 229, 204, 0.4));
+  filter: drop-shadow(0 0 6px var(--glow-color));
 }
 
 .iconButton > .icon {
