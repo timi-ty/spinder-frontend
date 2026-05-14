@@ -1,19 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <defs>
-    <radialGradient id="atmosphere" cx="50%" cy="44%" r="62%">
+    <radialGradient id="atmosphere" cx="50%" cy="44%" r="55%">
       <stop offset="0%" stop-color="#00e5cc" stop-opacity="0.55" />
-      <stop offset="40%" stop-color="#006b5e" stop-opacity="0.32" />
-      <stop offset="85%" stop-color="#000" stop-opacity="0" />
+      <stop offset="45%" stop-color="#006b5e" stop-opacity="0.32" />
+      <stop offset="100%" stop-color="#000" stop-opacity="0" />
     </radialGradient>
-    <radialGradient id="orb" cx="50%" cy="50%" r="36%">
+    <radialGradient id="orb" cx="50%" cy="50%" r="42%">
       <stop offset="0%" stop-color="#eafffb" stop-opacity="1" />
       <stop offset="22%" stop-color="#00ffd5" stop-opacity="0.95" />
       <stop offset="55%" stop-color="#00b8a4" stop-opacity="0.6" />
       <stop offset="100%" stop-color="#000" stop-opacity="0" />
     </radialGradient>
   </defs>
-  <rect width="32" height="32" fill="#000" />
-  <rect width="32" height="32" fill="url(#atmosphere)" />
+  <circle cx="16" cy="16" r="15" fill="#000" />
+  <circle cx="16" cy="16" r="15" fill="url(#atmosphere)" />
   <circle cx="16" cy="16" r="15" fill="url(#orb)" />
   <circle cx="16" cy="16" r="2" fill="#f0fffb" />
   <circle cx="16" cy="16" r="9" fill="none" stroke="#00e5cc" stroke-opacity="0.7" stroke-width="1" />
